@@ -1,4 +1,4 @@
-﻿using CasinoOperation;
+using CasinoOperation;
 
 var casino = new Casino();
 const string GameName = "#######---777CASINO777---#######";
@@ -46,11 +46,13 @@ while ( operation != Operation.Exit )
     }
 
 }
+
 static void PrintGameName( string gameName )
 {
     Console.WriteLine( gameName );
     Console.WriteLine();
 }
+
 static void DisplayMenu()
 {
     Console.WriteLine( "Menu: Play(1)" );
@@ -58,10 +60,9 @@ static void DisplayMenu()
     Console.WriteLine( "      Exit(3)" );
 }
 
-
 public class Casino
 {
-   
+
     public void ReadBalance( int balance )
     {
         if ( balance <= 0 )
@@ -71,6 +72,7 @@ public class Casino
 
         _balance = balance;
     }
+
     public static Operation? ReadOperation()
     {
         string operationStr = Console.ReadLine() ?? "";
@@ -105,10 +107,12 @@ public class Casino
                 throw new Exception( $"Unsupported operation passed {operation}." );
         }
     }
+
     private void CheckBalance()
     {
         Console.WriteLine( $"Your balance: {_balance}" );
     }
+
     private void PlayGame()
     {
         Console.Write( "Please, write bet: " );
@@ -132,20 +136,19 @@ public class Casino
             return;
         }
     }
+
     public int MakeBet( double bet )
     {
-        const int Multiplicator = 1;
-
+        const double Multiplicator = 1.1;
 
         Random random = new Random();
 
         int number = random.Next( 1, 21 );
 
-        int result = ( int )( bet * ( 1 + ( Multiplicator * number % 17 ) ) );
-        _balance = result;
-        return result;
+        int _balance = ( int )( bet * ( 1 + ( Multiplicator * number % 17 ) ) );
+        
+        return _balance;
     }
-
 
     int _balance;
 }
