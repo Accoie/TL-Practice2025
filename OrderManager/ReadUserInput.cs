@@ -15,7 +15,12 @@ namespace OrderManager
             string operationStr = Console.ReadLine() ?? string.Empty;
             bool isParsed = Enum.TryParse( operationStr, out Operation operation );
 
-            return isParsed ? operation : Operation.Error;
+            if ( !isParsed )
+            {
+                throw new FormatException( $"Операция с номером {operationStr} не поддерживается" );
+            }
+
+            return operation;
         }
         static public string ReadProductName()
         {

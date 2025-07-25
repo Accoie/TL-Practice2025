@@ -2,7 +2,7 @@
 
 class Program
 {
-    public void Main()
+    public static void Main()
     {
         Operation operation = Operation.MakeOrder;
 
@@ -14,6 +14,10 @@ class Program
             {
                 HandleOperation( operation );
             }
+            catch ( FormatException e )
+            {
+                Console.WriteLine( e.Message );
+            }
             catch ( InvalidOperationException e )
             {
                 Console.WriteLine( e.Message );
@@ -21,7 +25,7 @@ class Program
         }
     }
 
-    private void HandleOperation( Operation operation )
+    private static void HandleOperation( Operation operation )
     {
         switch ( operation )
         {
@@ -31,29 +35,22 @@ class Program
             case Operation.Exit:
                 Console.WriteLine( "До свидания!" );
                 break;
-            case Operation.Error:
-                throw new InvalidOperationException( "Операция не поддерживается" );
             default:
-                return;
+                throw new InvalidOperationException( "Операция не поддерживается" );
         }
     }
 
-    private void MakeOrder()
+    private static void MakeOrder()
     {
-        try
-        {
-            string productName = ReadUserInput.ReadProductName();
-            int countProduct = ReadUserInput.ReadCountProduct();
-            string clientName = ReadUserInput.ReadClientName();
-            string address = ReadUserInput.ReadAddress();
 
-            ConsolePrinter messagePrinter = new ConsolePrinter( productName, countProduct, address );
+        string productName = ReadUserInput.ReadProductName();
+        int countProduct = ReadUserInput.ReadCountProduct();
+        string clientName = ReadUserInput.ReadClientName();
+        string address = ReadUserInput.ReadAddress();
 
-            messagePrinter.PrintApplyMessage();
-        }
-        catch ( FormatException e )
-        {
-            Console.WriteLine( e.Message );
-        }
+        ConsolePrinter messagePrinter = new ConsolePrinter( productName, countProduct, address );
+
+        messagePrinter.PrintApplyMessage();
+
     }
 }
