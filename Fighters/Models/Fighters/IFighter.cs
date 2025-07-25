@@ -12,6 +12,7 @@ namespace Fighters.Models.Fighters
         public int CalculateDamage();
         public int CalculateArmor();
 
+        public int Fight( IFighter fighter );
         public void SetArmor( IArmor armor );
         public void SetWeapon( IWeapon weapon );
 

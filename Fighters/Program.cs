@@ -1,6 +1,6 @@
-﻿using Fighters.Models.Armors;
+﻿using Fighters.GameManager;
+using Fighters.Models.Armors;
 using Fighters.Models.Fighters;
-using Fighters.Models.GameManager;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 
@@ -30,7 +30,7 @@ public class Program
             **       **|";
     public static void Main( string[] args )
     {
-        GameManager gameManager = new GameManager();
+        GameEngine gameManager = new GameEngine();
 
         Console.WriteLine( Drawing );
         Command command = Command.Initial;
@@ -38,7 +38,7 @@ public class Program
         {
             PrintMenu();
             Console.Write( "\nВведите команду: " );
-            string commandStr = Console.ReadLine();
+            string commandStr = Console.ReadLine() ?? string.Empty;
             try
             {
                 command = TryParseCommand( commandStr );
@@ -47,13 +47,10 @@ public class Program
             catch ( Exception ex )
             {
                 Console.WriteLine( ex.Message );
-                PrintMenu();
             }
-
         }
 
     }
-
 
     public static void StartFight()
     {
@@ -72,6 +69,7 @@ public class Program
     private static Command TryParseCommand( string commandStr )
     {
         IReadOnlyDictionary<string, Command> commandDictionary = new Dictionary<string, Command> {
+            { "play", Command.StartFight},
             { "add-fighter", Command.AddFighter },
             { "show-fighters", Command.ShowFighters },
             { "quit", Command.Quit },

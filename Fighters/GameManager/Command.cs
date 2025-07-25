@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fighters.Models.GameManager
+namespace Fighters.GameManager
 {
     public enum Command
     {

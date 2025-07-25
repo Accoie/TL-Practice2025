@@ -12,7 +12,7 @@ using static Fighters.Models.Races.RaceGetter;
 using static Fighters.Models.Weapons.WeaponGetter;
 
 
-namespace Fighters.Models.GameManager
+namespace Fighters.GameManager
 {
     public class FighterBuilder
     {

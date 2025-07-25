@@ -32,7 +32,7 @@ namespace Fighters.Models.Fighters
         }
         public virtual int Fight( IFighter fighter )
         {
-            int damage = CalculateDamage() - fighter.CalculateArmor();
+            int damage = Math.Max( CalculateDamage() - fighter.CalculateArmor(), 0 );
             fighter.TakeDamage( damage );
 
             return damage;

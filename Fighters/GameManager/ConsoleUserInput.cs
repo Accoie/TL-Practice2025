@@ -9,7 +9,7 @@ using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 
 
-namespace Fighters.Models.GameManager
+namespace Fighters.GameManager
 {
     using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -39,11 +39,21 @@ namespace Fighters.Models.GameManager
                     .Build();
         }
 
-        private static string? ReadFighterName()
+        private static string ReadFighterName()
         {
-            Console.Write( "Введите имя бойца: " );
+            string name = string.Empty;
 
-            return Console.ReadLine();
+            while ( string.IsNullOrEmpty( name ) )
+            {
+                Console.Write( "Введите имя бойца: " );
+                name = Console.ReadLine() ?? string.Empty;
+                if ( string.IsNullOrEmpty( name ) )
+                {
+                    Console.WriteLine( "Имя не может быть пустым!" );
+                }
+            }
+
+            return name;
         }
         private static IWeapon ReadFighterWeapon()
         {
@@ -52,17 +62,23 @@ namespace Fighters.Models.GameManager
             Console.WriteLine( $"Выберите оружие: {Weapon.fists.ToString()} - кулаки(по умолчанию)\n" +
                 $"{indent}{Weapon.sword.ToString()} - меч\n" +
                 $"{indent}{Weapon.longSword.ToString()} - длинный меч" );
-            Console.Write( "Введите название оружия(на английском): " );
-            string weaponStr = Console.ReadLine() ?? string.Empty;
+
+            Weapon weapon = Weapon.fists;
 
             bool isParsed = false;
-            Weapon weapon = Weapon.fists;
             while ( !isParsed )
             {
+                Console.Write( "Введите название оружия(на английском): " );
+                string weaponStr = Console.ReadLine() ?? string.Empty;
+
                 isParsed = Enum.TryParse( weaponStr, ignoreCase: true, out weapon );
+                if ( !isParsed )
+                {
+                    Console.WriteLine( "Неверное название оружия!" );
+                }
             }
 
-            return WeaponGetter.WeaponFactory( weapon );
+            return WeaponGetter.WeaponFactory( weapon ); ;
         }
 
         private static IArmor ReadFighterArmor()
@@ -75,14 +91,19 @@ namespace Fighters.Models.GameManager
                 $"{indent}{Armor.iron.ToString()} - железная\n" +
                 $"{indent}{Armor.diamond.ToString()} - алмазная\n"
                 );
-            Console.Write( "Введите название брони(на английском): " );
-            string armorStr = Console.ReadLine() ?? string.Empty;
 
             bool isParsed = false;
             Armor armor = Armor.noArmor;
+
             while ( !isParsed )
             {
+                Console.Write( "Введите название брони(на английском): " );
+                string armorStr = Console.ReadLine() ?? string.Empty;
                 isParsed = Enum.TryParse( armorStr, ignoreCase: true, out armor );
+                if ( !isParsed )
+                {
+                    Console.WriteLine( "Неверное название брони!" );
+                }
             }
 
             return ArmorGetter.ArmorFactory( armor );
@@ -94,14 +115,18 @@ namespace Fighters.Models.GameManager
             Console.WriteLine( $"Выберите расу: {Race.human.ToString()} - человек(по умолчанию)\n" +
                 $"{indent}{Race.orc.ToString()} - орк\n"
                 );
-            Console.Write( "Введите название расы(на английском): " );
-            string raceStr = Console.ReadLine() ?? string.Empty;
 
             bool isParsed = false;
             Race race = Race.human;
             while ( !isParsed )
             {
+                Console.Write( "Введите название расы(на английском): " );
+                string raceStr = Console.ReadLine() ?? string.Empty;
                 isParsed = Enum.TryParse( raceStr, ignoreCase: true, out race );
+                if ( !isParsed )
+                {
+                    Console.WriteLine( "Неверное название расы!" );
+                }
             }
 
             return RaceGetter.RaceFactory( race );
@@ -114,19 +139,24 @@ namespace Fighters.Models.GameManager
                 $"{indent}{FighterType.assasin.ToString()} - Ассасин\n"
                 );
             Console.Write( "Введите название класса(на английском): " );
-            string fighterStr = Console.ReadLine() ?? string.Empty;
 
-            bool isParsed = false;
             FighterType fighter = FighterType.knight;
+            bool isParsed = false;
+
             while ( !isParsed )
             {
+                string fighterStr = Console.ReadLine() ?? string.Empty;
+
                 isParsed = Enum.TryParse( fighterStr, ignoreCase: true, out fighter );
+                if ( !isParsed )
+                {
+                    Console.WriteLine( "Неверное названия типа бойца!" );
+                }
             }
 
             return fighter;
-
-
         }
+
     }
 
 }
