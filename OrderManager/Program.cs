@@ -42,7 +42,6 @@ class Program
 
     private static void MakeOrder()
     {
-
         string productName = ReadUserInput.ReadProductName();
         int countProduct = ReadUserInput.ReadCountProduct();
         string clientName = ReadUserInput.ReadClientName();
@@ -51,6 +50,5 @@ class Program
         ConsolePrinter messagePrinter = new ConsolePrinter( productName, countProduct, address );
 
         messagePrinter.PrintApplyMessage();
-
     }
 }
