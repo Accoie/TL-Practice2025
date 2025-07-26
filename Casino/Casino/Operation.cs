@@ -1,6 +1,5 @@
 ﻿namespace CasinoOperation;
 
-// todo: изучить
 public enum Operation
 {
     Initial = 0,
