@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Casino;
+
 public class CasinoPrintInfo
 {
     const string GameName = "#######---777CASINO777---#######";
