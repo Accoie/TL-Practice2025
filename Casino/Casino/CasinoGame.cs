@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Casino;
+
 public class CasinoGame(int balance)
 {
-
     private int _balance = balance;
 
     public int Balance { get => _balance; }
