@@ -15,6 +15,7 @@ public class CasinoPrintInfo
         Console.WriteLine( $"Your balance: {balance}" );
         return;
     }
+    
     public static void DisplayMenu()
     {
         Console.WriteLine( "Menu: Play(1)" );
