@@ -24,7 +24,7 @@ public class CasinoPrintInfo
 
     public static void PrintGameName()
     {
-        Console.WriteLine( GameName );
+        Console.WriteLine( $"{GameName}\n");
         Console.WriteLine();
     }
 }
