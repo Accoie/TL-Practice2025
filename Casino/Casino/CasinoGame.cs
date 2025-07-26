@@ -25,6 +25,7 @@ public class CasinoGame(int balance)
         if ( _balance <= 0 || balance <= 0 )
         {
             Console.WriteLine( "Ooops... You don't have money!" );
+            _balance = 0;
             return;
         }
 

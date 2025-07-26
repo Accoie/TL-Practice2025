@@ -15,7 +15,7 @@ public class ReadUserInput
         string betStr = Console.ReadLine() ?? string.Empty;
 
         bool isBetParsed = double.TryParse( betStr,
-            new CultureInfo( "en-US" ), 
+            new CultureInfo( "en-US" ),
             out double bet );
 
         if ( !isBetParsed )
@@ -32,33 +32,46 @@ public class ReadUserInput
         return bet;
     }
 
-    public static int? ReadBalance()
+    public static int ReadBalance()
     {
-        Console.Write( "Please enter amount of money you'd like to lose: " );
-
-        string balanceStr = Console.ReadLine() ?? string.Empty;
-
-        bool isBalanceParsed = int.TryParse( balanceStr, out int balance );
-
-        if ( !isBalanceParsed )
+        bool isBalanceParsed = false;
+        int balance = 0;
+        while ( !isBalanceParsed )
         {
-            Console.WriteLine( $"Invalid balance value entered: {balanceStr}" );
-            return null;
+            Console.Write( "Please enter amount of money you'd like to lose: " );
+
+            string balanceStr = Console.ReadLine() ?? string.Empty;
+
+            isBalanceParsed = int.TryParse( balanceStr, out balance );
+
+            if ( !isBalanceParsed )
+            {
+                Console.WriteLine( $"Invalid balance value entered: {balanceStr}" );
+            }
+            if ( balance <= 0 )
+            {
+                Console.WriteLine( "Balance cannot be less than 1" );
+            }
         }
-        if ( balance <= 0 )
-        {
-            Console.WriteLine( "Balance cannot be less than 1" );
-            return null;
-        }
+
 
         return balance;
     }
 
-    public static Operation? ReadOperation()
+    public static Operation ReadOperation()
     {
         string operationStr = Console.ReadLine() ?? string.Empty;
-        bool isParsed = Enum.TryParse( operationStr, out Operation operation );
+        if ( string.IsNullOrEmpty( operationStr ) )
+        {
+            throw new Exception( "Operation cannot be empty!" );
+        }
 
-        return isParsed ? operation : null;
+        bool isParsed = Enum.TryParse( operationStr, out Operation operation );
+        if ( !isParsed )
+        {
+            throw new Exception( "Unsupport operation!" );
+        }
+
+        return operation;
     }
 }

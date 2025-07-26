@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Casino;
 using CasinoOperation;
 
+namespace Casino;
 public class CasinoOperationHandler
 {
     public static void HandleOperation( CasinoGame casino, Operation operation )
@@ -26,7 +26,7 @@ public class CasinoOperationHandler
                 }
             case Operation.Exit:
                 {
-                    Console.WriteLine( "Goodbye!!!" );
+                    Console.WriteLine( "\nGoodbye!!!" );
                     break;
                 }
             default:
