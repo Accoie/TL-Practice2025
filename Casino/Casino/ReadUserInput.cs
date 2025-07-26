@@ -7,6 +7,7 @@ using CasinoOperation;
 using System.Globalization;
 
 namespace Casino;
+
 public class ReadUserInput
 {
     public static double? ReadBet()
@@ -36,6 +37,7 @@ public class ReadUserInput
     {
         bool isBalanceParsed = false;
         int balance = 0;
+        
         while ( !isBalanceParsed )
         {
             Console.Write( "Please enter amount of money you'd like to lose: " );
@@ -53,7 +55,6 @@ public class ReadUserInput
                 Console.WriteLine( "Balance cannot be less than 1" );
             }
         }
-
 
         return balance;
     }
