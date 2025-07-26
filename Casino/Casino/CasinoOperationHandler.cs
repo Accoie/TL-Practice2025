@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CasinoOperation;
 
 namespace Casino;
+
 public class CasinoOperationHandler
 {
     public static void HandleOperation( CasinoGame casino, Operation operation )
