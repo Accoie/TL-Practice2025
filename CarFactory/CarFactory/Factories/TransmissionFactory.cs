@@ -1,4 +1,4 @@
-﻿using CarFactory.Transmissions;
+﻿using CarFactory.Models.Transmissions;
 
 namespace CarFactory.Factories
 {

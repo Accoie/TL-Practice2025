@@ -3,7 +3,7 @@ using CarFactory.Models.Cars;
 using CarFactory.Models.CarShapes;
 using CarFactory.Models.Colors;
 using CarFactory.Models.Engines;
-using CarFactory.Transmissions;
+using CarFactory.Models.Transmissions;
 
 namespace CarFactory.Services
 {

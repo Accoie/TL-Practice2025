@@ -1,4 +1,4 @@
-﻿namespace CarFactory.Transmissions
+﻿namespace CarFactory.Models.Transmissions
 {
     public class Manual : ITransmission
     {
