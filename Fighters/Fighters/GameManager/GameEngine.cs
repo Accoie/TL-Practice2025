@@ -98,18 +98,30 @@ namespace Fighters.GameManager
 
         private static IFighter? StartDuelAndGetDeadFighter( IFighter fighterFirst, IFighter fighterSecond )
         {
+            const int maxCountWithoutDamage = 5;
+
             if ( IsDraw( fighterFirst, fighterSecond ) )
             {
                 return null;
             }
 
+            int countWithoutDamage = 0;
             while ( fighterFirst.IsAlive() && fighterSecond.IsAlive() )
             {
-                Attack( fighterFirst, fighterSecond );
+                int damageFirst = Attack( fighterFirst, fighterSecond );
 
                 if ( fighterSecond.IsAlive() )
                 {
-                    Attack( fighterSecond, fighterFirst );
+                    int damageSecond = Attack( fighterSecond, fighterFirst );
+
+                    if ( damageFirst == 0 && damageSecond == 0 )
+                    {
+                        countWithoutDamage++;
+                    }
+                }
+                if ( countWithoutDamage == maxCountWithoutDamage )
+                {
+                    return null;
                 }
             }
 
@@ -122,13 +134,15 @@ namespace Fighters.GameManager
                 && !fighterSecond.CanWin( fighterFirst );
         }
 
-        private static void Attack( IFighter damager, IFighter defencer )
+        private static int Attack( IFighter damager, IFighter defencer )
         {
             int damage = damager.Fight( defencer );
 
             FightLog firstLog = new FightLog( damager, defencer, damage );
 
             GameManagerOutput.PrintFightLogs( firstLog );
+
+            return damage;
         }
 
         private static IFighter? Fight( List<InitiativeFighter> initiativeFighters )
