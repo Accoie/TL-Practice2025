@@ -106,6 +106,7 @@ namespace Fighters.GameManager
             }
 
             int countWithoutDamage = 0;
+
             while ( fighterFirst.IsAlive() && fighterSecond.IsAlive() )
             {
                 int damageFirst = Attack( fighterFirst, fighterSecond );
