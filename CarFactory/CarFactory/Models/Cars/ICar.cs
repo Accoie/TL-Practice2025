@@ -14,5 +14,9 @@ namespace CarFactory.Models.Cars
         public CarShape CarShape { get; }
 
         public CarColor CarColor { get; }
+
+        public int MaxSpeed { get; }
+
+        public int MaxGears { get; }
     }
 }

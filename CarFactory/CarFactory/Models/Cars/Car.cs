@@ -19,5 +19,9 @@ namespace CarFactory.Models.Cars
         public CarShape CarShape => _carShape;
 
         public CarColor CarColor => _carColor;
+
+        public int MaxSpeed => _engine.MaxSpeed;
+
+        public int MaxGears => _transmission.Gears;
     }
 }

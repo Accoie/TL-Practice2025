@@ -25,6 +25,8 @@ namespace CarFactory.Services
             table.AddRow( "Transmission:", car.Transmission.ToString() );
             table.AddRow( "Color:", car.CarColor.ToString() );
             table.AddRow( "Shape:", car.CarShape.ToString() );
+            table.AddRow( "Max Speed:", car.MaxSpeed.ToString() );
+            table.AddRow( "Max Gears:", car.MaxGears.ToString() );
 
             AnsiConsole.Write( table );
         }
