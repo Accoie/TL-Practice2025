@@ -10,6 +10,6 @@ namespace Fighters.Models.Fighters
 
         protected override int ClassDamage => 30;
 
-        protected override double CritChance => 0.06;
+        protected override double CritChance => 0.13;
     }
 }
