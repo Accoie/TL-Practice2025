@@ -1,8 +1,4 @@
 ﻿using Fighters.GameManager;
-using Fighters.Models.Armors;
-using Fighters.Models.Fighters;
-using Fighters.Models.Races;
-using Fighters.Models.Weapons;
 
 namespace Fighters;
 

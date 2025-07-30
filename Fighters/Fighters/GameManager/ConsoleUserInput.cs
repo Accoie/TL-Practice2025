@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fighters.Models.Armors;
+﻿using Fighters.Models.Armors;
 using Fighters.Models.Fighters;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
@@ -56,16 +51,6 @@ namespace Fighters.GameManager
             return command.Value;
         }
 
-        private static Command? TryParseCommand( string commandStr )
-        {
-            if ( !Enum.TryParse( commandStr, ignoreCase: true, out Command command ) )
-            {
-                return null;
-            }
-
-            return command;
-        }
-
         public static IFighter ReadFighterData()
         {
             FighterBuilder _builder = new FighterBuilder();
@@ -87,6 +72,15 @@ namespace Fighters.GameManager
                     .WithRace( race )
                     .OfType( type )
                     .Build();
+        }
+        private static Command? TryParseCommand( string commandStr )
+        {
+            if ( !Enum.TryParse( commandStr, ignoreCase: true, out Command command ) )
+            {
+                return null;
+            }
+
+            return command;
         }
 
         private static string ReadName()

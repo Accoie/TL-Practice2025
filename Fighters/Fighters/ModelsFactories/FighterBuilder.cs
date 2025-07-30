@@ -2,9 +2,6 @@
 using Fighters.Models.Fighters;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
-using static Fighters.ModelsFactories.ArmorFactory;
-using static Fighters.ModelsFactories.RaceFactory;
-using static Fighters.ModelsFactories.WeaponFactory;
 
 namespace Fighters.ModelsFactories
 {

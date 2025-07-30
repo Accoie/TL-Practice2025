@@ -7,6 +7,11 @@ namespace Fighters.Models.Fighters
     public class BaseFighter : IFighter
     {
         public string Name { get; private set; }
+        public IRace Race => _race;
+
+        public IArmor Armor => _armor;
+
+        public IWeapon Weapon => _weapon;
 
         protected virtual int ClassHealth => 10;
 
@@ -15,13 +20,6 @@ namespace Fighters.Models.Fighters
         protected virtual int ClassArmor => 10;
 
         protected virtual double CritChance => 0.03;
-
-        public IRace Race => _race;
-
-        public IArmor Armor => _armor;
-
-        public IWeapon Weapon => _weapon;
-
 
         protected readonly IRace _race;
         protected IArmor _armor;

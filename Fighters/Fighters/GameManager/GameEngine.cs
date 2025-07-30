@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fighters.Extensions;
+﻿using Fighters.Extensions;
 using Fighters.Models.Fighters;
 
 namespace Fighters.GameManager
