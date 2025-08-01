@@ -8,15 +8,15 @@ namespace Fighters.ModelsFactories
         {
             switch ( armor )
             {
-                case Armor.noArmor:
+                case Armor.NoArmor:
                     return new NoArmor();
-                case Armor.leather:
+                case Armor.Leather:
                     return new Leather();
-                case Armor.gold:
+                case Armor.Gold:
                     return new Gold();
-                case Armor.diamond:
+                case Armor.Diamond:
                     return new Diamond();
-                case Armor.iron:
+                case Armor.Iron:
                     return new Iron();
                 default:
                     return new NoArmor();

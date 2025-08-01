@@ -8,11 +8,11 @@ namespace Fighters.ModelsFactories
         {
             switch ( weapon )
             {
-                case Weapon.fists:
+                case Weapon.Fists:
                     return new Fists();
-                case Weapon.sword:
+                case Weapon.Sword:
                     return new Sword();
-                case Weapon.longSword:
+                case Weapon.LongSword:
                     return new LongSword();
                 default:
                     return new Fists();

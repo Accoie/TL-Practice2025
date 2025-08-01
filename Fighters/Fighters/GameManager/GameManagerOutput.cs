@@ -20,7 +20,7 @@ namespace Fighters.GameManager
 
     public class GameManagerOutput
     {
-        public static void ShowFighters( in List<IFighter> fighters )
+        public static void ShowFighters( IReadOnlyList<IFighter> fighters )
         {
             Console.WriteLine( "Список бойцов:" );
 
@@ -32,9 +32,9 @@ namespace Fighters.GameManager
             }
         }
 
-        public static void PrintNotEnoughFighter()
+        public static void PrintExceptionMessage( string e )
         {
-            Console.WriteLine( "Не хватает бойцов для удаления(нужен хотя бы 1)" );
+            Console.WriteLine( e );
         }
 
         public static void PrintFighterNotFound( string fighterName )
@@ -119,54 +119,39 @@ namespace Fighters.GameManager
 
         public static void PrintArmorMenu()
         {
-            const string indent = "                ";
-
-            Console.WriteLine( $"Выберите броню: {Armor.noArmor.ToString()} - без брони(по умолчанию)\n" +
-                $"{indent}{Armor.leather.ToString()} - кожаная\n" +
-                $"{indent}{Armor.gold.ToString()} - золотая\n" +
-                $"{indent}{Armor.iron.ToString()} - железная\n" +
-                $"{indent}{Armor.diamond.ToString()} - алмазная\n" );
+            Console.WriteLine( $"Выберите броню: {Armor.NoArmor.ToString()} - без брони(по умолчанию)\n" +
+                $"{' ',16}{Armor.Leather.ToString()} - кожаная\n" +
+                $"{' ',16}{Armor.Gold.ToString()} - золотая\n" +
+                $"{' ',16}{Armor.Iron.ToString()} - железная\n" +
+                $"{' ',16}{Armor.Diamond.ToString()} - алмазная\n" );
         }
 
         public static void PrintWeaponMenu()
         {
-            const string indent = "                 ";
-
-            Console.WriteLine( $"Выберите оружие: {Weapon.fists.ToString()} - кулаки(по умолчанию)\n" +
-                $"{indent}{Weapon.sword.ToString()} - меч\n" +
-                $"{indent}{Weapon.longSword.ToString()} - длинный меч" );
+            Console.WriteLine( $"Выберите оружие: {Weapon.Fists.ToString()} - кулаки(по умолчанию)\n" +
+                $"{' ',17}{Weapon.Sword.ToString()} - меч\n" +
+                $"{' ',17}{Weapon.LongSword.ToString()} - длинный меч" );
         }
 
         public static void PrintRaceMenu()
         {
-            const string indent = "               ";
-
-            Console.WriteLine( $"Выберите расу: {Race.human.ToString()} - человек(по умолчанию)\n" +
-                $"{indent}{Race.orc.ToString()} - орк\n" );
+            Console.WriteLine( $"Выберите расу: {Race.Human.ToString()} - человек(по умолчанию)\n" +
+                $"{' ',15}{Race.Orc.ToString()} - орк\n" );
         }
 
         public static void PrintFighterTypeMenu()
         {
-            const string indent = "                      ";
-
-            Console.WriteLine( $"Выберите класс бойца: {FighterType.knight.ToString()} - Рыцарь(по умолчанию)\n" +
-                $"{indent}{FighterType.assasin.ToString()} - Ассасин\n" );
+            Console.WriteLine( $"Выберите класс бойца: {FighterType.Knight.ToString()} - Рыцарь(по умолчанию)\n" +
+                $"{' ',22}{FighterType.Assasin.ToString()} - Ассасин\n" );
         }
 
         public static void PrintCommandMenu()
         {
-            const string indent = "               ";
-
             Console.WriteLine( $"\nСписок команд: {Command.StartFight.ToString()} - Запустить сражение " +
-                $"\n{indent}{Command.AddFighter.ToString()} - Добавить бойца" +
-                $"\n{indent}{Command.ShowFighters.ToString()}  - Показать бойцов" +
-                $"\n{indent}{Command.RemoveFighter.ToString()}  - Удалить бойца" +
-                $"\n{indent}{Command.Quit.ToString()} - Выйти из игры\n" );
-        }
-
-        public static void PrintNotEnoughFightersForFight()
-        {
-            Console.WriteLine( "Недостаточно бойцов для битвы (не может быть меньше 2)" );
+                $"\n{' ',15}{Command.AddFighter.ToString()} - Добавить бойца" +
+                $"\n{' ',15}{Command.ShowFighters.ToString()}  - Показать бойцов" +
+                $"\n{' ',15}{Command.RemoveFighter.ToString()}  - Удалить бойца" +
+                $"\n{' ',15}{Command.Quit.ToString()} - Выйти из игры\n" );
         }
 
         public static void PrintGreetingMessage()

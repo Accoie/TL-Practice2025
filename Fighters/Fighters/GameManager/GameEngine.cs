@@ -5,9 +5,11 @@ namespace Fighters.GameManager
 {
     public class GameEngine
     {
-        private List<IFighter> _fighterList = new List<IFighter>();
+        private List<IFighter> _fighterList = new();
 
-        public List<IFighter> Fighters => _fighterList;
+        const int MaxDraws = 20;
+
+        public IReadOnlyList<IFighter> Fighters => _fighterList;
 
         public void AddFighter( IFighter fighter )
         {
@@ -21,13 +23,6 @@ namespace Fighters.GameManager
 
         public void RemoveFighter()
         {
-            if ( _fighterList.Count == 0 )
-            {
-                GameManagerOutput.PrintNotEnoughFighter();
-
-                return;
-            }
-
             GameManagerOutput.ShowFighters( _fighterList );
 
             string? fighterName = ConsoleUserInput.ReadRemovedFighterName();
@@ -52,11 +47,11 @@ namespace Fighters.GameManager
 
         public IFighter? StartFight()
         {
-            List<InitiativeFighter> initiativeFighters = new List<InitiativeFighter>();
+            List<InitiativeFighter> initiativeFighters = new();
 
-            foreach ( var init in _fighterList )
+            foreach ( IFighter fighter in _fighterList )
             {
-                initiativeFighters.Add( new InitiativeFighter( 0, init ) );
+                initiativeFighters.Add( new InitiativeFighter( 0, fighter ) );
             }
 
             IFighter? winner = Fight( initiativeFighters );
@@ -77,18 +72,6 @@ namespace Fighters.GameManager
         private static void RemoveDeadFighters( List<InitiativeFighter> initiativeFighters )
         {
             initiativeFighters.RemoveAll( fighter => !fighter._fighter.IsAlive() );
-        }
-
-        private static void CalculateInitiativeAndSort( List<InitiativeFighter> initiativeFighters )
-        {
-            Random rnd = new Random();
-
-            foreach ( var init in initiativeFighters )
-            {
-                init._initiative = rnd.Next( 1, 36 );
-            }
-
-            initiativeFighters.Sort( ( x, y ) => y._initiative.CompareTo( x._initiative ) );
         }
 
         private static IFighter? StartDuelAndGetDeadFighter( IFighter fighterFirst, IFighter fighterSecond )
@@ -143,13 +126,13 @@ namespace Fighters.GameManager
 
         private static IFighter? Fight( List<InitiativeFighter> initiativeFighters )
         {
-            const int maxDraws = 20;
-
             int countDraws = 0;
 
             while ( initiativeFighters.Count != 1 )
             {
-                CalculateInitiativeAndSort( initiativeFighters );
+                CalculateInitiativeList( initiativeFighters );
+
+                SortInitiative( initiativeFighters );
 
                 IFighter fighterFirst = initiativeFighters[ 0 ]._fighter;
                 IFighter fighterSecond = initiativeFighters[ 1 ]._fighter;
@@ -164,7 +147,7 @@ namespace Fighters.GameManager
                 }
                 else
                 {
-                    if ( countDraws++ == maxDraws )
+                    if ( countDraws++ == MaxDraws )
                     {
                         return null;
                     }
@@ -174,6 +157,21 @@ namespace Fighters.GameManager
             }
 
             return initiativeFighters[ 0 ]._fighter;
+        }
+
+        private static void CalculateInitiativeList( List<InitiativeFighter> initiativeFighters )
+        {
+            Random rnd = new();
+
+            foreach ( var init in initiativeFighters )
+            {
+                init._initiative = rnd.Next( 1, 36 );
+            }
+        }
+
+        private static void SortInitiative( IReadOnlyList<InitiativeFighter> initiativeFighters )
+        {
+            initiativeFighters = initiativeFighters.OrderByDescending( x => x._initiative ).ToList();
         }
 
         private class InitiativeFighter( int initiative, IFighter fighter )

@@ -2,8 +2,8 @@
 {
     public enum Weapon
     {
-        fists = 0,
-        sword = 1,
-        longSword = 2
+        Fists = 0,
+        Sword = 1,
+        LongSword = 2
     }
 }

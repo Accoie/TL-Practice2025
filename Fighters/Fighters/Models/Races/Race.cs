@@ -2,7 +2,7 @@
 {
     public enum Race
     {
-        human = 0,
-        orc = 1,
+        Human = 0,
+        Orc = 1,
     }
 }

@@ -8,9 +8,9 @@ namespace Fighters.ModelsFactories
         {
             switch ( race )
             {
-                case Race.human:
+                case Race.Human:
                     return new Human();
-                case Race.orc:
+                case Race.Orc:
                     return new Orc();
                 default:
                     return new Human();

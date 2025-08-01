@@ -11,7 +11,7 @@ namespace Fighters.ModelsFactories
         private IArmor _armor = new NoArmor();
         private IWeapon _weapon = new Fists();
         private IRace _race = new Human();
-        private FighterType _type = FighterType.knight;
+        private FighterType _type = FighterType.Knight;
 
         public FighterBuilder WithName( string name )
         {
@@ -47,12 +47,12 @@ namespace Fighters.ModelsFactories
         {
             switch ( _type )
             {
-                case FighterType.knight:
+                case FighterType.Knight:
                     return new Knight( _name, _armor, _weapon, _race );
-                case FighterType.assasin:
+                case FighterType.Assasin:
                     return new Assasin( _name, _armor, _weapon, _race );
                 default:
-                    throw new ArgumentException( "Unknown fighter type" );
+                    throw new ArgumentException( "Неизвестный класс бойца" );
             }
         }
     }

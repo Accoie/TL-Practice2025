@@ -2,10 +2,10 @@
 {
     public enum Armor
     {
-        noArmor = 0,
-        leather = 1,
-        gold = 2,
-        iron = 3,
-        diamond = 4,
+        NoArmor = 0,
+        Leather = 1,
+        Gold = 2,
+        Iron = 3,
+        Diamond = 4,
     }
 }

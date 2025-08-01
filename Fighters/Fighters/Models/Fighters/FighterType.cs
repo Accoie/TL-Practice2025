@@ -2,7 +2,7 @@
 {
     public enum FighterType
     {
-        knight = 0,
-        assasin = 1,
+        Knight = 0,
+        Assasin = 1,
     }
 }

@@ -7,11 +7,11 @@ namespace Fighters.Models.Fighters
     public class BaseFighter : IFighter
     {
         public string Name { get; private set; }
-        public IRace Race => _race;
+        public IRace Race { get; private set; }
 
-        public IArmor Armor => _armor;
+        public IArmor Armor { get; private set; }
 
-        public IWeapon Weapon => _weapon;
+        public IWeapon Weapon { get; private set; }
 
         protected virtual int ClassHealth => 10;
 
@@ -20,10 +20,6 @@ namespace Fighters.Models.Fighters
         protected virtual int ClassArmor => 10;
 
         protected virtual double CritChance => 0.03;
-
-        protected readonly IRace _race;
-        protected IArmor _armor;
-        protected IWeapon _weapon;
 
         protected int _currentHealth;
 
@@ -34,9 +30,9 @@ namespace Fighters.Models.Fighters
         public BaseFighter( string name, IArmor armor, IWeapon weapon, IRace race )
         {
             Name = name;
-            _race = race;
-            _armor = armor;
-            _weapon = weapon;
+            Race = race;
+            Armor = armor;
+            Weapon = weapon;
             _currentHealth = GetMaxHealth();
         }
 
@@ -68,7 +64,7 @@ namespace Fighters.Models.Fighters
 
         public int GetCurrentHealth() => _currentHealth;
 
-        public virtual int GetMaxHealth() => _race.Health + ClassHealth;
+        public virtual int GetMaxHealth() => Race.Health + ClassHealth;
 
         public virtual int CalculateDamage()
         {
@@ -82,7 +78,7 @@ namespace Fighters.Models.Fighters
             return resultDamage;
         }
 
-        public int CalculateArmor() => _armor.Armor + _race.Armor;
+        public int CalculateArmor() => Armor.Armor + Race.Armor;
 
         public bool CanWin( IFighter defencer )
         {
@@ -95,11 +91,11 @@ namespace Fighters.Models.Fighters
             return defencer.CalculateArmor() >= maxDamage ? false : true;
         }
 
-        private int GetClearDamage() => _race.Damage + ClassDamage + _weapon.Damage;
+        private int GetClearDamage() => Race.Damage + ClassDamage + Weapon.Damage;
 
         private double CalculateBonusDamage( double calculatedDamage )
         {
-            Random random = new Random();
+            Random random = new();
 
             double bonusMultiplier = random.Next( _minBonus, _maxBonus ) / 100;
             double bonusDamage = calculatedDamage * bonusMultiplier;
@@ -112,7 +108,7 @@ namespace Fighters.Models.Fighters
         {
             const double minRate = 0.5;
 
-            Random random = new Random();
+            Random random = new();
             int randomNumber = random.Next( 1, 10 );
 
             return critChance * randomNumber > minRate ? true : false;

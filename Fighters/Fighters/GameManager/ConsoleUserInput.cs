@@ -53,7 +53,7 @@ namespace Fighters.GameManager
 
         public static IFighter ReadFighterData()
         {
-            FighterBuilder _builder = new FighterBuilder();
+            FighterBuilder _builder = new();
 
             string name = ReadName();
 
@@ -73,6 +73,7 @@ namespace Fighters.GameManager
                     .OfType( type )
                     .Build();
         }
+
         private static Command? TryParseCommand( string commandStr )
         {
             if ( !Enum.TryParse( commandStr, ignoreCase: true, out Command command ) )
@@ -106,7 +107,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintWeaponMenu();
 
-            Weapon weapon = Weapon.fists;
+            Weapon weapon = Weapon.Fists;
 
             bool isParsed = false;
 
@@ -131,7 +132,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintArmorMenu();
 
-            Armor armor = Armor.noArmor;
+            Armor armor = Armor.NoArmor;
 
             bool isParsed = false;
 
@@ -156,7 +157,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintRaceMenu();
 
-            Race race = Race.human;
+            Race race = Race.Human;
 
             bool isParsed = false;
 
@@ -183,7 +184,7 @@ namespace Fighters.GameManager
 
             GameManagerOutput.PrintEnterFighterType();
 
-            FighterType fighter = FighterType.knight;
+            FighterType fighter = FighterType.Knight;
 
             bool isParsed = false;
 
