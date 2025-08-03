@@ -5,30 +5,15 @@ using Fighters.Models.Weapons;
 
 namespace Fighters.GameManager
 {
-    public class FightLog( IFighter damager, IFighter defencer, int damage )
-    {
-        public string DamagerName => damager.Name;
-
-        public string DefencerName => defencer.Name;
-
-        public int Damage => damage;
-
-        public string WeaponName => damager.Weapon.Name;
-
-        public int HealthCurrent => defencer.GetCurrentHealth();
-    }
-
     public class GameManagerOutput
     {
         public static void ShowFighters( IReadOnlyList<IFighter> fighters )
         {
             Console.WriteLine( "Список бойцов:" );
 
-            int count = 1;
-
-            foreach ( var fighter in fighters )
+            for ( int i = 0; i != fighters.Count; i++ )
             {
-                Console.WriteLine( $"{count++}. {fighter.Name}" );
+                Console.WriteLine( $"{i + 1}. {fighters[ i ].Name}" );
             }
         }
 
@@ -62,9 +47,9 @@ namespace Fighters.GameManager
             Console.WriteLine( "Команда не может быть пустой строкой!" );
         }
 
-        public static void PrintCommandNotSupported( string commandStr )
+        public static void PrintBadCommand()
         {
-            Console.WriteLine( $"Команда {commandStr} не поддерживается!" );
+            Console.WriteLine( $"Команда не поддерживается!" );
         }
 
         public static void PrintEnterFighterName()
@@ -181,7 +166,7 @@ namespace Fighters.GameManager
 
         public static void PrintFightLogs( FightLog logs )
         {
-            Console.WriteLine( $"{logs.DamagerName} нанес оружием {logs.WeaponName} {logs.DefencerName} {logs.Damage} урона, оставив {logs.HealthCurrent} здоровья" );
+            Console.WriteLine( $"{logs.DamagerName} нанес оружием {logs.WeaponName} {logs.DefencerName} {logs.Damage} урона, оставив {logs.CurrentHealth} здоровья" );
         }
 
         public static void PrintWinner( IFighter? winner )

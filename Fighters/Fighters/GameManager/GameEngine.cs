@@ -7,7 +7,7 @@ namespace Fighters.GameManager
     {
         private List<IFighter> _fighterList = new();
 
-        const int MaxDraws = 20;
+        private const int MaxDraws = 20;
 
         public IReadOnlyList<IFighter> Fighters => _fighterList;
 
@@ -89,15 +89,18 @@ namespace Fighters.GameManager
             {
                 int damageFirst = Attack( fighterFirst, fighterSecond );
 
-                if ( fighterSecond.IsAlive() )
+                if ( !fighterSecond.IsAlive() )
                 {
-                    int damageSecond = Attack( fighterSecond, fighterFirst );
-
-                    if ( damageFirst == 0 && damageSecond == 0 )
-                    {
-                        countWithoutDamage++;
-                    }
+                    return fighterSecond;
                 }
+
+                int damageSecond = Attack( fighterSecond, fighterFirst );
+
+                if ( damageFirst == 0 && damageSecond == 0 )
+                {
+                    countWithoutDamage++;
+                }
+
                 if ( countWithoutDamage == maxCountWithoutDamage )
                 {
                     return null;
@@ -147,12 +150,14 @@ namespace Fighters.GameManager
                 }
                 else
                 {
-                    if ( countDraws++ == MaxDraws )
-                    {
-                        return null;
-                    }
+                    countDraws++;
 
                     GameManagerOutput.PrintNobodyDied();
+                }
+
+                if ( countDraws == MaxDraws )
+                {
+                    return null;
                 }
             }
 
@@ -163,7 +168,7 @@ namespace Fighters.GameManager
         {
             Random rnd = new();
 
-            foreach ( var init in initiativeFighters )
+            foreach ( InitiativeFighter init in initiativeFighters )
             {
                 init._initiative = rnd.Next( 1, 36 );
             }

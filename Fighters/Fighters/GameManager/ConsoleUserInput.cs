@@ -8,6 +8,34 @@ namespace Fighters.GameManager
 {
     public class ConsoleUserInput
     {
+        public static T ReadEnum<T>( Action onInput, Action onError ) where T : struct
+        {
+            bool isParsed = false;
+
+            T result = default;
+
+            while ( !isParsed )
+            {
+                onInput.Invoke();
+
+                string input = Console.ReadLine() ?? string.Empty;
+
+                if ( string.IsNullOrEmpty( input ) )
+                {
+                    continue;
+                }
+
+                isParsed = Enum.TryParse( input, ignoreCase: true, out result );
+
+                if ( !isParsed )
+                {
+                    onError.Invoke();
+                }
+            }
+
+            return result;
+        }
+
         public static string? ReadRemovedFighterName()
         {
             GameManagerOutput.PrintEnterRemovedFighterOrCancel();
@@ -24,31 +52,11 @@ namespace Fighters.GameManager
 
         public static Command ReadUserCommand()
         {
-            Command? command = null;
+            GameManagerOutput.PrintCommandMenu();
 
-            while ( !command.HasValue )
-            {
-                GameManagerOutput.PrintCommandMenu();
+            Command command = ReadEnum<Command>( GameManagerOutput.PrintEnterCommand, GameManagerOutput.PrintBadCommand );
 
-                GameManagerOutput.PrintEnterCommand();
-
-                string commandStr = Console.ReadLine() ?? string.Empty;
-
-                if ( string.IsNullOrEmpty( commandStr ) )
-                {
-                    GameManagerOutput.PrintCommandNotEmpty();
-                    continue;
-                }
-
-                command = TryParseCommand( commandStr );
-
-                if ( !command.HasValue )
-                {
-                    GameManagerOutput.PrintCommandNotSupported( commandStr );
-                }
-            }
-
-            return command.Value;
+            return command;
         }
 
         public static IFighter ReadFighterData()
@@ -74,16 +82,6 @@ namespace Fighters.GameManager
                     .Build();
         }
 
-        private static Command? TryParseCommand( string commandStr )
-        {
-            if ( !Enum.TryParse( commandStr, ignoreCase: true, out Command command ) )
-            {
-                return null;
-            }
-
-            return command;
-        }
-
         private static string ReadName()
         {
             string name = string.Empty;
@@ -107,23 +105,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintWeaponMenu();
 
-            Weapon weapon = Weapon.Fists;
-
-            bool isParsed = false;
-
-            while ( !isParsed )
-            {
-                GameManagerOutput.PrintEnterWeaponName();
-
-                string weaponStr = Console.ReadLine() ?? string.Empty;
-
-                isParsed = Enum.TryParse( weaponStr, ignoreCase: true, out weapon );
-
-                if ( !isParsed )
-                {
-                    GameManagerOutput.PrintBadWeaponName();
-                }
-            }
+            Weapon weapon = ReadEnum<Weapon>( GameManagerOutput.PrintEnterWeaponName, GameManagerOutput.PrintBadWeaponName );
 
             return WeaponFactory.CreateWeapon( weapon ); ;
         }
@@ -132,23 +114,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintArmorMenu();
 
-            Armor armor = Armor.NoArmor;
-
-            bool isParsed = false;
-
-            while ( !isParsed )
-            {
-                GameManagerOutput.PrintEnterArmorName();
-
-                string armorStr = Console.ReadLine() ?? string.Empty;
-
-                isParsed = Enum.TryParse( armorStr, ignoreCase: true, out armor );
-
-                if ( !isParsed )
-                {
-                    GameManagerOutput.PrintBadArmorName();
-                }
-            }
+            Armor armor = ReadEnum<Armor>( GameManagerOutput.PrintEnterArmorName, GameManagerOutput.PrintBadArmorName );
 
             return ArmorFactory.CreateArmor( armor );
         }
@@ -157,23 +123,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintRaceMenu();
 
-            Race race = Race.Human;
-
-            bool isParsed = false;
-
-            while ( !isParsed )
-            {
-                GameManagerOutput.PrintEnterRaceName();
-
-                string raceStr = Console.ReadLine() ?? string.Empty;
-
-                isParsed = Enum.TryParse( raceStr, ignoreCase: true, out race );
-
-                if ( !isParsed )
-                {
-                    GameManagerOutput.PrintBadRaceName();
-                }
-            }
+            Race race = ReadEnum<Race>( GameManagerOutput.PrintEnterRaceName, GameManagerOutput.PrintBadRaceName );
 
             return RaceFactory.CreateRace( race );
         }
@@ -182,23 +132,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintFighterTypeMenu();
 
-            GameManagerOutput.PrintEnterFighterType();
-
-            FighterType fighter = FighterType.Knight;
-
-            bool isParsed = false;
-
-            while ( !isParsed )
-            {
-                string fighterStr = Console.ReadLine() ?? string.Empty;
-
-                isParsed = Enum.TryParse( fighterStr, ignoreCase: true, out fighter );
-
-                if ( !isParsed )
-                {
-                    GameManagerOutput.PrintBadFighterType();
-                }
-            }
+            FighterType fighter = ReadEnum<FighterType>( GameManagerOutput.PrintEnterFighterType, GameManagerOutput.PrintBadFighterType );
 
             return fighter;
         }

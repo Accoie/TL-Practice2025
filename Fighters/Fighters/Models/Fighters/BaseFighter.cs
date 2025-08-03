@@ -8,20 +8,17 @@ namespace Fighters.Models.Fighters
     {
         public string Name { get; private set; }
         public IRace Race { get; private set; }
-
         public IArmor Armor { get; private set; }
-
         public IWeapon Weapon { get; private set; }
+        public int Health { get; private set; }
+        public int FullArmor => Armor.Armor + Race.Armor;
+        public int MaxHealth => Race.Health + ClassHealth;
+        public int ClearDamage => Race.Damage + ClassDamage + Weapon.Damage;
 
         protected virtual int ClassHealth => 10;
-
         protected virtual int ClassDamage => 10;
-
         protected virtual int ClassArmor => 10;
-
         protected virtual double CritChance => 0.03;
-
-        protected int _currentHealth;
 
         private const int _maxBonus = 10;
         private const int _minBonus = -20;
@@ -33,12 +30,13 @@ namespace Fighters.Models.Fighters
             Race = race;
             Armor = armor;
             Weapon = weapon;
-            _currentHealth = GetMaxHealth();
+
+            Health = MaxHealth;
         }
 
         public virtual int Fight( IFighter fighter )
         {
-            int damage = Math.Max( CalculateDamage() - fighter.CalculateArmor(), 0 );
+            int damage = Math.Max( CalculateDamage() - fighter.FullArmor, 0 );
 
             fighter.TakeDamage( damage );
 
@@ -47,28 +45,24 @@ namespace Fighters.Models.Fighters
 
         public void TakeDamage( int damage )
         {
-            int newHealth = _currentHealth - damage;
+            int newHealth = Health - damage;
 
             if ( newHealth < 0 )
             {
                 newHealth = 0;
             }
 
-            _currentHealth = newHealth;
+            Health = newHealth;
         }
 
         public void ResetHealth()
         {
-            _currentHealth = GetMaxHealth();
+            Health = MaxHealth;
         }
 
-        public int GetCurrentHealth() => _currentHealth;
-
-        public virtual int GetMaxHealth() => Race.Health + ClassHealth;
-
-        public virtual int CalculateDamage()
+        public int CalculateDamage()
         {
-            double calculatedDamage = GetClearDamage()
+            double calculatedDamage = ClearDamage
                 * ( IsCriticalDamage( CritChance ) ? _criticalMultiplier : 1 );
 
             double bonusDamage = CalculateBonusDamage( calculatedDamage );
@@ -78,20 +72,16 @@ namespace Fighters.Models.Fighters
             return resultDamage;
         }
 
-        public int CalculateArmor() => Armor.Armor + Race.Armor;
-
         public bool CanWin( IFighter defencer )
         {
             const double maxBonusMultiplier = _maxBonus / 100 + 1;
 
-            double criticalDamage = GetClearDamage() * _criticalMultiplier;
+            double criticalDamage = ClearDamage * _criticalMultiplier;
 
             int maxDamage = ( int )( criticalDamage * ( maxBonusMultiplier ) );
 
-            return defencer.CalculateArmor() >= maxDamage ? false : true;
+            return defencer.FullArmor >= maxDamage ? false : true;
         }
-
-        private int GetClearDamage() => Race.Damage + ClassDamage + Weapon.Damage;
 
         private double CalculateBonusDamage( double calculatedDamage )
         {
@@ -102,7 +92,6 @@ namespace Fighters.Models.Fighters
 
             return bonusDamage;
         }
-
 
         private bool IsCriticalDamage( double critChance )
         {

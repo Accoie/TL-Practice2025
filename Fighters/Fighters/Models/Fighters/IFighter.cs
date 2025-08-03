@@ -10,12 +10,11 @@ namespace Fighters.Models.Fighters
         public IRace Race { get; }
         public IArmor Armor { get; }
         public IWeapon Weapon { get; }
-
-        public int GetCurrentHealth();
-        public int GetMaxHealth();
-
+        public int MaxHealth { get; }
+        public int Health { get; }
+        public int FullArmor { get; }
+        public int ClearDamage { get; }
         public int CalculateDamage();
-        public int CalculateArmor();
 
         public bool CanWin( IFighter defencer );
 
