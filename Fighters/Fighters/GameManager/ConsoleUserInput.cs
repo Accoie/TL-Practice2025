@@ -36,18 +36,18 @@ namespace Fighters.GameManager
             return result;
         }
 
-        public static string? ReadRemovedFighterName()
+        public static (string? input, bool isCancel) ReadInputWithCancel()
         {
-            GameManagerOutput.PrintEnterRemovedFighterOrCancel();
-
             ConsoleKeyInfo keyInfo = Console.ReadKey( intercept: true );
 
             if ( keyInfo.Key == ConsoleKey.Escape )
             {
-                return null;
+                return (null, true);
             }
 
-            return Console.ReadLine();
+            string input = Console.ReadLine() ?? string.Empty;
+
+            return (input, false);
         }
 
         public static Command ReadUserCommand()

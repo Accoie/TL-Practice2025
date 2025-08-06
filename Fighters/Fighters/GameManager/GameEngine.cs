@@ -15,7 +15,7 @@ namespace Fighters.GameManager
         {
             if ( string.IsNullOrEmpty( fighter.Name ) )
             {
-                return;
+                throw new ArgumentException( "Имя бойца не может быть пустым" );
             }
 
             _fighterList.Add( fighter );
@@ -23,21 +23,31 @@ namespace Fighters.GameManager
 
         public void RemoveFighter()
         {
-            GameManagerOutput.ShowFighters( _fighterList );
+            if ( _fighterList.Count == 0 )
+            {
+                throw new Exception( "Не хватает бойцов для удаления(нужен хотя бы 1)" );
+            }
 
-            string? fighterName = ConsoleUserInput.ReadRemovedFighterName();
+            GameManagerOutput.ShowFighters( _fighterList );
+            GameManagerOutput.PrintEnterRemovedFighterOrCancel();
+
+            (string? fighterName, bool isCancel) = ConsoleUserInput.ReadInputWithCancel();
+
+            if ( isCancel )
+            {
+                return;
+            }
 
             if ( string.IsNullOrEmpty( fighterName ) )
             {
-                return;
+                throw new ArgumentException( "Имя бойца не может быть пустым" );
             }
 
             IFighter? fighter = _fighterList.Find( x => x.Name == fighterName );
 
             if ( fighter == null )
             {
-                GameManagerOutput.PrintFighterNotFound( fighterName );
-                return;
+                throw new ArgumentException( "Боец не найден!" );
             }
 
             _fighterList.Remove( fighter );
@@ -47,6 +57,11 @@ namespace Fighters.GameManager
 
         public IFighter? StartFight()
         {
+            if ( _fighterList.Count < 2 )
+            {
+                throw new Exception( "Недостаточно бойцов для битвы (не может быть меньше 2)" );
+            }
+
             List<InitiativeFighter> initiativeFighters = new();
 
             foreach ( IFighter fighter in _fighterList )
