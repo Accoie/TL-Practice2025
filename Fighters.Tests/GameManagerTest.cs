@@ -10,8 +10,8 @@ namespace Fighters.Tests;
 public class GameManagerTests
 {
     private Knight _strongFighter;
-    private List<Knight> _weakFighters;
-    private List<Knight> _weakFightersWithBestArmor;
+    private IReadOnlyList<Knight> _weakFighters;
+    private IReadOnlyList<Knight> _weakFightersWithBestArmor;
 
     [SetUp]
     public void Setup()
@@ -40,7 +40,10 @@ public class GameManagerTests
     {
         GameEngine game = new GameEngine();
         game.AddFighter( _strongFighter );
-        _weakFighters.ForEach( f => game.AddFighter( f ) );
+        foreach ( var fighter in _weakFighters )
+        {
+            game.AddFighter( fighter );
+        }
 
         IFighter? winner = game.StartFight();
         Assert.That( winner.Name, Is.EqualTo( _strongFighter.Name ) );
@@ -50,7 +53,7 @@ public class GameManagerTests
     public void Play_TwoWeakFighters_WillDraw() // test on infinity
     {
         GameEngine game = new GameEngine();
-        game.AddFighter( _weakFightersWithBestArmor[ 0] );
+        game.AddFighter( _weakFightersWithBestArmor[ 0 ] );
         game.AddFighter( _weakFightersWithBestArmor[ 1 ] );
 
         IFighter? winner = game.StartFight();
@@ -62,7 +65,10 @@ public class GameManagerTests
     {
         GameEngine game = new GameEngine();
 
-        _weakFightersWithBestArmor.ForEach( f => game.AddFighter( f ) );
+        foreach ( var fighter in _weakFightersWithBestArmor )
+        {
+            game.AddFighter( fighter );
+        }
 
         IFighter? winner = game.StartFight();
         Assert.That( winner, Is.Null );
