@@ -13,7 +13,6 @@ namespace CarFactory.Services
         CarShape _carShape = CarShape.Sedan;
         CarColor _carColor = CarColor.Red;
 
-
         public CarBuilder WithEngine( IEngine engine )
         {
             _engine = engine;

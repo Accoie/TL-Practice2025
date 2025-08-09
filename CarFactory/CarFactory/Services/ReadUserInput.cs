@@ -8,14 +8,25 @@ namespace CarFactory.Services
 {
     public static class ReadUserInput
     {
-        public static CarColor ReadCarColor()
+        public static string ReadChoiceFromAnsiConsole( string title, params string[] choices )
         {
-            string carColorStr = AnsiConsole.Prompt(
+            string result = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title( "Choose car color: " )
-                    .AddChoices( [ CarColor.Red.ToString(), CarColor.Blue.ToString(), CarColor.Green.ToString() ] )
+                    .Title( title )
+                    .AddChoices( choices )
                     .HighlightStyle( Style.Parse( "red" ) )
             );
+
+            return result;
+        }
+
+        public static CarColor ReadCarColor()
+        {
+            string carColorStr = ReadChoiceFromAnsiConsole( "Choose car color: ", [
+                    CarColor.Red.ToString(),
+                    CarColor.Blue.ToString(),
+                    CarColor.Green.ToString()
+                ] );
 
             Enum.TryParse( carColorStr, out CarColor result );
 
@@ -23,16 +34,11 @@ namespace CarFactory.Services
         }
         public static Transmission ReadCarTransmission()
         {
-            string transmissionStr = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title( "Choose transmission: " )
-                    .AddChoices( [
+            string transmissionStr = ReadChoiceFromAnsiConsole( "Choose transmission", [
                         Transmission.Automatic.ToString(),
                         Transmission.Manual.ToString(),
                         Transmission.Robotic.ToString(),
-                    ] )
-                    .HighlightStyle( Style.Parse( "red" ) )
-            );
+                    ] );
 
             Enum.TryParse( transmissionStr, out Transmission result );
 
@@ -41,16 +47,11 @@ namespace CarFactory.Services
 
         public static Engine ReadCarEngine()
         {
-            string engineStr = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title( "Choose engine: " )
-                    .AddChoices( [
+            string engineStr = ReadChoiceFromAnsiConsole( "Choose engine: ", [
                         Engine.Gasoline.ToString(),
                         Engine.Diesel.ToString(),
                         Engine.Wankel.ToString(),
-                    ] )
-                    .HighlightStyle( Style.Parse( "red" ) )
-            );
+                    ] );
 
             Enum.TryParse( engineStr, out Engine result );
 
@@ -59,16 +60,11 @@ namespace CarFactory.Services
 
         public static CarShape ReadCarShape()
         {
-            string carShapeStr = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title( "Choose car shape: " )
-                    .AddChoices( [
+            string carShapeStr = ReadChoiceFromAnsiConsole( "Choose car shape: ", [
                         CarShape.Crossover.ToString(),
                         CarShape.Sedan.ToString(),
                         CarShape.Jeep.ToString(),
-                    ] )
-                    .HighlightStyle( Style.Parse( "red" ) )
-            );
+                    ] );
 
             Enum.TryParse( carShapeStr, out CarShape result );
 
@@ -77,12 +73,7 @@ namespace CarFactory.Services
 
         public static Operation ReadOperation()
         {
-            string operationStr = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title( "Choose operation: " )
-                    .AddChoices( [ Operation.CreateCar.ToString(), Operation.Exit.ToString() ] )
-                    .HighlightStyle( Style.Parse( "red" ) )
-                );
+            string operationStr = ReadChoiceFromAnsiConsole( "Choose operation: ", [ Operation.CreateCar.ToString(), Operation.Exit.ToString() ] );
 
             Enum.TryParse( operationStr, out Operation result );
 

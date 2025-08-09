@@ -5,23 +5,26 @@ using CarFactory.Models.Transmissions;
 
 namespace CarFactory.Models.Cars
 {
-    public class Car( IEngine engine, ITransmission transmission, CarShape carShape, CarColor carColor ) : ICar
+    public class Car : ICar
     {
-        IEngine _engine = engine;
-        ITransmission _transmission = transmission;
-        CarShape _carShape = carShape;
-        CarColor _carColor = carColor;
+        public IEngine Engine { get; private set; }
 
-        public IEngine Engine => _engine;
+        public ITransmission Transmission { get; private set; }
 
-        public ITransmission Transmission => _transmission;
+        public CarShape CarShape { get; private set; }
 
-        public CarShape CarShape => _carShape;
+        public CarColor CarColor { get; private set; }
 
-        public CarColor CarColor => _carColor;
+        public int MaxSpeed => Engine.MaxSpeed;
 
-        public int MaxSpeed => _engine.MaxSpeed;
+        public int MaxGears => Transmission.Gears;
 
-        public int MaxGears => _transmission.Gears;
+        public Car( IEngine engine, ITransmission transmission, CarShape carShape, CarColor carColor )
+        {
+            Engine = engine;
+            Transmission = transmission;
+            CarShape = carShape;
+            CarColor = carColor;
+        }
     }
 }
