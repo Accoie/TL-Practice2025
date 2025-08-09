@@ -29,14 +29,15 @@ namespace Fighters.GameManager
             }
 
             GameManagerOutput.ShowFighters( _fighterList );
+
             GameManagerOutput.PrintEnterRemovedFighterOrCancel();
 
-            (string? fighterName, bool isCancel) = ConsoleUserInput.ReadInputWithCancel();
-
-            if ( isCancel )
+            if ( ConsoleUserInput.IsCancel() )
             {
                 return;
             }
+
+            string fighterName = ConsoleUserInput.ReadInputString();
 
             if ( string.IsNullOrEmpty( fighterName ) )
             {
@@ -66,7 +67,7 @@ namespace Fighters.GameManager
 
             foreach ( IFighter fighter in _fighterList )
             {
-                initiativeFighters.Add( new InitiativeFighter( 0, fighter ) );
+                initiativeFighters.Add( new InitiativeFighter( initiative: 0, fighter ) );
             }
 
             IFighter? winner = Fight( initiativeFighters );
@@ -127,8 +128,8 @@ namespace Fighters.GameManager
 
         private static bool IsDraw( IFighter fighterFirst, IFighter fighterSecond )
         {
-            return !fighterFirst.CanWin( fighterSecond )
-                && !fighterSecond.CanWin( fighterFirst );
+            return !fighterFirst.IsCanWin( fighterSecond )
+                && !fighterSecond.IsCanWin( fighterFirst );
         }
 
         private static int Attack( IFighter damager, IFighter defencer )

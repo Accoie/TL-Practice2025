@@ -18,7 +18,7 @@ namespace Fighters.Models.Fighters
         protected virtual int ClassHealth => 10;
         protected virtual int ClassDamage => 10;
         protected virtual int ClassArmor => 10;
-        protected virtual double CritChance => 0.03;
+        protected virtual double CritChance => 0.06;
 
         private const int _maxBonus = 10;
         private const int _minBonus = -20;
@@ -72,7 +72,7 @@ namespace Fighters.Models.Fighters
             return resultDamage;
         }
 
-        public bool CanWin( IFighter defencer )
+        public bool IsCanWin( IFighter defencer )
         {
             const double maxBonusMultiplier = _maxBonus / 100 + 1;
 
@@ -99,8 +99,9 @@ namespace Fighters.Models.Fighters
 
             Random random = new();
             int randomNumber = random.Next( 1, 10 );
+            double resultRate = critChance * randomNumber;
 
-            return critChance * randomNumber > minRate ? true : false;
+            return resultRate > minRate ? true : false;
         }
     }
 }

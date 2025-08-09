@@ -3,58 +3,28 @@ using Fighters.Models.Fighters;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 using Fighters.ModelsFactories;
+using Fighters.Extensions;
 
 namespace Fighters.GameManager
 {
-    public class ConsoleUserInput
+    public static class ConsoleUserInput
     {
-        public static T ReadEnum<T>( Action onInput, Action onError ) where T : struct
-        {
-            bool isParsed = false;
-
-            T result = default;
-
-            while ( !isParsed )
-            {
-                onInput.Invoke();
-
-                string input = Console.ReadLine() ?? string.Empty;
-
-                if ( string.IsNullOrEmpty( input ) )
-                {
-                    continue;
-                }
-
-                isParsed = Enum.TryParse( input, ignoreCase: true, out result );
-
-                if ( !isParsed )
-                {
-                    onError.Invoke();
-                }
-            }
-
-            return result;
-        }
-
-        public static (string? input, bool isCancel) ReadInputWithCancel()
+        public static bool IsCancel()
         {
             ConsoleKeyInfo keyInfo = Console.ReadKey( intercept: true );
 
-            if ( keyInfo.Key == ConsoleKey.Escape )
-            {
-                return (null, true);
-            }
-
-            string input = Console.ReadLine() ?? string.Empty;
-
-            return (input, false);
+            return keyInfo.Key == ConsoleKey.Escape ? true : false;
+        }
+        public static string ReadInputString()
+        {
+            return Console.ReadLine() ?? string.Empty;
         }
 
         public static Command ReadUserCommand()
         {
             GameManagerOutput.PrintCommandMenu();
 
-            Command command = ReadEnum<Command>( GameManagerOutput.PrintEnterCommand, GameManagerOutput.PrintBadCommand );
+            Command command = ConsoleUserInputExtensions.ReadEnum<Command>( GameManagerOutput.PrintEnterCommand, GameManagerOutput.PrintBadCommand );
 
             return command;
         }
@@ -105,7 +75,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintWeaponMenu();
 
-            Weapon weapon = ReadEnum<Weapon>( GameManagerOutput.PrintEnterWeaponName, GameManagerOutput.PrintBadWeaponName );
+            Weapon weapon = ConsoleUserInputExtensions.ReadEnum<Weapon>( GameManagerOutput.PrintEnterWeaponName, GameManagerOutput.PrintBadWeaponName );
 
             return WeaponFactory.CreateWeapon( weapon ); ;
         }
@@ -114,7 +84,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintArmorMenu();
 
-            Armor armor = ReadEnum<Armor>( GameManagerOutput.PrintEnterArmorName, GameManagerOutput.PrintBadArmorName );
+            Armor armor = ConsoleUserInputExtensions.ReadEnum<Armor>( GameManagerOutput.PrintEnterArmorName, GameManagerOutput.PrintBadArmorName );
 
             return ArmorFactory.CreateArmor( armor );
         }
@@ -123,7 +93,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintRaceMenu();
 
-            Race race = ReadEnum<Race>( GameManagerOutput.PrintEnterRaceName, GameManagerOutput.PrintBadRaceName );
+            Race race = ConsoleUserInputExtensions.ReadEnum<Race>( GameManagerOutput.PrintEnterRaceName, GameManagerOutput.PrintBadRaceName );
 
             return RaceFactory.CreateRace( race );
         }
@@ -132,7 +102,7 @@ namespace Fighters.GameManager
         {
             GameManagerOutput.PrintFighterTypeMenu();
 
-            FighterType fighter = ReadEnum<FighterType>( GameManagerOutput.PrintEnterFighterType, GameManagerOutput.PrintBadFighterType );
+            FighterType fighter = ConsoleUserInputExtensions.ReadEnum<FighterType>( GameManagerOutput.PrintEnterFighterType, GameManagerOutput.PrintBadFighterType );
 
             return fighter;
         }

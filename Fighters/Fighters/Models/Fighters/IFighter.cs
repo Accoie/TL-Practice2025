@@ -16,7 +16,7 @@ namespace Fighters.Models.Fighters
         public int ClearDamage { get; }
         public int CalculateDamage();
 
-        public bool CanWin( IFighter defencer );
+        public bool IsCanWin( IFighter defencer );
 
         public int Fight( IFighter fighter );
 
