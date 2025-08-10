@@ -15,7 +15,7 @@ namespace Fighters.GameManager
                     AddFighter( engine );
                     break;
                 case Command.RemoveFighter:
-                    engine.RemoveFighter();
+                    RemoveFighter( engine );
                     break;
                 case Command.ShowFighters:
                     GameManagerOutput.ShowFighters( engine.Fighters );
@@ -27,7 +27,21 @@ namespace Fighters.GameManager
                     throw new Exception( "Команда не поддерживается" );
             }
         }
+        public static void RemoveFighter( GameEngine engine )
+        {
+            GameManagerOutput.ShowFighters( engine.Fighters );
 
+            GameManagerOutput.PrintEnterRemovedFighterOrCancel();
+
+            if ( ConsoleUserInput.IsCancel() )
+            {
+                return;
+            }
+
+            string fighterName = ConsoleUserInput.ReadInputString();
+
+            engine.RemoveFighter( fighterName );
+        }
         public static void AddFighter( GameEngine engine )
         {
             IFighter fighter = ConsoleUserInput.ReadFighterData();

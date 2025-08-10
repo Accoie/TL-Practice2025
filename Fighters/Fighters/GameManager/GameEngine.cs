@@ -21,23 +21,12 @@ namespace Fighters.GameManager
             _fighterList.Add( fighter );
         }
 
-        public void RemoveFighter()
+        public void RemoveFighter( string fighterName )
         {
             if ( _fighterList.Count == 0 )
             {
                 throw new Exception( "Не хватает бойцов для удаления(нужен хотя бы 1)" );
             }
-
-            GameManagerOutput.ShowFighters( _fighterList );
-
-            GameManagerOutput.PrintEnterRemovedFighterOrCancel();
-
-            if ( ConsoleUserInput.IsCancel() )
-            {
-                return;
-            }
-
-            string fighterName = ConsoleUserInput.ReadInputString();
 
             if ( string.IsNullOrEmpty( fighterName ) )
             {
