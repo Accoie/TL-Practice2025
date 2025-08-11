@@ -6,15 +6,17 @@ namespace CarFactory.Factories
     {
         public static ITransmission MakeTransmission( Transmission transmission )
         {
-            ITransmission result = transmission switch
+            switch ( transmission )
             {
-                Transmission.Manual => new Manual(),
-                Transmission.Automatic => new Automatic(),
-                Transmission.Robotic => new Robotic(),
-                _ => throw new NotImplementedException(),
-            };
-
-            return result;
+                case Transmission.Manual:
+                    return new Manual();
+                case Transmission.Automatic:
+                    return new Automatic();
+                case Transmission.Robotic:
+                    return new Robotic();
+                default:
+                    throw new Exception( "Unknown transmission!" );
+            }
         }
     }
 }

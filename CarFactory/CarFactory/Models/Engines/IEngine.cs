@@ -4,6 +4,6 @@
     {
         public int MaxSpeed { get; }
 
-        public string ToString();
+        public string Name { get; }
     }
 }

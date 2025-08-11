@@ -11,6 +11,11 @@ namespace CarFactory.Services
                         .Color( Color.Red ) );
         }
 
+        public static void PrintMessage( string message )
+        {
+            AnsiConsole.WriteLine( message );
+        }
+
         public static void PrintCar( ICar car )
         {
             AnsiConsole.Markup( "[#FF5733]Car Configuration[/]\n" );
@@ -21,8 +26,8 @@ namespace CarFactory.Services
                 .AddColumn( "" )
                 .AddColumn( "" ).HideHeaders();
 
-            table.AddRow( "Engine:", car.Engine.ToString() );
-            table.AddRow( "Transmission:", car.Transmission.ToString() );
+            table.AddRow( "Engine:", car.Engine.Name );
+            table.AddRow( "Transmission:", car.Transmission.Name );
             table.AddRow( "Color:", car.CarColor.ToString() );
             table.AddRow( "Shape:", car.CarShape.ToString() );
             table.AddRow( "Max Speed:", car.MaxSpeed.ToString() );

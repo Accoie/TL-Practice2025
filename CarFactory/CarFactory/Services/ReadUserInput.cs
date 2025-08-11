@@ -28,19 +28,30 @@ namespace CarFactory.Services
                     CarColor.Green.ToString()
                 ] );
 
-            Enum.TryParse( carColorStr, out CarColor result );
+            bool isParsed = Enum.TryParse( carColorStr, out CarColor result );
+
+            if ( !isParsed )
+            {
+                throw new Exception( $"Invalid car color: {carColorStr}" );
+            }
 
             return result;
         }
+
         public static Transmission ReadCarTransmission()
         {
             string transmissionStr = ReadChoiceFromAnsiConsole( "Choose transmission", [
-                        Transmission.Automatic.ToString(),
-                        Transmission.Manual.ToString(),
-                        Transmission.Robotic.ToString(),
-                    ] );
+                    Transmission.Automatic.ToString(),
+                    Transmission.Manual.ToString(),
+                    Transmission.Robotic.ToString(),
+                ] );
 
-            Enum.TryParse( transmissionStr, out Transmission result );
+            bool isParsed = Enum.TryParse( transmissionStr, out Transmission result );
+
+            if ( !isParsed )
+            {
+                throw new Exception( $"Invalid transmission: {transmissionStr}" );
+            }
 
             return result;
         }
@@ -48,12 +59,17 @@ namespace CarFactory.Services
         public static Engine ReadCarEngine()
         {
             string engineStr = ReadChoiceFromAnsiConsole( "Choose engine: ", [
-                        Engine.Gasoline.ToString(),
-                        Engine.Diesel.ToString(),
-                        Engine.Wankel.ToString(),
-                    ] );
+                    Engine.Gasoline.ToString(),
+                    Engine.Diesel.ToString(),
+                    Engine.Wankel.ToString(),
+                ] );
 
-            Enum.TryParse( engineStr, out Engine result );
+            bool isParsed = Enum.TryParse( engineStr, out Engine result );
+
+            if ( ( !isParsed ) )
+            {
+                throw new Exception( $"Invalid engine: {engineStr}" );
+            }
 
             return result;
         }
@@ -61,13 +77,17 @@ namespace CarFactory.Services
         public static CarShape ReadCarShape()
         {
             string carShapeStr = ReadChoiceFromAnsiConsole( "Choose car shape: ", [
-                        CarShape.Crossover.ToString(),
-                        CarShape.Sedan.ToString(),
-                        CarShape.Jeep.ToString(),
-                    ] );
+                    CarShape.Crossover.ToString(),
+                    CarShape.Sedan.ToString(),
+                    CarShape.Jeep.ToString(),
+                ] );
 
-            Enum.TryParse( carShapeStr, out CarShape result );
+            bool isParsed = Enum.TryParse( carShapeStr, out CarShape result );
 
+            if ( !isParsed )
+            {
+                throw new Exception( $"Invalid car shape: {carShapeStr}" );
+            }
             return result;
         }
 
@@ -75,8 +95,12 @@ namespace CarFactory.Services
         {
             string operationStr = ReadChoiceFromAnsiConsole( "Choose operation: ", [ Operation.CreateCar.ToString(), Operation.Exit.ToString() ] );
 
-            Enum.TryParse( operationStr, out Operation result );
+            bool isParsed = Enum.TryParse( operationStr, out Operation result );
 
+            if ( !isParsed )
+            {
+                throw new Exception( $"Invalid operation: {operationStr}" );
+            }
             return result;
         }
     }

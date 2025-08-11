@@ -11,17 +11,24 @@ class Program
 
         while ( operation != Operation.Exit )
         {
-            operation = ReadUserInput.ReadOperation();
-
-            if ( operation == Operation.Exit )
+            try
             {
-                ConsolePrinter.PrintGoodbyeMessage();
-                return;
+                operation = ReadUserInput.ReadOperation();
+
+                if ( operation == Operation.Exit )
+                {
+                    ConsolePrinter.PrintGoodbyeMessage();
+                    return;
+                }
+
+                Car car = CarCreator.Create();
+
+                ConsolePrinter.PrintCar( car );
             }
-
-            Car car = CarCreator.Create();
-
-            ConsolePrinter.PrintCar( car );
+            catch ( Exception ex )
+            {
+                ConsolePrinter.PrintMessage( ex.Message );
+            }
         }
     }
 }

@@ -4,9 +4,6 @@
     {
         public int MaxSpeed => 200;
 
-        public override string ToString()
-        {
-            return "Diesel";
-        }
+        public string Name => "Diesel";
     }
 }

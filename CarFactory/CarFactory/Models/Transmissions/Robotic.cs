@@ -4,9 +4,6 @@
     {
         public int Gears => 7;
 
-        public override string ToString()
-        {
-            return "Robotic";
-        }
+        public string Name => "Robotic";
     }
 }

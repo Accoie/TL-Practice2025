@@ -4,8 +4,5 @@ public class Wankel : IEngine
 {
     public int MaxSpeed => 220;
 
-    public override string ToString()
-    {
-        return "Wankel";
-    }
+    public string Name => "Wankel";
 }

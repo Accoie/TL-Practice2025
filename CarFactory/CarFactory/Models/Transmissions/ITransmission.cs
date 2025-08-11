@@ -4,6 +4,6 @@
     {
         public int Gears { get; }
 
-        public string ToString();
+        public string Name { get; }
     }
 }

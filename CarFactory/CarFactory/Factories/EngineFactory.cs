@@ -6,15 +6,17 @@ namespace CarFactory.Factories
     {
         public static IEngine MakeEngine( Engine engine )
         {
-            IEngine result = engine switch
+            switch ( engine )
             {
-                Engine.Wankel => new Wankel(),
-                Engine.Gasoline => new Gasoline(),
-                Engine.Diesel => new Diesel(),
-                _ => throw new NotImplementedException(),
-            };
-
-            return result;
+                case Engine.Wankel:
+                    return new Wankel();
+                case Engine.Gasoline:
+                    return new Gasoline();
+                case Engine.Diesel:
+                    return new Diesel();
+                default:
+                    throw new Exception( "Unknown engine!" );
+            }
         }
     }
 }
