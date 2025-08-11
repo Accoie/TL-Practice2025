@@ -15,6 +15,7 @@ namespace Fighters.GameManager
 
             return keyInfo.Key == ConsoleKey.Escape ? true : false;
         }
+
         public static string ReadInputString()
         {
             return Console.ReadLine() ?? string.Empty;

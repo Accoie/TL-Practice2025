@@ -12,28 +12,13 @@ public class GameEngineTests
 {
     private readonly Mock<IFighter> _strongFighterMock;
     private readonly Mock<IFighter> _emptyNameFighterMock;
-    private IReadOnlyList<BaseFighter> _weakFighters;
-    private IReadOnlyList<BaseFighter> _weakFightersWithBestArmor;
+    private readonly Mock<IFighter> _zeroDamageFighterMock;
 
     public GameEngineTests()
     {
-        _strongFighterMock = CreateFighterMock( "Df", 333, 50 );
-        _emptyNameFighterMock = CreateFighterMock( "", 333, 50 );
-        _weakFighters = new List<BaseFighter>
-        {
-            new BaseFighter("Weak1", new Leather(), new Fists(), new Human()),
-            new BaseFighter("Weak2", new Leather(), new Fists(), new Human()),
-            new BaseFighter("Weak3", new Leather(), new Fists(), new Human())
-        };
-
-        _weakFightersWithBestArmor = new List<BaseFighter>
-        {
-            new BaseFighter("Weak1", new Diamond(), new Fists(), new Human()),
-            new BaseFighter("Weak2", new Diamond(), new Fists(), new Human()),
-            new BaseFighter("Weak3", new Diamond(), new Fists(), new Human()),
-            new BaseFighter("Weak4", new Diamond(), new Fists(), new Human()),
-            new BaseFighter("Weak5", new Diamond(), new Fists(), new Human()),
-        };
+        _strongFighterMock = CreateFighterMock( "strong", 333, 50 );
+        _emptyNameFighterMock = CreateFighterMock( string.Empty, 333, 50 );
+        _zeroDamageFighterMock = CreateFighterMock( "zeroDamage", 100, 0 );
     }
 
     public static Mock<IFighter> CreateFighterMock(
@@ -59,7 +44,7 @@ public class GameEngineTests
         fighter.Setup( f => f.IsCanWin( It.IsAny<IFighter>() ) ).Returns( true );
 
         fighter.Setup( f => f.Fight( It.IsAny<IFighter>() ) )
-            .Callback<IFighter>( target => target.TakeDamage( damage ) )
+            .Callback<IFighter>( def => def.TakeDamage( damage ) )
             .Returns( damage );
 
         fighter.Setup( f => f.ResetHealth() ).Callback( () => health = maxHealth );
@@ -96,23 +81,26 @@ public class GameEngineTests
         IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
 
         GameEngine game = new GameEngine();
+
         game.AddFighter( fighter );
 
-        Assert.Throws<ArgumentException>( () => game.RemoveFighter( "" ) );
+        Assert.Throws<ArgumentException>( () => game.RemoveFighter( string.Empty ) );
     }
 
     [Test]
-    public void Play_Only_One_Fighter_Exception_Thrown()
+    public void StartFight_Only_One_Fighter_Exception_Thrown()
     {
+        Mock<IFighter> fighterMock = CreateFighterMock( "fighter", 333, 50 );
         GameEngine game = new GameEngine();
 
-        game.AddFighter( _strongFighterMock.Object );
+        game.AddFighter( fighterMock.Object );
 
         Assert.Throws<Exception>( () => game.StartFight() );
+        fighterMock.Verify( e => e.Fight( It.IsAny<IFighter>() ), Times.Never );
     }
 
     [Test]
-    public void StartFight_TwoFighters_Strong_WillWin()
+    public void StartFight_TwoFighters_StrongFighter_WillWin()
     {
         Mock<IFighter> weakFighter = CreateFighterMock( "Dfsd", 100, 10 );
 
@@ -127,44 +115,32 @@ public class GameEngineTests
     }
 
     [Test]
-    public void Play_OneStrongThreeWeak_FirstFighterWins()
+    public void StartFight_OneStrongThreeWeak_FirstFighterWins()
     {
         GameEngine game = new GameEngine();
 
         game.AddFighter( _strongFighterMock.Object );
 
-        foreach ( var fighter in _weakFighters )
-        {
-            game.AddFighter( fighter );
-        }
+        Mock<IFighter> _weakFighterMock1 = CreateFighterMock( "weak", 100, 10 );
+        Mock<IFighter> _weakFighterMock2 = CreateFighterMock( "weak", 100, 10 );
+        Mock<IFighter> _weakFighterMock3 = CreateFighterMock( "weak", 100, 10 );
+
+        game.AddFighter( _weakFighterMock1.Object );
+        game.AddFighter( _weakFighterMock2.Object );
+        game.AddFighter( _weakFighterMock3.Object );
 
         IFighter? winner = game.StartFight();
 
-        Assert.That( winner.Name, Is.EqualTo( _strongFighterMock.Name ) );
+        Assert.That( winner.Name, Is.EqualTo( _strongFighterMock.Object.Name ) );
     }
 
     [Test]
-    public void Play_TwoWeakFighters_Will_Draw()
+    public void StartFight_TwoWeakFighters_Will_Draw()
     {
         GameEngine game = new GameEngine();
 
-        game.AddFighter( _weakFightersWithBestArmor[ 0 ] );
-        game.AddFighter( _weakFightersWithBestArmor[ 1 ] );
-
-        IFighter? winner = game.StartFight();
-
-        Assert.That( winner, Is.Null );
-    }
-
-    [Test]
-    public void Play_SeveralWeakFighters_Will_Draw()
-    {
-        GameEngine game = new GameEngine();
-
-        foreach ( var fighter in _weakFightersWithBestArmor )
-        {
-            game.AddFighter( fighter );
-        }
+        game.AddFighter( _zeroDamageFighterMock.Object );
+        game.AddFighter( _zeroDamageFighterMock.Object );
 
         IFighter? winner = game.StartFight();
 

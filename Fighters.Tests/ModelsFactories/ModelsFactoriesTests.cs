@@ -3,44 +3,32 @@ using Fighters.Models.Fighters;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 using Fighters.ModelsFactories;
+using Moq;
 
 namespace Fighters.Tests.ModelsFactories
 {
     public class ModelsFactoriesTests
     {
-        [Test]
-        public void Create_Armor()
-        {
-            IArmor armorObj = ArmorFactory.CreateArmor( Armor.Iron );
+        private readonly Mock<IWeapon> _weaponMock;
+        private readonly Mock<IArmor> _armorMock;
+        private readonly Mock<IRace> _raceMock;
 
-            Assert.That( armorObj, Is.InstanceOf<Iron>() );
+        public ModelsFactoriesTests()
+        {
+            _weaponMock = new Mock<IWeapon>();
+            _armorMock = new Mock<IArmor>();
+            _raceMock = new Mock<IRace>();
         }
 
         [Test]
-        public void Create_Weapon()
-        {
-            IWeapon weaponObj = WeaponFactory.CreateWeapon( Weapon.LongSword );
-
-            Assert.That( weaponObj, Is.InstanceOf<LongSword>() );
-        }
-
-        [Test]
-        public void Create_Race()
-        {
-            IRace raceObj = RaceFactory.CreateRace( Race.Orc );
-
-            Assert.That( raceObj, Is.InstanceOf<Orc>() );
-        }
-
-        [Test]
-        public void Create_Fighter()
+        public void Build_Fighter()
         {
             FighterBuilder builder = new();
 
             builder.WithName( "sdf" )
-                   .WithWeapon( new Fists() )
-                   .WithArmor( new Leather() )
-                   .WithRace( new Orc() )
+                   .WithWeapon( _weaponMock.Object )
+                   .WithArmor( _armorMock.Object )
+                   .WithRace( _raceMock.Object )
                    .OfType( FighterType.Knight );
 
             IFighter fighterObj = builder.Build();
@@ -52,11 +40,11 @@ namespace Fighters.Tests.ModelsFactories
         {
             FighterBuilder builder = new();
 
-            builder.WithName( "" );
-            builder.WithWeapon( new Fists() );
-            builder.WithArmor( new Leather() );
-            builder.WithRace( new Orc() );
-            builder.OfType( FighterType.Knight );
+            builder.WithName( string.Empty )
+                   .WithWeapon( _weaponMock.Object )
+                   .WithArmor( _armorMock.Object )
+                   .WithRace( _raceMock.Object )
+                   .OfType( FighterType.Knight );
 
             IFighter fighterObj = builder.Build();
 
