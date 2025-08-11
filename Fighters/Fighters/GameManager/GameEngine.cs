@@ -73,13 +73,7 @@ namespace Fighters.GameManager
                 fighter.ResetHealth();
             }
         }
-
-        private static void RemoveDeadFighters( List<InitiativeFighter> initiativeFighters )
-        {
-            initiativeFighters.RemoveAll( fighter => !fighter._fighter.IsAlive() );
-        }
-
-        private static IFighter? StartDuelAndGetDeadFighter( IFighter fighterFirst, IFighter fighterSecond )
+        public static IFighter? StartDuelAndGetDeadFighter( IFighter fighterFirst, IFighter fighterSecond )
         {
             const int maxCountWithoutDamage = 5;
 
@@ -113,6 +107,11 @@ namespace Fighters.GameManager
             }
 
             return !fighterFirst.IsAlive() ? fighterFirst : fighterSecond;
+        }
+
+        private static void RemoveDeadFighters( List<InitiativeFighter> initiativeFighters )
+        {
+            initiativeFighters.RemoveAll( fighter => !fighter._fighter.IsAlive() );
         }
 
         private static bool IsDraw( IFighter fighterFirst, IFighter fighterSecond )

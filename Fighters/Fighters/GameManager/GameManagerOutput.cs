@@ -104,7 +104,7 @@ namespace Fighters.GameManager
 
         public static void PrintArmorMenu()
         {
-            Console.WriteLine( $"Выберите броню: {Armor.NoArmor.ToString()} - без брони(по умолчанию)\n" +
+            Console.WriteLine( $"\nВыберите броню: {Armor.NoArmor.ToString()} - без брони(по умолчанию)\n" +
                 $"{' ',16}{Armor.Leather.ToString()} - кожаная\n" +
                 $"{' ',16}{Armor.Gold.ToString()} - золотая\n" +
                 $"{' ',16}{Armor.Iron.ToString()} - железная\n" +
@@ -113,20 +113,20 @@ namespace Fighters.GameManager
 
         public static void PrintWeaponMenu()
         {
-            Console.WriteLine( $"Выберите оружие: {Weapon.Fists.ToString()} - кулаки(по умолчанию)\n" +
+            Console.WriteLine( $"\nВыберите оружие: {Weapon.Fists.ToString()} - кулаки(по умолчанию)\n" +
                 $"{' ',17}{Weapon.Sword.ToString()} - меч\n" +
-                $"{' ',17}{Weapon.LongSword.ToString()} - длинный меч" );
+                $"{' ',17}{Weapon.LongSword.ToString()} - длинный меч\n" );
         }
 
         public static void PrintRaceMenu()
         {
-            Console.WriteLine( $"Выберите расу: {Race.Human.ToString()} - человек(по умолчанию)\n" +
+            Console.WriteLine( $"\nВыберите расу: {Race.Human.ToString()} - человек(по умолчанию)\n" +
                 $"{' ',15}{Race.Orc.ToString()} - орк\n" );
         }
 
         public static void PrintFighterTypeMenu()
         {
-            Console.WriteLine( $"Выберите класс бойца: {FighterType.Knight.ToString()} - Рыцарь(по умолчанию)\n" +
+            Console.WriteLine( $"\nВыберите класс бойца: {FighterType.Knight.ToString()} - Рыцарь(по умолчанию)\n" +
                 $"{' ',22}{FighterType.Assasin.ToString()} - Ассасин\n" );
         }
 
