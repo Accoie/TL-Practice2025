@@ -6,8 +6,8 @@ public interface IPropertyRepository
 {
     public void Create( Property property );
 
-    public List<Property> List();
-    public Task<Property?> GetById( int id );
+    public List<Property> GetAll();
+    public Property? GetById( int id );
 
     public void Update( Property property );
 

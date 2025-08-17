@@ -2,6 +2,7 @@
 using WebApi.Domain.Repositories;
 
 namespace WebApi.Infrastructure.Repositories;
+
 public class PropertyRepository : IPropertyRepository
 {
     private readonly WebApiDbContext _webApiDbContext;
@@ -16,13 +17,14 @@ public class PropertyRepository : IPropertyRepository
         _webApiDbContext.Add( property );
     }
 
-    public List<Property> List()
+    public List<Property> GetAll()
     {
         return _webApiDbContext.Properties.ToList();
     }
-    public async Task<Property?> GetById( int id )
+
+    public Property? GetById( int id )
     {
-        return await _webApiDbContext.FindAsync<Property>( id );
+        return _webApiDbContext.Find<Property>( id );
     }
 
     public void Update( Property property )

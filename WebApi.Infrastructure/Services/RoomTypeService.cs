@@ -18,15 +18,10 @@ public class RoomTypeService : IRoomTypeService
 
     public void Create( RoomType roomType )
     {
-        bool isExists = _roomTypeRepository.GetById( roomType.Id ).Result != null;
-
-        if ( isExists )
-        {
-            throw new ArgumentException( "RoomType is already exists" );
-        }
+        CheckRoomTypeExists( roomType.Id );
+        ValidateRoomType( roomType );
 
         _roomTypeRepository.Create( roomType );
-
         _unitOfWork.CommitAsync();
     }
 
@@ -41,9 +36,9 @@ public class RoomTypeService : IRoomTypeService
 
     public RoomType GetById( int id )
     {
-        RoomType? roomType = _roomTypeRepository.GetById( id ).Result;
+        RoomType? roomType = _roomTypeRepository.GetById( id );
 
-        if ( roomType == null )
+        if ( roomType is null )
         {
             throw new ArgumentException( "RoomType doesn't exists" );
         }
@@ -51,9 +46,14 @@ public class RoomTypeService : IRoomTypeService
         return roomType;
     }
 
-    public List<RoomType> GetList()
+    public List<RoomType> GetAllById( int propertyId )
     {
-        return _roomTypeRepository.List();
+        return GetAll().Where( r => r.PropertyId == propertyId ).ToList();
+    }
+
+    public List<RoomType> GetAll()
+    {
+        return _roomTypeRepository.GetAll();
     }
 
     public void Update( RoomType newRoomType )
@@ -68,8 +68,114 @@ public class RoomTypeService : IRoomTypeService
         roomType.MaxPersonCount = newRoomType.MaxPersonCount;
         roomType.MinPersonCount = newRoomType.MinPersonCount;
 
+        ValidateRoomType( roomType );
+
         _roomTypeRepository.Update( roomType );
 
         _unitOfWork.CommitAsync();
+    }
+
+    private void ValidateRoomType( RoomType roomType )
+    {
+        ValidatePropertyId( roomType.PropertyId );
+        ValidateName( roomType.Name );
+        ValidateDailyPrice( roomType.DailyPrice );
+        ValidateCurrency( roomType.Currency );
+        ValidatePersonCounts( roomType.MinPersonCount, roomType.MaxPersonCount );
+        ValidateServices( roomType.Services );
+        ValidateAmenities( roomType.Amenities );
+    }
+
+    private void CheckRoomTypeExists( int id )
+    {
+        bool isExists = _roomTypeRepository.GetById( id ) is not null;
+        if ( isExists )
+        {
+            throw new ArgumentException( "RoomType already exists" );
+        }
+    }
+
+    private void ValidatePropertyId( int propertyId )
+    {
+        if ( propertyId <= 0 )
+        {
+            throw new ArgumentException( "PropertyId must be greater than 0" );
+        }
+    }
+
+    private void ValidateName( string name )
+    {
+        if ( string.IsNullOrWhiteSpace( name ) )
+        {
+            throw new ArgumentException( "Name cannot be empty or whitespace" );
+        }
+        if ( name.Length > 100 )
+        {
+            throw new ArgumentException( "Name cannot be longer than 100 characters" );
+        }
+    }
+
+    private void ValidateDailyPrice( decimal dailyPrice )
+    {
+        if ( dailyPrice <= 0 )
+        {
+            throw new ArgumentException( "DailyPrice must be greater than 0" );
+        }
+        if ( dailyPrice > 100000000 )
+        {
+            throw new ArgumentException( "DailyPrice is too high" );
+        }
+    }
+
+    private void ValidateCurrency( string currency )
+    {
+        if ( string.IsNullOrWhiteSpace( currency ) )
+        {
+            throw new ArgumentException( "Currency cannot be empty" );
+        }
+        if ( currency.Length != 3 )
+        {
+            throw new ArgumentException( "Currency must be a 3-letter code" );
+        }
+    }
+
+    private void ValidatePersonCounts( int minCount, int maxCount )
+    {
+        if ( minCount <= 0 )
+        {
+            throw new ArgumentException( "Minimal person count could not be less than 1" );
+        }
+        if ( maxCount <= 0 )
+        {
+            throw new ArgumentException( "Maximal person count could not be less than 1" );
+        }
+        if ( maxCount < minCount )
+        {
+            throw new ArgumentException( "Maximal person count cannot be less than minimal" );
+        }
+    }
+
+    private void ValidateServices( List<string> services )
+    {
+        if ( services is null )
+        {
+            throw new ArgumentException( "Services list cannot be null" );
+        }
+        if ( services.Any( string.IsNullOrWhiteSpace ) )
+        {
+            throw new ArgumentException( "Services cannot contain empty or whitespace values" );
+        }
+    }
+
+    private void ValidateAmenities( List<string> amenities )
+    {
+        if ( amenities is null )
+        {
+            throw new ArgumentException( "Amenities list cannot be null" );
+        }
+        if ( amenities.Any( string.IsNullOrWhiteSpace ) )
+        {
+            throw new ArgumentException( "Amenities cannot contain empty or whitespace values" );
+        }
     }
 }

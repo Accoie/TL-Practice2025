@@ -6,8 +6,8 @@ public interface IRoomTypeRepository
 {
     public void Create( RoomType roomType );
 
-    public List<RoomType> List();
-    public Task<RoomType?> GetById( int id );
+    public List<RoomType> GetAll();
+    public RoomType? GetById( int id );
 
     public void Update( RoomType roomType );
 

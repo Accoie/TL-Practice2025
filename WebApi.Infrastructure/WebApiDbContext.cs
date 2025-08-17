@@ -8,7 +8,7 @@ public class WebApiDbContext : DbContext
 {
     public DbSet<Property> Properties { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
-
+    public DbSet<Reservation> Reservations { get; set; }
     public WebApiDbContext( DbContextOptions<WebApiDbContext> options ) : base( options )
     {
     }
@@ -19,5 +19,6 @@ public class WebApiDbContext : DbContext
 
         modelBuilder.ApplyConfiguration( new PropertyConfiguration() );
         modelBuilder.ApplyConfiguration( new RoomTypeConfiguration() );
+        modelBuilder.ApplyConfiguration( new ReservationConfiguration() );
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace WebApi.Domain.Foundations
+﻿namespace WebApi.Domain.Foundations;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        public Task CommitAsync();
-    }
+    public Task CommitAsync();
 }

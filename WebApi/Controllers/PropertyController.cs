@@ -2,14 +2,17 @@
 using WebApi.Data;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Services;
+using WebApi.Mapping;
 
-namespace WebApi.Infrastructure.Controllers;
+namespace WebApi.Controllers;
 
 [Route( "/api/properties" )]
 [ApiController]
 public class PropertyController : ControllerBase
 {
     private IPropertyService _propertyService;
+    private int MinId = 1;
+    private int MaxId = 1000000000;
 
     public PropertyController( IPropertyService propertyService )
     {
@@ -19,7 +22,7 @@ public class PropertyController : ControllerBase
     [HttpGet]
     public List<Property> ListProperty()
     {
-        return _propertyService.GetList();
+        return _propertyService.GetAll();
     }
 
     [HttpGet( "{id}" )]
@@ -29,15 +32,7 @@ public class PropertyController : ControllerBase
         {
             Property property = _propertyService.GetById( id );
 
-            return new PropertyDto
-            {
-                Name = property.Name,
-                Country = property.Country,
-                City = property.City,
-                Address = property.Address,
-                Longitude = property.Longitude,
-                Latitude = property.Latitude
-            };
+            return Mapper.ToPropertyDto( property );
         }
         catch ( ArgumentException ex )
         {
@@ -46,10 +41,14 @@ public class PropertyController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateProperty( Property property )
+    public ActionResult CreateProperty( PropertyDto propertyDto )
     {
         try
         {
+            Random rnd = new Random();
+
+            Property property = Mapper.ToProperty( rnd.Next( MinId, MaxId ), propertyDto ); ;
+
             _propertyService.Create( property );
 
             return Ok();
@@ -65,15 +64,7 @@ public class PropertyController : ControllerBase
     {
         try
         {
-            Property property = new();
-
-            property.Id = id;
-            property.Name = propertyDto.Name;
-            property.Address = propertyDto.Address;
-            property.Country = propertyDto.Country;
-            property.City = propertyDto.City;
-            property.Latitude = propertyDto.Latitude;
-            property.Longitude = propertyDto.Longitude;
+            Property property = Mapper.ToProperty( id, propertyDto );
 
             _propertyService.Update( property );
 

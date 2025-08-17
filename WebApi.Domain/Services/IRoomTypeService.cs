@@ -6,7 +6,8 @@ public interface IRoomTypeService
 {
     public void Create( RoomType roomType );
 
-    public List<RoomType> GetList();
+    public List<RoomType> GetAll();
+    public List<RoomType> GetAllById( int propertyId );
     public RoomType GetById( int id );
 
     public void Update( RoomType roomType );

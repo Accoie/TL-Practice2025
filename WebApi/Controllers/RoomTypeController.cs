@@ -2,14 +2,17 @@
 using WebApi.Data;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Services;
+using WebApi.Mapping;
 
-namespace WebApi.Infrastructure.Controllers;
+namespace WebApi.Controllers;
 
 [Route( "api/properties/{propertyId}/roomtypes" )]
 [ApiController]
 public class RoomTypeController : ControllerBase
 {
     private IRoomTypeService _roomTypeService;
+    private int MinId = 1;
+    private int MaxId = 1000000000;
 
     public RoomTypeController( IRoomTypeService roomTypeService )
     {
@@ -17,9 +20,9 @@ public class RoomTypeController : ControllerBase
     }
 
     [HttpGet]
-    public List<RoomType> ListRoomType()
+    public List<RoomType> ListRoomType( int propertyId )
     {
-        return _roomTypeService.GetList();
+        return _roomTypeService.GetAllById( propertyId );
     }
 
     [HttpGet( "{id}" )]
@@ -29,16 +32,7 @@ public class RoomTypeController : ControllerBase
         {
             RoomType roomType = _roomTypeService.GetById( id );
 
-            return new RoomTypeDto
-            {
-                Name = roomType.Name,
-                Currency = roomType.Currency,
-                MaxPersonCount = roomType.MaxPersonCount,
-                MinPersonCount = roomType.MinPersonCount,
-                Amenities = roomType.Amenities,
-                DailyPrice = roomType.DailyPrice,
-                Services = roomType.Services,
-            };
+            return Mapper.ToRoomTypeDto( roomType );
         }
         catch ( ArgumentException ex )
         {
@@ -46,11 +40,14 @@ public class RoomTypeController : ControllerBase
         }
     }
 
-    [HttpPost]
-    public ActionResult CreateRoomType( [FromRoute] int propertyId, RoomType roomType )
+    [HttpPost()]
+    public ActionResult CreateRoomType( [FromRoute] int propertyId, RoomTypeDto roomTypeDto )
     {
         try
         {
+            Random rnd = new Random();
+
+            RoomType roomType = Mapper.ToRoomType( rnd.Next( MinId, MaxId ), roomTypeDto );
             roomType.PropertyId = propertyId;
 
             _roomTypeService.Create( roomType );
@@ -68,14 +65,7 @@ public class RoomTypeController : ControllerBase
     {
         try
         {
-            RoomType roomType = new();
-
-            roomType.Id = id;
-            roomType.Name = roomTypeDto.Name;
-            roomType.Currency = roomTypeDto.Currency;
-            roomType.Services = roomTypeDto.Services;
-            roomType.DailyPrice = roomTypeDto.DailyPrice;
-            roomType.Amenities = roomTypeDto.Amenities;
+            RoomType roomType = Mapper.ToRoomType( id, roomTypeDto );
 
             _roomTypeService.Update( roomType );
 
@@ -93,6 +83,7 @@ public class RoomTypeController : ControllerBase
         try
         {
             _roomTypeService.Delete( id );
+
             return Ok();
         }
         catch ( ArgumentException ex )

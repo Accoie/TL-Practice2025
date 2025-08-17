@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApi.Domain.Foundations;
+﻿using WebApi.Domain.Foundations;
 
 namespace WebApi.Infrastructure.Foundations;
 

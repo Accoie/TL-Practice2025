@@ -17,14 +17,14 @@ public class RoomTypeRepository : IRoomTypeRepository
         _webApiDbContext.Add( roomType );
     }
 
-    public List<RoomType> List()
+    public List<RoomType> GetAll()
     {
         return _webApiDbContext.RoomTypes.ToList();
     }
 
-    public async Task<RoomType?> GetById( int id )
+    public RoomType? GetById( int id )
     {
-        return await _webApiDbContext.FindAsync<RoomType>( id );
+        return _webApiDbContext.Find<RoomType>( id );
     }
 
     public void Update( RoomType roomType )

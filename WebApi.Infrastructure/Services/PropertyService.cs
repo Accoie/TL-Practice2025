@@ -18,32 +18,17 @@ public class PropertyService : IPropertyService
 
     public void Create( Property property )
     {
-        bool isExists = _propertyRepository.GetById( property.Id ).Result != null;
-
-        if ( isExists )
-        {
-            throw new ArgumentException( "Property is already exists" );
-        }
+        ValidateProperty( property );
+        CheckPropertyExists( property.Id );
 
         _propertyRepository.Create( property );
-
         _unitOfWork.CommitAsync();
     }
-
-    public void Delete( int id )
-    {
-        Property property = GetById( id );
-
-        _propertyRepository.Delete( property );
-
-        _unitOfWork.CommitAsync();
-    }
-
     public Property GetById( int id )
     {
-        Property? property = _propertyRepository.GetById( id ).Result;
+        Property? property = _propertyRepository.GetById( id );
 
-        if ( property == null )
+        if ( property is null )
         {
             throw new ArgumentException( "Property doesn't exists" );
         }
@@ -51,9 +36,9 @@ public class PropertyService : IPropertyService
         return property;
     }
 
-    public List<Property> GetList()
+    public List<Property> GetAll()
     {
-        return _propertyRepository.List();
+        return _propertyRepository.GetAll();
     }
 
     public void Update( Property property )
@@ -65,9 +50,109 @@ public class PropertyService : IPropertyService
         oldProperty.Address = property.Address;
         oldProperty.City = property.City;
         oldProperty.Country = property.Country;
-        oldProperty.Name = property.Name;   
+        oldProperty.Name = property.Name;
 
         _propertyRepository.Update( oldProperty );
+
+        _unitOfWork.CommitAsync();
+    }
+    private void ValidateProperty( Property property )
+    {
+        ValidateNotNull( property );
+        ValidateName( property.Name );
+        ValidateCountry( property.Country );
+        ValidateCity( property.City );
+        ValidateAddress( property.Address );
+        ValidateCoordinates( property.Latitude, property.Longitude );
+    }
+
+    private void CheckPropertyExists( int id )
+    {
+        bool isExists = _propertyRepository.GetById( id ) is not null;
+        if ( isExists )
+        {
+            throw new ArgumentException( "Property already exists" );
+        }
+    }
+
+    private void ValidateNotNull( Property property )
+    {
+        if ( property is null )
+        {
+            throw new ArgumentNullException( "Property cannot be null" );
+        }
+    }
+
+    private void ValidateName( string name )
+    {
+        if ( string.IsNullOrWhiteSpace( name ) )
+        {
+            throw new ArgumentException( "Property name cannot be empty" );
+        }
+
+        if ( name.Length > 100 )
+        {
+            throw new ArgumentException( "Property name cannot exceed 100 characters" );
+        }
+    }
+
+    private void ValidateCountry( string country )
+    {
+        if ( string.IsNullOrWhiteSpace( country ) )
+        {
+            throw new ArgumentException( "Country cannot be empty" );
+        }
+
+        if ( country.Length > 50 )
+        {
+            throw new ArgumentException( "Country name cannot exceed 50 characters" );
+        }
+    }
+
+    private void ValidateCity( string city )
+    {
+        if ( string.IsNullOrWhiteSpace( city ) )
+        {
+            throw new ArgumentException( "City cannot be empty" );
+        }
+
+        if ( city.Length > 50 )
+        {
+            throw new ArgumentException( "City name cannot exceed 50 characters" );
+        }
+    }
+
+    private void ValidateAddress( string address )
+    {
+        if ( string.IsNullOrWhiteSpace( address ) )
+        {
+            throw new ArgumentException( "Address cannot be empty" );
+        }
+
+        if ( address.Length > 200 )
+        {
+            throw new ArgumentException( "Address cannot exceed 200 characters" );
+        }
+    }
+
+    private void ValidateCoordinates( decimal latitude, decimal longitude )
+    {
+        if ( latitude < -90 || latitude > 90 )
+        {
+            throw new ArgumentException( "Latitude must be between -90 and 90 degrees" );
+        }
+
+        if ( longitude < -180 || longitude > 180 )
+        {
+            throw new ArgumentException( "Longitude must be between -180 and 180 degrees" );
+        }
+    }
+
+    public void Delete( int id )
+    {
+        Property property = GetById( id );
+
+        _propertyRepository.Delete( property );
 
         _unitOfWork.CommitAsync();
     }
