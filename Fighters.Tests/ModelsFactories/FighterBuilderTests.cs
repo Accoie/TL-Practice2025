@@ -7,13 +7,13 @@ using Moq;
 
 namespace Fighters.Tests.ModelsFactories
 {
-    public class ModelsFactoriesTests
+    public class FighterBuilderTests
     {
         private readonly Mock<IWeapon> _weaponMock;
         private readonly Mock<IArmor> _armorMock;
         private readonly Mock<IRace> _raceMock;
 
-        public ModelsFactoriesTests()
+        public FighterBuilderTests()
         {
             _weaponMock = new Mock<IWeapon>();
             _armorMock = new Mock<IArmor>();
@@ -23,32 +23,29 @@ namespace Fighters.Tests.ModelsFactories
         [Test]
         public void Build_Fighter()
         {
-            FighterBuilder builder = new();
-
-            builder.WithName( "sdf" )
-                   .WithWeapon( _weaponMock.Object )
-                   .WithArmor( _armorMock.Object )
-                   .WithRace( _raceMock.Object )
-                   .OfType( FighterType.Knight );
-
-            IFighter fighterObj = builder.Build();
+            IFighter fighterObj = CreateFighter( "sdf" );
 
             Assert.That( fighterObj, Is.InstanceOf<Knight>() );
         }
 
-        public void Create_Fighter_Accept_Empty_Name()
+        public void Build_FighterWithEmptyName()
+        {
+            IFighter fighterObj = CreateFighter( string.Empty );
+
+            Assert.That( fighterObj, Is.InstanceOf<Knight>() );
+        }
+
+        private IFighter CreateFighter( string name )
         {
             FighterBuilder builder = new();
 
-            builder.WithName( string.Empty )
+            builder.WithName( name )
                    .WithWeapon( _weaponMock.Object )
                    .WithArmor( _armorMock.Object )
                    .WithRace( _raceMock.Object )
                    .OfType( FighterType.Knight );
 
-            IFighter fighterObj = builder.Build();
-
-            Assert.That( fighterObj, Is.InstanceOf<Knight>() );
+            return builder.Build();
         }
     }
 }

@@ -21,11 +21,9 @@ public class GameEngineTests
         _zeroDamageFighterMock = CreateFighterMock( "zeroDamage", 100, 0 );
     }
 
-    public static Mock<IFighter> CreateFighterMock(
-        string name,
+    private static Mock<IFighter> CreateFighterMock( string name,
         int maxHealth,
-        int damage
-         )
+        int damage )
     {
         int health = maxHealth;
 
@@ -56,7 +54,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void AddFighter_With_Empty_Name()
+    public void AddFighter_AddWithEmptyName_ThrowException()
     {
         GameEngine game = new GameEngine();
 
@@ -64,7 +62,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void RemoveFighter_Fighter_Not_Exist()
+    public void RemoveFighter_RemoveNotExistingFighter_ThrowException()
     {
         IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
 
@@ -76,7 +74,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void RemoveFighter_FighterName_Is_Empty()
+    public void RemoveFighter_RemoveWithEmptyString_ThrowException()
     {
         IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
 
@@ -88,7 +86,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void StartFight_Only_One_Fighter_Exception_Thrown()
+    public void StartFight_StartFightWithOneFighter_ThrowException()
     {
         Mock<IFighter> fighterMock = CreateFighterMock( "fighter", 333, 50 );
         GameEngine game = new GameEngine();
@@ -100,7 +98,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void StartFight_TwoFighters_StrongFighter_WillWin()
+    public void StartFight_WeakVsStrong_StrongWillWin()
     {
         Mock<IFighter> weakFighter = CreateFighterMock( "Dfsd", 100, 10 );
 
@@ -115,7 +113,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void StartFight_OneStrongThreeWeak_FirstFighterWins()
+    public void StartFight_OneStrongThreeWeak_StrongFighterWins()
     {
         GameEngine game = new GameEngine();
 
@@ -135,7 +133,7 @@ public class GameEngineTests
     }
 
     [Test]
-    public void StartFight_TwoWeakFighters_Will_Draw()
+    public void StartFight_TwoWeakFighters_WillDraw()
     {
         GameEngine game = new GameEngine();
 
