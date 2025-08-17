@@ -60,34 +60,54 @@ public class ReservationService : IReservationService
         }
 
         if ( filter.PropertyId.HasValue )
+        {
             reservations = reservations.Where( r => r.PropertyId == filter.PropertyId.Value );
+        }
 
         if ( filter.RoomTypeId.HasValue )
+        {
             reservations = reservations.Where( r => r.RoomTypeId == filter.RoomTypeId.Value );
+        }
 
         if ( filter.ArrivalDate.HasValue )
+        {
             reservations = reservations.Where( r => r.ArrivalDate >= filter.ArrivalDate.Value );
+        }
 
         if ( filter.DepartureDate.HasValue )
+        {
             reservations = reservations.Where( r => r.DepartureDate <= filter.DepartureDate.Value );
+        }
 
         if ( filter.ArrivalTime.HasValue )
+        {
             reservations = reservations.Where( r => r.ArrivalTime >= filter.ArrivalTime.Value );
+        }
 
         if ( filter.DepartureTime.HasValue )
+        {
             reservations = reservations.Where( r => r.DepartureTime <= filter.DepartureTime.Value );
+        }
 
         if ( filter.PersonCount.HasValue )
+        {
             reservations = reservations.Where( r => r.PersonCount == filter.PersonCount.Value );
+        }
 
         if ( !string.IsNullOrEmpty( filter.GuestName ) )
+        {
             reservations = reservations.Where( r => r.GuestName == filter.GuestName );
+        }
 
         if ( !string.IsNullOrEmpty( filter.GuestPhoneNumber ) )
+        {
             reservations = reservations.Where( r => r.GuestPhoneNumber == r.GuestPhoneNumber );
+        }
 
         if ( !string.IsNullOrEmpty( filter.Currency ) )
+        {
             reservations = reservations.Where( r => r.Currency == filter.Currency );
+        }
 
         return reservations.ToList();
     }
@@ -121,19 +141,27 @@ public class ReservationService : IReservationService
     private void ValidateGuestInfo( Reservation reservation )
     {
         if ( string.IsNullOrEmpty( reservation.GuestName ) )
+        {
             throw new ArgumentException( "Guest name cannot be empty" );
+        }
 
         if ( string.IsNullOrEmpty( reservation.GuestPhoneNumber ) )
+        {
             throw new ArgumentException( "Guest phone number cannot be empty" );
+        }
 
         if ( string.IsNullOrEmpty( reservation.Currency ) )
+        {
             throw new ArgumentException( "Currency cannot be empty" );
+        }
     }
 
     private void ValidateDates( Reservation reservation )
     {
         if ( reservation.ArrivalDate >= reservation.DepartureDate )
+        {
             throw new ArgumentException( "Arrival date must be before departure date" );
+        }
     }
 
     private void ValidatePropertyAndRoom( Reservation reservation )
@@ -142,10 +170,14 @@ public class ReservationService : IReservationService
         RoomType? roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
 
         if ( property is null )
+        {
             throw new ArgumentException( $"Property \"{reservation.PropertyId}\" doesn't exist" );
+        }
 
         if ( roomType is null )
+        {
             throw new ArgumentException( $"Room \"{reservation.RoomTypeId}\" doesn't exist" );
+        }
     }
 
     private void ValidatePersonCount( Reservation reservation )
@@ -153,10 +185,14 @@ public class ReservationService : IReservationService
         RoomType? roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
 
         if ( reservation.PersonCount > roomType.MaxPersonCount )
+        {
             throw new ArgumentException( $"Too many people for reservation! Max count is {roomType.MaxPersonCount}" );
+        }
 
         if ( reservation.PersonCount < roomType.MinPersonCount )
+        {
             throw new ArgumentException( $"Too few people for reservation! Min count is {roomType.MinPersonCount}" );
+        }
     }
 
     private void ValidateAvailability( Reservation reservation )
@@ -170,18 +206,21 @@ public class ReservationService : IReservationService
 
         foreach ( Reservation res in reservations )
         {
-            bool isDateIntersection = IsDateIntersection( (reservation.ArrivalDate, reservation.DepartureDate), (res.ArrivalDate, res.DepartureDate) );
             bool isDateEqual = reservation.ArrivalDate == res.DepartureDate || reservation.DepartureDate == res.ArrivalDate;
+            bool isDateIntersection = IsDateIntersection( (reservation.ArrivalDate, reservation.DepartureDate), (res.ArrivalDate, res.DepartureDate) );
 
-            if ( isDateIntersection || isDateEqual )
+            if ( isDateEqual )
             {
                 bool isAvailableTime = reservation.ArrivalTime > res.DepartureTime || reservation.DepartureTime > res.ArrivalTime;
 
-                if ( !isAvailableTime && !isDateEqual )
-                {
-                    throw new ArgumentException(
+                throw new ArgumentException(
                     $"RoomType \"{reservation.RoomTypeId}\" is already reserved on {res.ArrivalDate.Date} {res.ArrivalTime} - {res.DepartureDate.Date} {res.DepartureTime}" );
-                }
+            }
+            if ( isDateIntersection )
+            {
+                throw new ArgumentException(
+                    $"RoomType \"{reservation.RoomTypeId}\" is already reserved on {res.ArrivalDate.Date} {res.ArrivalTime} - {res.DepartureDate.Date} {res.DepartureTime}" );
+
             }
         }
     }
