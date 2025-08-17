@@ -28,35 +28,53 @@ namespace Fighters.Tests.Models
         [Test]
         public void Create_WithEmptyName_WillAccept()
         {
+            // Arrange
+            // (Initialization in constructor)
+
+            // Act
             BaseFighter fighter = new( string.Empty, _strongArmor, _strongWeapon, _strongRace );
 
+            // Assert
             Assert.That( fighter.Name, Is.EqualTo( string.Empty ) );
         }
 
         [Test]
         public void TakeDamage_MoreThanHealth_WillZero()
         {
+            // Arrange
             BaseFighter fighter = _strongFighter;
             int damage = fighter.MaxHealth + 1;
 
+            // Act
             fighter.TakeDamage( damage );
 
+            // Assert
             Assert.That( fighter.Health, Is.EqualTo( 0 ) );
         }
 
         [Test]
         public void IsCanWin_WeakFighterVsStrongFighter_WeakWillLose()
         {
+            // Arrange
+            // (Test data is already created in test class fields)
+
+            // Act
             bool isCanWin = _weakFighter.IsCanWin( _strongFighter );
 
+            // Assert
             Assert.That( isCanWin, Is.False );
         }
 
         [Test]
         public void Fight_WeakFighterVsStrong_WillNoDamage()
         {
+            // Arrange
+            // (Тестовые данные уже подготовлены в полях класса)
+
+            // Act
             int damage = _weakFighter.Fight( _strongFighter );
 
+            // Assert
             Assert.That( damage, Is.EqualTo( 0 ) );
         }
     }

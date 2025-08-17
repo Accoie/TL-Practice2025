@@ -23,15 +23,26 @@ namespace Fighters.Tests.ModelsFactories
         [Test]
         public void Build_Fighter()
         {
-            IFighter fighterObj = CreateFighter( "sdf" );
+            // Arrange
+            string fighterName = "sdf";
 
+            // Act
+            IFighter fighterObj = CreateFighter( fighterName );
+
+            // Assert
             Assert.That( fighterObj, Is.InstanceOf<Knight>() );
         }
 
+        [Test]
         public void Build_FighterWithEmptyName()
         {
-            IFighter fighterObj = CreateFighter( string.Empty );
+            // Arrange
+            string emptyName = string.Empty;
 
+            // Act
+            IFighter fighterObj = CreateFighter( emptyName );
+
+            // Assert
             Assert.That( fighterObj, Is.InstanceOf<Knight>() );
         }
 

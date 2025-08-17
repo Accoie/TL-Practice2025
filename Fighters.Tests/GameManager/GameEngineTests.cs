@@ -56,43 +56,46 @@ public class GameEngineTests
     [Test]
     public void AddFighter_AddWithEmptyName_ThrowException()
     {
+        // Arrange
         GameEngine game = new GameEngine();
 
+        // Act & Assert
         Assert.Throws<ArgumentException>( () => game.AddFighter( _emptyNameFighterMock.Object ) );
     }
 
     [Test]
     public void RemoveFighter_RemoveNotExistingFighter_ThrowException()
     {
+        // Arrange
         IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
-
         GameEngine game = new GameEngine();
-
         game.AddFighter( fighter );
 
+        // Act & Assert
         Assert.Throws<ArgumentException>( () => game.RemoveFighter( "sdfasd" ) );
     }
 
     [Test]
     public void RemoveFighter_RemoveWithEmptyString_ThrowException()
     {
+        // Arrange
         IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
-
         GameEngine game = new GameEngine();
-
         game.AddFighter( fighter );
 
+        // Act & Assert
         Assert.Throws<ArgumentException>( () => game.RemoveFighter( string.Empty ) );
     }
 
     [Test]
     public void StartFight_StartFightWithOneFighter_ThrowException()
     {
+        // Arrange
         Mock<IFighter> fighterMock = CreateFighterMock( "fighter", 333, 50 );
         GameEngine game = new GameEngine();
-
         game.AddFighter( fighterMock.Object );
 
+        // Act & Assert
         Assert.Throws<Exception>( () => game.StartFight() );
         fighterMock.Verify( e => e.Fight( It.IsAny<IFighter>() ), Times.Never );
     }
@@ -100,23 +103,24 @@ public class GameEngineTests
     [Test]
     public void StartFight_WeakVsStrong_StrongWillWin()
     {
+        // Arrange
         Mock<IFighter> weakFighter = CreateFighterMock( "Dfsd", 100, 10 );
-
         GameEngine engine = new GameEngine();
-
         engine.AddFighter( _strongFighterMock.Object );
         engine.AddFighter( weakFighter.Object );
 
+        // Act
         IFighter? winner = engine.StartFight();
 
+        // Assert
         Assert.That( winner.Name, Is.EqualTo( _strongFighterMock.Object.Name ) );
     }
 
     [Test]
     public void StartFight_OneStrongThreeWeak_StrongFighterWins()
     {
+        // Arrange
         GameEngine game = new GameEngine();
-
         game.AddFighter( _strongFighterMock.Object );
 
         Mock<IFighter> _weakFighterMock1 = CreateFighterMock( "weak", 100, 10 );
@@ -127,21 +131,25 @@ public class GameEngineTests
         game.AddFighter( _weakFighterMock2.Object );
         game.AddFighter( _weakFighterMock3.Object );
 
+        // Act
         IFighter? winner = game.StartFight();
 
+        // Assert
         Assert.That( winner.Name, Is.EqualTo( _strongFighterMock.Object.Name ) );
     }
 
     [Test]
     public void StartFight_TwoWeakFighters_WillDraw()
     {
+        // Arrange
         GameEngine game = new GameEngine();
-
         game.AddFighter( _zeroDamageFighterMock.Object );
         game.AddFighter( _zeroDamageFighterMock.Object );
 
+        // Act
         IFighter? winner = game.StartFight();
 
+        // Assert
         Assert.That( winner, Is.Null );
     }
 }
