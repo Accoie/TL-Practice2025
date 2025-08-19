@@ -161,8 +161,8 @@ function resetApplication() {
   elements.formWrapper.style.display = "none";
   elements.loginErrorMessage.style.display = "none";
   elements.usernameInput.style.marginBottom = "40px";
-  elements.textareaOldValue.value = '{ "text": 123,  "textw": 124,  "texts": 125  }';
-  elements.textareaNewValue.value = '{ "text": 321, "textw":421,"texts":125 }';
+  elements.textareaOldValue.value = '{ "example1": 123,  "example2": 124,  "example3": 125  }';
+  elements.textareaNewValue.value = '{ "example1": 321, "example2":421,"example3":125 }';
   elements.diffResult.textContent = '';
 
   localStorage.clear();
