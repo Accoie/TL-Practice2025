@@ -21,13 +21,13 @@ public class ReservationController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateReservation( [FromQuery] ReservationDto reservationDto )
+    public ActionResult CreateReservation( ReservationDto dto )
     {
         try
         {
             Random rnd = new Random();
 
-            Reservation reservation = Mapper.ToReservation( rnd.Next( MinId, MaxId ), reservationDto );
+            Reservation reservation = Mapper.ToReservation( rnd.Next( MinId, MaxId ), dto );
 
             _reservationService.Create( reservation );
 
@@ -38,7 +38,24 @@ public class ReservationController : ControllerBase
             return BadRequest( ex.Message );
         }
     }
+    [HttpPut( "{id}" )]
+    public ActionResult UpdateReservation( int id, ReservationUpdationDto dto )
+    {
+        try
+        {
+            Reservation reservation = _reservationService.GetById( id );
 
+            Mapper.ChangeExistingReservation( dto, reservation );
+
+            _reservationService.Update( reservation );
+
+            return Ok();
+        }
+        catch ( ArgumentException ex )
+        {
+            return BadRequest( ex.Message );
+        }
+    }
     [HttpGet]
     public List<Reservation> GetReservations( [FromQuery] ReservationFilter filter )
     {

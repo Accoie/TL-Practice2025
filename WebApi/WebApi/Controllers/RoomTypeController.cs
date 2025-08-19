@@ -6,7 +6,7 @@ using WebApi.Mapping;
 
 namespace WebApi.Controllers;
 
-[Route( "api/properties/{propertyId}/roomtypes" )]
+[Route( "api/roomtypes" )]
 [ApiController]
 public class RoomTypeController : ControllerBase
 {
@@ -19,7 +19,7 @@ public class RoomTypeController : ControllerBase
         _roomTypeService = roomTypeService;
     }
 
-    [HttpGet]
+    [HttpGet( "property/{propertyId}" )]
     public List<RoomType> ListRoomType( int propertyId )
     {
         return _roomTypeService.GetAllById( propertyId );
@@ -40,7 +40,7 @@ public class RoomTypeController : ControllerBase
         }
     }
 
-    [HttpPost()]
+    [HttpPost( "property/{propertyId}" )]
     public ActionResult CreateRoomType( [FromRoute] int propertyId, RoomTypeDto roomTypeDto )
     {
         try
@@ -48,6 +48,7 @@ public class RoomTypeController : ControllerBase
             Random rnd = new Random();
 
             RoomType roomType = Mapper.ToRoomType( rnd.Next( MinId, MaxId ), roomTypeDto );
+
             roomType.PropertyId = propertyId;
 
             _roomTypeService.Create( roomType );
@@ -65,7 +66,9 @@ public class RoomTypeController : ControllerBase
     {
         try
         {
-            RoomType roomType = Mapper.ToRoomType( id, roomTypeDto );
+            RoomType roomType = _roomTypeService.GetById( id );
+
+            Mapper.ChangeExistingRoomType( roomTypeDto, roomType );
 
             _roomTypeService.Update( roomType );
 

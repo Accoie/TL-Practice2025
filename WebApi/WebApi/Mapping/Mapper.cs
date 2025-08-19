@@ -1,5 +1,6 @@
 ﻿using WebApi.Data;
 using WebApi.Domain.Entities;
+using WebApi.Infrastructure.Repositories;
 
 namespace WebApi.Mapping;
 
@@ -22,6 +23,19 @@ public static class Mapper
         newReservation.GuestPhoneNumber = dto.GuestPhoneNumber;
 
         return newReservation;
+    }
+    public static Reservation ChangeExistingReservation( ReservationUpdationDto dto, Reservation reservation )
+    {
+        reservation.ArrivalDate = dto.ArrivalDate.Date;
+        reservation.ArrivalTime = dto.ArrivalTime;
+        reservation.Currency = dto.Currency;
+        reservation.DepartureDate = dto.DepartureDate.Date;
+        reservation.DepartureTime = dto.DepartureTime;
+        reservation.PersonCount = dto.PersonCount;
+        reservation.GuestName = dto.GuestName;
+        reservation.GuestPhoneNumber = dto.GuestPhoneNumber;
+
+        return reservation;
     }
 
     public static Property ToProperty( int id, PropertyDto dto )
@@ -50,6 +64,26 @@ public static class Mapper
             Longitude = property.Longitude,
             Latitude = property.Latitude
         };
+    }
+
+    public static void ChangeExistingProperty( PropertyDto dto, Property property )
+    {
+        property.Longitude = dto.Longitude;
+        property.Latitude = dto.Latitude;
+        property.Address = dto.Address;
+        property.City = dto.City;
+        property.Country = dto.Country;
+        property.Name = dto.Name;
+    }
+    public static void ChangeExistingRoomType( RoomTypeDto dto, RoomType roomType )
+    {
+        roomType.Currency = dto.Currency;
+        roomType.Name = dto.Name;
+        roomType.DailyPrice = dto.DailyPrice;
+        roomType.Services = dto.Services;
+        roomType.Amenities = dto.Amenities;
+        roomType.MaxPersonCount = dto.MaxPersonCount;
+        roomType.MinPersonCount = dto.MinPersonCount;
     }
 
     public static RoomType ToRoomType( int id, RoomTypeDto dto )

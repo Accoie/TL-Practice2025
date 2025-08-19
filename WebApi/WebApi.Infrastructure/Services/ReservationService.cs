@@ -12,7 +12,7 @@ public class ReservationService : IReservationService
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
-
+    
     public ReservationService(
         IPropertyRepository propertyRepository,
         IRoomTypeRepository roomTypeRepository,
@@ -37,6 +37,17 @@ public class ReservationService : IReservationService
         reservation.Total = CalculateTotalPrice( reservation );
 
         _reservationRepository.Create( reservation );
+
+        _unitOfWork.CommitAsync();
+    }
+
+    public void Update( Reservation reservation )
+    {
+        ValidateReservation( reservation );
+
+        reservation.Total = CalculateTotalPrice( reservation );
+
+        _reservationRepository.Update( reservation );
 
         _unitOfWork.CommitAsync();
     }

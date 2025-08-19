@@ -56,18 +56,8 @@ public class RoomTypeService : IRoomTypeService
         return _roomTypeRepository.GetAll();
     }
 
-    public void Update( RoomType newRoomType )
+    public void Update( RoomType roomType )
     {
-        RoomType roomType = GetById( newRoomType.Id );
-
-        roomType.Currency = newRoomType.Currency;
-        roomType.Name = newRoomType.Name;
-        roomType.DailyPrice = newRoomType.DailyPrice;
-        roomType.Services = newRoomType.Services;
-        roomType.Amenities = newRoomType.Amenities;
-        roomType.MaxPersonCount = newRoomType.MaxPersonCount;
-        roomType.MinPersonCount = newRoomType.MinPersonCount;
-
         ValidateRoomType( roomType );
 
         _roomTypeRepository.Update( roomType );

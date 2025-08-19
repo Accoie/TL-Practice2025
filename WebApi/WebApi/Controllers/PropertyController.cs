@@ -64,7 +64,9 @@ public class PropertyController : ControllerBase
     {
         try
         {
-            Property property = Mapper.ToProperty( id, propertyDto );
+            Property property = _propertyService.GetById( id );
+
+            Mapper.ChangeExistingProperty( propertyDto, property );
 
             _propertyService.Update( property );
 

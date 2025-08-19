@@ -27,6 +27,11 @@ public class ReservationRepository : IReservationRepository
         return _webApiDbContext.Find<Reservation>( id );
     }
 
+    public void Update( Reservation reservation )
+    {
+        _webApiDbContext.Update( reservation );
+    }
+
     public void Delete( Reservation reservation )
     {
         _webApiDbContext.Remove( reservation );

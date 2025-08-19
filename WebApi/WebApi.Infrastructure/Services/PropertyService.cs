@@ -43,16 +43,7 @@ public class PropertyService : IPropertyService
 
     public void Update( Property property )
     {
-        Property oldProperty = GetById( property.Id );
-
-        oldProperty.Longitude = property.Longitude;
-        oldProperty.Latitude = property.Latitude;
-        oldProperty.Address = property.Address;
-        oldProperty.City = property.City;
-        oldProperty.Country = property.Country;
-        oldProperty.Name = property.Name;
-
-        _propertyRepository.Update( oldProperty );
+        _propertyRepository.Update( property );
 
         _unitOfWork.CommitAsync();
     }
