@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json diff</title>
+    <link rel="stylesheet" href="./src/styles/common.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header__title">JSON-DIFF</h1>
+        <a href="#" class="login__link"> Log in </a>
+        <a href="#" class="logout__link"> Log out </a>
+        <div class="greet__wrapper">
+          <p class="greet-message"></p>
+          <a href="#" class="logged__link"> Log out </a>
+        </div>
+      </header>
+      <main class="contents">
+        <section class="promo">
+          <div class="promo__text">
+            <div class="promo__text__wrapper">
+              <p class="promo__text__base">Compare</p>
+              <p class="promo__text__objects">two JSON objects</p>
+              <p class="promo__text__base">and see the</p>
+            </div>
+
+            <p class="promo__text__differences">differences</p>
+
+            <button type="submit" class="start-button">Start</button>
+          </div>
+        </section>
+        <section id="login" class="login">
+          <div class="login__wrapper">
+            <h2 class="login__title">Login Form</h2>
+            <form id="loginForm" class="login__form__wrapper">
+              <div class="login__form">
+                <label for="username" class="form-label">LOGIN</label>
+                <div class="login__form__input">
+                  <input
+                    type="text"
+                    id="username"
+                    class="form-input"
+                    placeholder="Enter your login"
+                    required
+                  />
+                  <div id="errorMessage" class="login-error-message">
+                    Обязательное поле
+                  </div>
+                  <button type="submit" class="form-submit" id="submitBtn">
+                    SIGN IN
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+        <div class="form-wrapper">
+          <form class="form">
+            <div class="old-json-wrapper">
+              <div class="old-json-area">
+                <p class="old-json-text">OLD JSON</p>
+                <textarea name="oldJson" class="old-json">{ "text": 123,  "textw": 124,  "texts": 125  }</textarea>       
+              </div>
+              <div id="errorMessage" class="diff-error-message">
+                Некорректный JSON
+              </div>
+            </div>
+            <div class="new-json-wrapper">
+              <div class="new-json-area">
+                <p class="new-json-text">NEW JSON</p>
+                <textarea name="newJson" class="new-json">{ "text": 321, "textw":421,"texts":125 }</textarea> 
+              </div>
+              <div id="errorMessage" class="diff-error-message">
+                Обязательное поле
+              </div>
+              <button class="diff-button">Show difference</button>
+            </div>
+            <pre class="diff-result"></pre>
+          </form>
+        </div>
+      </main>
+      <footer>
+        <p>Copyright 2025 ©</p>
+      </footer>
+    </div>
+    <script type="module" src="./src/index.js"></script>
+  </body>
+</html>
