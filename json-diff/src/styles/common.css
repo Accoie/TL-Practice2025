@@ -390,27 +390,31 @@ header {
   color: rgb(252, 241, 199);
   margin-top: auto;
   margin-bottom: auto;
+  font-weight: bold;
 }
+
 .logout__link {
-  display: none;
-  padding-right: 30px;
-  text-decoration: none;
-  font-size: x-large;
-  color: rgb(252, 241, 199);
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.greet__wrapper {
-  display: none;
-}
-.logged__link {
   display: block;
   padding-right: 30px;
   text-decoration: none;
   font-size: x-large;
+  font-weight: bold;
   color: rgb(252, 241, 199);
   margin-top: auto;
   margin-bottom: auto;
+  padding-left: 20px;
+  justify-self: end;
+}
+
+.greet__wrapper {
+  display: none;
+}
+
+.greet-message {
+  font-size: x-large;
+  margin: 0;
+  padding-top: 10px;
+  margin-bottom: 5px;
 }
 
 .login {
@@ -431,6 +435,7 @@ footer {
   /* Direction of the items, can be row or column */
   flex-direction: column;
 }
+
 .promo__text {
   font-size: 50px;
   margin: 0;
@@ -438,18 +443,22 @@ footer {
   flex-direction: column;
   margin: auto;
 }
+
 .promo__text__base {
   margin: inherit;
 }
+
 .promo__text__objects {
   font-weight: bold;
   color: brown;
   margin: inherit;
 }
+
 .promo__text__wrapper {
   gap: 20px;
   display: flex;
 }
+
 .promo__text__differences {
   font-weight: bold;
   color: darkorange;
@@ -460,7 +469,7 @@ footer {
 
 .start-button {
   cursor: pointer;
-  color: rgb(89, 143, 245);
+  color: rgb(34, 98, 215);
   background: none;
   border: none;
   font-weight: bold;
@@ -526,6 +535,7 @@ footer {
   padding: 10px;
   margin-bottom: 40px;
 }
+
 .login-error-message {
   display: none;
   color: red;
@@ -540,6 +550,7 @@ footer {
   display: flex;
   flex-direction: column;
 }
+
 .form {
   margin: auto;
   margin-top: 30px;
@@ -551,36 +562,43 @@ footer {
   padding-right: 10px;
   background-color: rgb(255, 251, 199);
 }
+
 .old-json-area {
   display: flex;
   padding-top: 20px;
-  
 }
+
 .old-json-wrapper {
   margin-bottom: 30px;
 }
+
 .old-json {
   width: 400px;
   height: 300px
 }
+
 .new-json-wrapper {
   padding-bottom: 30px;
 }
+
 .new-json {
   width: 400px;
   height: 300px;
 }
+
 .new-json-area {
   display: flex;
 
   align-items: flex-start; 
 }
+
 .old-json-text {
   padding-left: 40px;
   padding-right: 40px;
   width: 15%; 
   flex-shrink: 0; 
 }
+
 .new-json-text {
   padding-left: 40px;
   padding-right: 39px;
@@ -588,6 +606,7 @@ footer {
   flex-shrink: 0; 
   text-wrap: nowrap;
 }
+
 .diff-button {
   background-color: gray;
   color: white;
@@ -598,6 +617,7 @@ footer {
   margin-left: 28%;
   margin-top: 25px; 
 }
+
 .diff-error-message {
   display: none;
   color: red;

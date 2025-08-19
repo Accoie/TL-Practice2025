@@ -32,15 +32,13 @@ form.addEventListener('submit', (event) => {
     document.querySelector('.diff-result').innerHTML = diff;
     document.querySelector('.diff-result').style.display = 'flex';
     document.querySelectorAll('.diff-error-message').forEach(el => {
-  el.style.display = 'none';
+    el.style.display = 'none';
 });
   } catch (error) {
     document.querySelectorAll('.diff-error-message').forEach(el => {
   el.style.display = 'block';
 });
-
     document.querySelector('.diff-result').style.display = 'none';
-    console.error('Ошибка при сравнении JSON:', error);
   }
 });
 
@@ -52,31 +50,24 @@ document.querySelector(".login__link").addEventListener("click", (e) => {
   document.querySelector(".logout__link").style.display = "block";
   document.querySelector('.login-error-message').style.display = "none";
   document.getElementById('username').style.marginBottom = "40px";
+  document.getElementById('username').value = null;
+
 });
 
 document.querySelector(".logout__link").addEventListener("click", (e) => {
   e.preventDefault();
   document.querySelector(".login").style.display = "none";
-  document.querySelector(".start-button").style.display = "none";
   document.querySelector(".promo").style.display = "flex";
   document.querySelector(".login__link").style.display = "block";
-  document.querySelector(".logout__link").style.display = "none";
-  document.querySelector('.login-error-message').style.display = "none";
-  document.getElementById('username').style.marginBottom = "40px";
-});
-
-document.querySelector(".logged__link").addEventListener("click", (e) => {
-  e.preventDefault();
-  document.querySelector(".login").style.display = "none";
-  document.querySelector(".promo").style.display = "flex";
-  document.querySelector(".login__link").style.display = "block";
-  document.querySelector(".logout__link").style.display = "none";
   document.querySelector(".start-button").style.display = "none";
-  document.querySelector(".logged__link").style.display = "none";
+  document.querySelector(".logout__link").style.display = "none";
   document.querySelector(".greet__wrapper").style.display = "none";
   document.querySelector(".form-wrapper").style.display = "none";
   document.querySelector('.login-error-message').style.display = "none";
   document.getElementById('username').style.marginBottom = "40px";
+  document.querySelector('.old-json').value = '{ "text": 123,  "textw": 124,  "texts": 125  }';
+  document.querySelector('.new-json').value = '{ "text": 321, "textw":421,"texts":125 }';
+  document.querySelector('.diff-result').textContent = '';
 
   localStorage.clear();
 });
@@ -122,8 +113,7 @@ function showWelcomeScreen(username) {
   document.querySelector(".greet__wrapper").style.display = "block";
   document.querySelector(".greet-message").textContent = `Hello, ${username}!`;
   document.querySelector(".login__link").style.display = "none";
-  document.querySelector(".logout__link").style.display = "none";
-  document.querySelector(".logged__link").style.display = "block";
+  document.querySelector(".logout__link").style.display = "block";
   document.querySelector(".promo").style.display = "flex";
   document.querySelector(".login").style.display = "none";
   document.querySelector(".form-wrapper").style.display = "none";
