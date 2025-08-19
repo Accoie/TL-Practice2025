@@ -2,121 +2,196 @@
 
 import { Diff } from "./Diff.js";
 
-const form = document.querySelector(`.form`);
-const textareaOldValue = document.querySelector('.old-json');
-const textareaNewValue = document.querySelector('.new-json');
-const pre = document.querySelector('pre');
+const elements = {
+  form: document.querySelector('.form'),
+  textareaOldValue: document.querySelector('.old-json'),
+  textareaNewValue: document.querySelector('.new-json'),
+  pre: document.querySelector('pre'),
+  diffResult: document.querySelector('.diff-result'),
+  loginLink: document.querySelector('.login-link'),
+  logoutLink: document.querySelector('.logout-link'),
+  loginForm: document.querySelector('.login'),
+  promo: document.querySelector('.promo'),
+  startButton: document.querySelector('.start-button'),
+  greetWrapper: document.querySelector('.greet-wrapper'),
+  formWrapper: document.querySelector('.form-wrapper'),
+  greetMessage: document.querySelector('.greet-message'),
+  usernameInput: document.getElementById('username'),
+  submitBtn: document.getElementById('submitBtn'),
+  errorMessages: document.querySelectorAll('.diff-error-message'),
+  loginErrorMessage: document.querySelector('.login-error-message')
+};
 
-form.addEventListener('submit', (event) => {
+function setupEventListeners() {
+  elements.form.addEventListener('submit', handleFormSubmit);
+  elements.loginLink.addEventListener('click', handleLoginClick);
+  elements.logoutLink.addEventListener('click', handleLogoutClick);
+  elements.submitBtn.addEventListener('click', handleLoginSubmit);
+  elements.startButton.addEventListener('click', handleStartButtonClick);
+}
+
+function handleFormSubmit(event) {
   event.preventDefault();
   
   try {
-    if (!textareaOldValue.value.trim() || !textareaNewValue.value.trim()) {
-      throw new Error('Оба JSON должны быть заполнены');
-    }
-
-    const oldValue = JSON.parse(textareaOldValue.value);
-    const newValue = JSON.parse(textareaNewValue.value);
-    
-    if (typeof oldValue !== 'object' || typeof newValue !== 'object' || oldValue === null || newValue === null) {
-      throw new Error('Введите валидные JSON объекты');
-    }
-
-    const diff = Diff.calculate(oldValue, newValue);
-    
-
-    if (!diff) {
-      throw new Error('Не удалось вычислить разницу');
-    }
-
-    document.querySelector('.diff-result').innerHTML = diff;
-    document.querySelector('.diff-result').style.display = 'flex';
-    document.querySelectorAll('.diff-error-message').forEach(el => {
-    el.style.display = 'none';
-});
+    validateJsonInputs();
+    const { oldValue, newValue } = parseJsonInputs();
+    const diff = calculateDiff(oldValue, newValue);
+    displayDiffResult(diff);
+    hideErrorMessages();
   } catch (error) {
-    document.querySelectorAll('.diff-error-message').forEach(el => {
-  el.style.display = 'block';
-});
-    document.querySelector('.diff-result').style.display = 'none';
+    showErrorMessages();
+    hideDiffResult();
   }
-});
+}
 
-document.querySelector(".login__link").addEventListener("click", (e) => {
-  e.preventDefault();
-  document.querySelector(".login").style.display = "flex";
-  document.querySelector(".promo").style.display = "none";
-  document.querySelector(".login__link").style.display = "none";
-  document.querySelector(".logout__link").style.display = "block";
-  document.querySelector('.login-error-message').style.display = "none";
-  document.getElementById('username').style.marginBottom = "40px";
-  document.getElementById('username').value = null;
+function validateJsonInputs() {
+  if (!elements.textareaOldValue.value.trim() || !elements.textareaNewValue.value.trim()) {
+    throw new Error('Оба JSON должны быть заполнены');
+  }
+}
 
-});
+function parseJsonInputs() {
+  const oldValue = JSON.parse(elements.textareaOldValue.value);
+  const newValue = JSON.parse(elements.textareaNewValue.value);
+  
+  if (typeof oldValue !== 'object' || typeof newValue !== 'object' || 
+      oldValue === null || newValue === null) {
+    throw new Error('Введите валидные JSON объекты');
+  }
+  
+  return { oldValue, newValue };
+}
 
-document.querySelector(".logout__link").addEventListener("click", (e) => {
-  e.preventDefault();
-  document.querySelector(".login").style.display = "none";
-  document.querySelector(".promo").style.display = "flex";
-  document.querySelector(".login__link").style.display = "block";
-  document.querySelector(".start-button").style.display = "none";
-  document.querySelector(".logout__link").style.display = "none";
-  document.querySelector(".greet__wrapper").style.display = "none";
-  document.querySelector(".form-wrapper").style.display = "none";
-  document.querySelector('.login-error-message').style.display = "none";
-  document.getElementById('username').style.marginBottom = "40px";
-  document.querySelector('.old-json').value = '{ "text": 123,  "textw": 124,  "texts": 125  }';
-  document.querySelector('.new-json').value = '{ "text": 321, "textw":421,"texts":125 }';
-  document.querySelector('.diff-result').textContent = '';
+function calculateDiff(oldValue, newValue) {
+  const diff = Diff.calculate(oldValue, newValue);
+  
+  if (!diff) {
+    throw new Error('Не удалось вычислить разницу');
+  }
+  
+  return diff;
+}
+
+function displayDiffResult(diff) {
+  elements.diffResult.innerHTML = diff;
+  elements.diffResult.style.display = 'flex';
+}
+
+function hideDiffResult() {
+  elements.diffResult.style.display = 'none';
+}
+
+function showErrorMessages() {
+  elements.errorMessages.forEach(el => {
+    el.style.display = 'block';
+  });
+}
+
+function hideErrorMessages() {
+  elements.errorMessages.forEach(el => {
+    el.style.display = 'none';
+  });
+}
+
+function handleLoginClick(event) {
+  event.preventDefault();
+  showLoginScreen();
+}
+
+function handleLogoutClick(event) {
+  event.preventDefault();
+  resetApplication();
+}
+
+function handleLoginSubmit(event) {
+  event.preventDefault();
+  
+  const username = elements.usernameInput.value.trim();
+  
+  if (!username) {
+    showLoginError();
+    return;
+  }
+  
+  saveUser(username);
+  showWelcomeScreen(username);
+}
+
+function handleStartButtonClick(event) {
+  event.preventDefault();
+  showFormScreen();
+}
+
+function showLoginScreen() {
+  elements.loginForm.style.display = "flex";
+  elements.promo.style.display = "none";
+  elements.loginLink.style.display = "none";
+  elements.logoutLink.style.display = "block";
+  elements.loginErrorMessage.style.display = "none";
+  elements.usernameInput.style.marginBottom = "40px";
+  elements.usernameInput.value = "";
+}
+
+function showWelcomeScreen(username) {
+  hideErrorMessages();
+  elements.startButton.style.display = "block";
+  elements.greetWrapper.style.display = "block";
+  elements.greetMessage.textContent = `Hello, ${username}!`;
+  elements.loginLink.style.display = "none";
+  elements.logoutLink.style.display = "block";
+  elements.promo.style.display = "flex";
+  elements.loginForm.style.display = "none";
+  elements.formWrapper.style.display = "none";
+}
+
+function showFormScreen() {
+  elements.promo.style.display = "none";
+  elements.loginForm.style.display = "none";
+  elements.formWrapper.style.display = "flex";
+}
+
+function resetApplication() {
+  elements.loginForm.style.display = "none";
+  elements.promo.style.display = "flex";
+  elements.loginLink.style.display = "block";
+  elements.startButton.style.display = "none";
+  elements.logoutLink.style.display = "none";
+  elements.greetWrapper.style.display = "none";
+  elements.formWrapper.style.display = "none";
+  elements.loginErrorMessage.style.display = "none";
+  elements.usernameInput.style.marginBottom = "40px";
+  elements.textareaOldValue.value = '{ "text": 123,  "textw": 124,  "texts": 125  }';
+  elements.textareaNewValue.value = '{ "text": 321, "textw":421,"texts":125 }';
+  elements.diffResult.textContent = '';
 
   localStorage.clear();
-});
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-  const savedUser = localStorage.getItem('savedUsername');
-  document.querySelector(".start-button").style.display = "none";
-  document.querySelector(".login").style.display = "none";
-  document.querySelector(".form-wrapper").style.display = "none";
+function showLoginError() {
+  elements.loginErrorMessage.style.display = "block";
+  elements.usernameInput.style.margin = "0";
+}
+
+function saveUser(username) {
+  localStorage.setItem('savedUsername', username);
+}
+
+function loadSavedUser() {
+  return localStorage.getItem('savedUsername');
+}
+
+function initializeApplication() {
+  setupEventListeners();
+  resetApplication();
+  elements.startButton.style.display = "none";
+  elements.loginForm.style.display = "none";
+  elements.formWrapper.style.display = "none";
+  
+  const savedUser = loadSavedUser();
   if (savedUser) {
     showWelcomeScreen(savedUser);
   }
-});
-
-document.getElementById('submitBtn').addEventListener('click', function(event) {
-  event.preventDefault();
-  
-  const username = document.getElementById('username').value.trim();
- 
-  if(!username)
-  {
-    document.querySelector('.login-error-message').style.display = "block";
-    document.getElementById('username').style.margin = "0";
-    return;
-  }
-  localStorage.setItem('savedUsername', username);
-  
-  showWelcomeScreen(username);
-});
-
-document.querySelector('.start-button').addEventListener('click', function(event){
-  event.preventDefault();
-  document.querySelector(".promo").style.display = "none";
-  document.querySelector(".login").style.display = "none";
-  document.querySelector(".form-wrapper").style.display = "flex";
-})
-
-function showWelcomeScreen(username) {
-  document.querySelectorAll('.diff-error-message').forEach(el => {
-  el.style.display = 'none';
-});
-  document.querySelector(".start-button").style.display = "block";
-  document.querySelector(".greet__wrapper").style.display = "block";
-  document.querySelector(".greet-message").textContent = `Hello, ${username}!`;
-  document.querySelector(".login__link").style.display = "none";
-  document.querySelector(".logout__link").style.display = "block";
-  document.querySelector(".promo").style.display = "flex";
-  document.querySelector(".login").style.display = "none";
-  document.querySelector(".form-wrapper").style.display = "none";
 }
 
-
+document.addEventListener('DOMContentLoaded', initializeApplication);

@@ -13,34 +13,32 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header__title">JSON-DIFF</h1>
-        <a href="#" class="login__link"> Log in </a>
-        <div class="greet__wrapper">
+        <h1 class="header-title">JSON-DIFF</h1>
+        <a href="#" class="login-link"> Log in </a>
+        <div class="greet-wrapper">
           <p class="greet-message"></p>
-          <a href="#" class="logout__link"> Log out </a>
+          <a href="#" class="logout-link"> Log out </a>
         </div>
       </header>
       <main class="contents">
         <section class="promo">
-          <div class="promo__text">
-            <div class="promo__text__wrapper">
-              <p class="promo__text__base">Compare</p>
-              <p class="promo__text__objects">two JSON objects</p>
-              <p class="promo__text__base">and see the</p>
+          <div class="promo-text">
+            <div class="promo-text-wrapper">
+              <p class="promo-text-base">Compare</p>
+              <p class="promo-text-objects">two JSON objects</p>
+              <p class="promo-text-base">and see the</p>
             </div>
-
-            <p class="promo__text__differences">differences</p>
-
+            <p class="promo-text-differences">differences</p>
             <button type="submit" class="start-button">Start</button>
           </div>
         </section>
         <section id="login" class="login">
-          <div class="login__wrapper">
-            <h2 class="login__title">Login Form</h2>
-            <form id="loginForm" class="login__form__wrapper">
-              <div class="login__form">
+          <div class="login-wrapper">
+            <h2 class="login-title">Login Form</h2>
+            <form id="loginForm" class="login-form-wrapper">
+              <div class="login-form">
                 <label for="username" class="form-label">LOGIN</label>
-                <div class="login__form__input">
+                <div class="login-form-input">
                   <input
                     type="text"
                     id="username"
@@ -64,7 +62,7 @@
             <div class="old-json-wrapper">
               <div class="old-json-area">
                 <p class="old-json-text">OLD JSON</p>
-                <textarea name="oldJson" class="old-json">{ "text": 123,  "textw": 124,  "texts": 125  }</textarea>       
+                <textarea name="oldJson" class="old-json"></textarea>       
               </div>
               <div id="errorMessage" class="diff-error-message">
                 Некорректный JSON
@@ -73,7 +71,7 @@
             <div class="new-json-wrapper">
               <div class="new-json-area">
                 <p class="new-json-text">NEW JSON</p>
-                <textarea name="newJson" class="new-json">{ "text": 321, "textw":421,"texts":125 }</textarea> 
+                <textarea name="newJson" class="new-json"></textarea> 
               </div>
               <div id="errorMessage" class="diff-error-message">
                 Обязательное поле
