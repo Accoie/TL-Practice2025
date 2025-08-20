@@ -24,6 +24,7 @@ public class PropertyService : IPropertyService
         _propertyRepository.Create( property );
         _unitOfWork.CommitAsync();
     }
+
     public Property GetById( int id )
     {
         Property? property = _propertyRepository.GetById( id );
@@ -49,7 +50,6 @@ public class PropertyService : IPropertyService
     }
     private void ValidateProperty( Property property )
     {
-        ValidateNotNull( property );
         ValidateName( property.Name );
         ValidateCountry( property.Country );
         ValidateCity( property.City );
@@ -63,14 +63,6 @@ public class PropertyService : IPropertyService
         if ( isExists )
         {
             throw new ArgumentException( "Property already exists" );
-        }
-    }
-
-    private void ValidateNotNull( Property property )
-    {
-        if ( property is null )
-        {
-            throw new ArgumentNullException( "Property cannot be null" );
         }
     }
 

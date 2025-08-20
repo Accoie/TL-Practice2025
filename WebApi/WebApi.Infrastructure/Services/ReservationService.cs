@@ -34,6 +34,8 @@ public class ReservationService : IReservationService
 
         ValidateReservation( reservation );
 
+        ValidateAvailability( reservation );
+
         reservation.Total = CalculateTotalPrice( reservation );
 
         _reservationRepository.Create( reservation );
@@ -146,7 +148,6 @@ public class ReservationService : IReservationService
         ValidateDates( reservation );
         ValidatePropertyAndRoom( reservation );
         ValidatePersonCount( reservation );
-        ValidateAvailability( reservation );
     }
 
     private void ValidateGuestInfo( Reservation reservation )

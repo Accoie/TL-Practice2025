@@ -26,6 +26,8 @@ public class Program
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        builder.Services.AddScoped<IActualizer, ReservationActualizer>();
+
         builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
         builder.Services.AddScoped<IPropertyService, PropertyService>();
         builder.Services.AddScoped<IReservationService, ReservationService>();

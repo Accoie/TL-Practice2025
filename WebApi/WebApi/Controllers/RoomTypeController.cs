@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Data;
 using WebApi.Domain.Entities;
+using WebApi.Domain.Foundations;
 using WebApi.Domain.Services;
 using WebApi.Mapping;
 
@@ -11,12 +12,14 @@ namespace WebApi.Controllers;
 public class RoomTypeController : ControllerBase
 {
     private IRoomTypeService _roomTypeService;
+    private IActualizer _actualizer;
     private int MinId = 1;
     private int MaxId = 1000000000;
 
-    public RoomTypeController( IRoomTypeService roomTypeService )
+    public RoomTypeController( IRoomTypeService roomTypeService, IActualizer actualizer )
     {
         _roomTypeService = roomTypeService;
+        _actualizer = actualizer;
     }
 
     [HttpGet( "property/{propertyId}" )]
@@ -71,6 +74,8 @@ public class RoomTypeController : ControllerBase
             Mapper.ChangeExistingRoomType( roomTypeDto, roomType );
 
             _roomTypeService.Update( roomType );
+
+            _actualizer.ActualizeById( id );
 
             return Ok();
         }

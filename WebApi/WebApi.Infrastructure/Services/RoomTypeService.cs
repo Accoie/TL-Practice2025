@@ -5,7 +5,7 @@ using WebApi.Domain.Services;
 
 namespace WebApi.Infrastructure.Services;
 
-public class RoomTypeService : IRoomTypeService 
+public class RoomTypeService : IRoomTypeService
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -59,7 +59,7 @@ public class RoomTypeService : IRoomTypeService
     public void Update( RoomType roomType )
     {
         ValidateRoomType( roomType );
-        
+
         _roomTypeRepository.Update( roomType );
 
         _unitOfWork.CommitAsync();
@@ -67,7 +67,11 @@ public class RoomTypeService : IRoomTypeService
 
     private void ValidateRoomType( RoomType roomType )
     {
-        ValidatePropertyId( roomType.PropertyId );
+        if ( roomType.PropertyId <= 0 )
+        {
+            throw new ArgumentException( "PropertyId must be greater than 0" );
+        }
+
         ValidateName( roomType.Name );
         ValidateDailyPrice( roomType.DailyPrice );
         ValidateCurrency( roomType.Currency );
@@ -82,14 +86,6 @@ public class RoomTypeService : IRoomTypeService
         if ( isExists )
         {
             throw new ArgumentException( "RoomType already exists" );
-        }
-    }
-
-    private void ValidatePropertyId( int propertyId )
-    {
-        if ( propertyId <= 0 )
-        {
-            throw new ArgumentException( "PropertyId must be greater than 0" );
         }
     }
 
@@ -123,9 +119,9 @@ public class RoomTypeService : IRoomTypeService
         {
             throw new ArgumentException( "Currency cannot be empty" );
         }
-        if ( currency.Length != 3 )
+        if ( currency.Length != 5 )
         {
-            throw new ArgumentException( "Currency must be a 3-letter code" );
+            throw new ArgumentException( "Currency must be a 5-letter code" );
         }
     }
 
