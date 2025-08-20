@@ -5,7 +5,7 @@ using WebApi.Domain.Services;
 
 namespace WebApi.Infrastructure.Services;
 
-public class RoomTypeService : IRoomTypeService
+public class RoomTypeService : IRoomTypeService 
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -59,7 +59,7 @@ public class RoomTypeService : IRoomTypeService
     public void Update( RoomType roomType )
     {
         ValidateRoomType( roomType );
-
+        
         _roomTypeRepository.Update( roomType );
 
         _unitOfWork.CommitAsync();

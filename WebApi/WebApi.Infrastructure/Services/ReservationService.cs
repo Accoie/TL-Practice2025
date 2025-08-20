@@ -8,19 +8,19 @@ namespace WebApi.Infrastructure.Services;
 
 public class ReservationService : IReservationService
 {
-    private readonly IPropertyRepository _propertyRepository;
-    private readonly IRoomTypeRepository _roomTypeRepository;
+    private readonly IPropertyService _propertyService;
+    private readonly IRoomTypeService _roomTypeService;
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public ReservationService(
-        IPropertyRepository propertyRepository,
-        IRoomTypeRepository roomTypeRepository,
+        IPropertyService propertyService,
+        IRoomTypeService roomTypeService,
         IReservationRepository reservationRepository,
         IUnitOfWork unitOfWork )
     {
-        _propertyRepository = propertyRepository;
-        _roomTypeRepository = roomTypeRepository;
+        _propertyService = propertyService;
+        _roomTypeService = roomTypeService;
         _reservationRepository = reservationRepository;
         _unitOfWork = unitOfWork;
     }
@@ -177,23 +177,13 @@ public class ReservationService : IReservationService
 
     private void ValidatePropertyAndRoom( Reservation reservation )
     {
-        Property? property = _propertyRepository.GetById( reservation.PropertyId );
-        RoomType? roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
-
-        if ( property is null )
-        {
-            throw new ArgumentException( $"Property \"{reservation.PropertyId}\" doesn't exist" );
-        }
-
-        if ( roomType is null )
-        {
-            throw new ArgumentException( $"Room \"{reservation.RoomTypeId}\" doesn't exist" );
-        }
+        Property property = _propertyService.GetById( reservation.PropertyId );
+        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
     }
 
     private void ValidatePersonCount( Reservation reservation )
     {
-        RoomType? roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
+        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
 
         if ( reservation.PersonCount > roomType.MaxPersonCount )
         {
@@ -238,12 +228,7 @@ public class ReservationService : IReservationService
 
     private decimal CalculateTotalPrice( Reservation reservation )
     {
-        RoomType? roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
-
-        if ( roomType is null )
-        {
-            throw new ArgumentException( $"RoomType \"{reservation.RoomTypeId}\" doesn't exist" );
-        }
+        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
 
         int numberOfDays = ( reservation.DepartureDate - reservation.ArrivalDate ).Days;
         decimal totalPrice = roomType.DailyPrice * numberOfDays;
