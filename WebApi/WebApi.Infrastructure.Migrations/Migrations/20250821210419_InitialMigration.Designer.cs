@@ -9,10 +9,10 @@ using WebApi.Infrastructure;
 
 #nullable disable
 
-namespace WebApi.Infrastructure.Migrations
+namespace WebApi.Infrastructure.Migrations.Migrations
 {
     [DbContext(typeof(WebApiDbContext))]
-    [Migration("20250821204322_InitialMigration")]
+    [Migration("20250821210419_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

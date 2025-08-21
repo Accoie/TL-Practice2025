@@ -8,7 +8,9 @@ public class BookingManagerDbContextFactory : IDesignTimeDbContextFactory<WebApi
     public WebApiDbContext CreateDbContext( string[] args )
     {
         var optionsBuilder = new DbContextOptionsBuilder<WebApiDbContext>();
-        optionsBuilder.UseSqlServer( "Server=local\\SQLEXPRESS;Database=WebApi;TrustServerCertificate=True;" );
+        optionsBuilder.UseSqlServer( "Server=localhost\\SQLEXPRESS;Database=WebApi;TrustServerCertificate=True;",
+             b => b.MigrationsAssembly( "WebApi.Infrastructure.Migrations" ) );
+        
 
         return new WebApiDbContext( optionsBuilder.Options );
     }
