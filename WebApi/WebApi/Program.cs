@@ -20,8 +20,7 @@ public class Program
 
         builder.Services.AddDbContext<WebApiDbContext>( options =>
         {
-            options.UseInMemoryDatabase( databaseName: "WebApiDatabase" );
-            options.LogTo( Console.WriteLine );
+            options.UseSqlServer( builder.Configuration.GetConnectionString( "DefaultConnection" ) );
         } );
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
