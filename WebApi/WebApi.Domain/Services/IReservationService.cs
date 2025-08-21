@@ -11,5 +11,6 @@ public interface IReservationService
     public Reservation GetById( int id );
 
     public void Update( Reservation reservation );
+
     public void Delete( int id );
 }

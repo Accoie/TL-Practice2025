@@ -22,6 +22,7 @@ public class RoomTypeService : IRoomTypeService
         ValidateRoomType( roomType );
 
         _roomTypeRepository.Create( roomType );
+
         _unitOfWork.CommitAsync();
     }
 
@@ -82,8 +83,7 @@ public class RoomTypeService : IRoomTypeService
 
     private void CheckRoomTypeExists( int id )
     {
-        bool isExists = _roomTypeRepository.GetById( id ) is not null;
-        if ( isExists )
+        if ( _roomTypeRepository.GetById( id ) is not null )
         {
             throw new ArgumentException( "RoomType already exists" );
         }

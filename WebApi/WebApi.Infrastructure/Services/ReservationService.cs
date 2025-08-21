@@ -222,7 +222,6 @@ public class ReservationService : IReservationService
             {
                 throw new ArgumentException(
                     $"RoomType \"{reservation.RoomTypeId}\" is already reserved on {res.ArrivalDate.Date} {res.ArrivalTime} - {res.DepartureDate.Date} {res.DepartureTime}" );
-
             }
         }
     }

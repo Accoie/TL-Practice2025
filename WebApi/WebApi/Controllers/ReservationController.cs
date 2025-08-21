@@ -38,6 +38,7 @@ public class ReservationController : ControllerBase
             return BadRequest( ex.Message );
         }
     }
+
     [HttpPut( "{id}" )]
     public ActionResult UpdateReservation( int id, ReservationUpdationDto dto )
     {
@@ -56,6 +57,7 @@ public class ReservationController : ControllerBase
             return BadRequest( ex.Message );
         }
     }
+
     [HttpGet]
     public List<Reservation> GetReservations( [FromQuery] ReservationFilter filter )
     {

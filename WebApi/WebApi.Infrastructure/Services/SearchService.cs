@@ -21,44 +21,28 @@ public class SearchService : ISearchService
 
     public List<(Property, RoomType)> Search( SearchFilter filter )
     {
-        ValidateCity( filter.City );
-        ValidateDates( filter.ArrivalDate, filter.DepartureDate );
-        ValidateMaxPrice( filter.MaxPrice );
-        ValidatePersonCount( filter.PersonCount );
-
-        return ExecuteSearch( filter );
-    }
-
-    private void ValidateCity( string city )
-    {
-        if ( string.IsNullOrWhiteSpace( city ) )
+        if ( string.IsNullOrWhiteSpace( filter.City ) )
         {
             throw new ArgumentException( "City must be specified" );
         }
-    }
 
-    private void ValidateDates( DateTime arrivalDate, DateTime departureDate )
-    {
-        if ( departureDate <= arrivalDate )
+        if ( filter.DepartureDate <= filter.ArrivalDate )
         {
             throw new ArgumentException( "Departure date must be after arrival date" );
         }
-    }
 
-    private void ValidateMaxPrice( decimal maxPrice )
-    {
-        if ( maxPrice < 0 )
+        if ( filter.MaxPrice < 0 )
         {
             throw new ArgumentException( "Max price cannot be negative" );
         }
-    }
 
-    private void ValidatePersonCount( int personCount )
-    {
-        if ( personCount <= 0 )
+        if ( filter.PersonCount <= 0 )
         {
             throw new ArgumentException( "Person count must be at least 1" );
         }
+
+
+        return ExecuteSearch( filter );
     }
 
     private List<(Property, RoomType)> ExecuteSearch( SearchFilter filter )
@@ -90,9 +74,11 @@ public class SearchService : ISearchService
             .ToList();
 
         List<(Property, RoomType)> resultList = new();
+
         foreach ( var roomType in roomTypes )
         {
             var property = properties.FirstOrDefault( p => p.Id == roomType.PropertyId );
+
             if ( property != null )
             {
                 resultList.Add( (property, roomType) );

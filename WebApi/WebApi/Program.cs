@@ -9,9 +9,9 @@ using WebApi.Infrastructure.Services;
 
 public class Program
 {
-    private static void Main( string[] args )
+    private static void Main()
     {
-        var builder = WebApplication.CreateBuilder( args );
+        var builder = WebApplication.CreateBuilder();
 
         builder.Services.AddControllers();
 

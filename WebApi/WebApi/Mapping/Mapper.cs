@@ -1,6 +1,5 @@
 ﻿using WebApi.Data;
 using WebApi.Domain.Entities;
-using WebApi.Infrastructure.Repositories;
 
 namespace WebApi.Mapping;
 
@@ -24,6 +23,7 @@ public static class Mapper
 
         return newReservation;
     }
+
     public static Reservation ChangeExistingReservation( ReservationUpdationDto dto, Reservation reservation )
     {
         reservation.ArrivalDate = dto.ArrivalDate.Date;
@@ -75,6 +75,7 @@ public static class Mapper
         property.Country = dto.Country;
         property.Name = dto.Name;
     }
+
     public static void ChangeExistingRoomType( RoomTypeDto dto, RoomType roomType )
     {
         roomType.Currency = dto.Currency;

@@ -48,6 +48,7 @@ public class PropertyService : IPropertyService
 
         _unitOfWork.CommitAsync();
     }
+
     private void ValidateProperty( Property property )
     {
         ValidateName( property.Name );

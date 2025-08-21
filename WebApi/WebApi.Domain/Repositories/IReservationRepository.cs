@@ -7,7 +7,6 @@ public interface IReservationRepository
     public void Create( Reservation reservation );
 
     public List<Reservation> GetAll();
-
     public Reservation? GetById( int id );
 
     public void Update( Reservation reservation );
