@@ -9,6 +9,7 @@ public class WebApiDbContext : DbContext
     public DbSet<Property> Properties { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+
     public WebApiDbContext( DbContextOptions<WebApiDbContext> options ) : base( options )
     {
     }
