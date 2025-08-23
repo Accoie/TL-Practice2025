@@ -26,7 +26,7 @@ namespace Fighters.Tests.Models
         }
 
         [Test]
-        public void Create_WithEmptyName_WillAccept()
+        public void Create_WithEmptyName_WillEqual()
         {
             // Arrange
             // (Initialization in constructor)
@@ -39,7 +39,7 @@ namespace Fighters.Tests.Models
         }
 
         [Test]
-        public void TakeDamage_MoreThanHealth_WillZero()
+        public void TakeDamage_MoreThanHealth_WillEqualZero()
         {
             // Arrange
             BaseFighter fighter = _strongFighter;
@@ -66,10 +66,10 @@ namespace Fighters.Tests.Models
         }
 
         [Test]
-        public void Fight_WeakFighterVsStrong_WillNoDamage()
+        public void Fight_WeakFighterVsStrong_DamageWillEqualZero()
         {
             // Arrange
-            // (Тестовые данные уже подготовлены в полях класса)
+            // (Test data is already created in test class fields)
 
             // Act
             int damage = _weakFighter.Fight( _strongFighter );

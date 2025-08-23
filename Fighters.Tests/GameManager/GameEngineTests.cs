@@ -21,6 +21,12 @@ public class GameEngineTests
         _zeroDamageFighterMock = CreateFighterMock( "zeroDamage", 100, 0 );
     }
 
+    private static void AddWeakFighter( GameEngine engine )
+    {
+        IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
+        engine.AddFighter( fighter );
+    }
+
     private static Mock<IFighter> CreateFighterMock( string name,
         int maxHealth,
         int damage )
@@ -58,6 +64,7 @@ public class GameEngineTests
     {
         // Arrange
         GameEngine game = new GameEngine();
+        AddWeakFighter( game );
 
         // Act & Assert
         Assert.Throws<ArgumentException>( () => game.AddFighter( _emptyNameFighterMock.Object ) );
@@ -67,9 +74,8 @@ public class GameEngineTests
     public void RemoveFighter_RemoveNotExistingFighter_ThrowException()
     {
         // Arrange
-        IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
         GameEngine game = new GameEngine();
-        game.AddFighter( fighter );
+        AddWeakFighter( game );
 
         // Act & Assert
         Assert.Throws<ArgumentException>( () => game.RemoveFighter( "sdfasd" ) );
@@ -79,9 +85,8 @@ public class GameEngineTests
     public void RemoveFighter_RemoveWithEmptyString_ThrowException()
     {
         // Arrange
-        IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
         GameEngine game = new GameEngine();
-        game.AddFighter( fighter );
+        AddWeakFighter( game );
 
         // Act & Assert
         Assert.Throws<ArgumentException>( () => game.RemoveFighter( string.Empty ) );

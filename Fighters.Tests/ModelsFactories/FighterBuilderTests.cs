@@ -9,16 +9,9 @@ namespace Fighters.Tests.ModelsFactories
 {
     public class FighterBuilderTests
     {
-        private readonly Mock<IWeapon> _weaponMock;
-        private readonly Mock<IArmor> _armorMock;
-        private readonly Mock<IRace> _raceMock;
-
-        public FighterBuilderTests()
-        {
-            _weaponMock = new Mock<IWeapon>();
-            _armorMock = new Mock<IArmor>();
-            _raceMock = new Mock<IRace>();
-        }
+        private readonly Mock<IWeapon> _weaponMock = new Mock<IWeapon>();
+        private readonly Mock<IArmor> _armorMock = new Mock<IArmor>();
+        private readonly Mock<IRace> _raceMock = new Mock<IRace>();
 
         [Test]
         public void Build_Fighter()
@@ -34,7 +27,7 @@ namespace Fighters.Tests.ModelsFactories
         }
 
         [Test]
-        public void Build_FighterWithEmptyName()
+        public void CreateFighter_FighterWithEmptyName()
         {
             // Arrange
             string emptyName = string.Empty;
