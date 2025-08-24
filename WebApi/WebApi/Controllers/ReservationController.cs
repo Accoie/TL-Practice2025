@@ -1,9 +1,9 @@
 ﻿using WebApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Data;
-using WebApi.Domain.Services;
 using WebApi.Domain.Filters;
 using WebApi.Mapping;
+using WebApi.Domain.Services.Interfaces;
 
 namespace WebApi.Controllers;
 
@@ -12,8 +12,6 @@ namespace WebApi.Controllers;
 public class ReservationController : ControllerBase
 {
     private IReservationService _reservationService;
-    private int MinId = 1;
-    private int MaxId = 1000000000;
 
     public ReservationController( IReservationService reservationService )
     {
@@ -21,41 +19,21 @@ public class ReservationController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateReservation( ReservationDto dto )
+    public void CreateReservation( [FromBody] ReservationDto dto )
     {
-        try
-        {
-            Random rnd = new Random();
+        Reservation reservation = ReservationMapper.ToReservation( ControllerHelper.GenerateId(), dto );
 
-            Reservation reservation = Mapper.ToReservation( rnd.Next( MinId, MaxId ), dto );
-
-            _reservationService.Create( reservation );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _reservationService.Create( reservation );
     }
 
     [HttpPut( "{id}" )]
-    public ActionResult UpdateReservation( int id, ReservationUpdationDto dto )
+    public void UpdateReservation( [FromQuery] int id, [FromBody] ReservationUpdationDto dto )
     {
-        try
-        {
-            Reservation reservation = _reservationService.GetById( id );
+        Reservation reservation = _reservationService.GetById( id );
 
-            Mapper.ChangeExistingReservation( dto, reservation );
+        ReservationMapper.ChangeExistingReservation( dto, reservation );
 
-            _reservationService.Update( reservation );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _reservationService.Update( reservation );
     }
 
     [HttpGet]
@@ -65,17 +43,8 @@ public class ReservationController : ControllerBase
     }
 
     [HttpDelete( "{id}" )]
-    public ActionResult DeleteReservation( int id )
+    public void DeleteReservation( [FromQuery] int id )
     {
-        try
-        {
-            _reservationService.Delete( id );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _reservationService.Delete( id );
     }
 }

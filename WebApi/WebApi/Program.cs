@@ -2,10 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Domain.Foundations;
 using WebApi.Domain.Repositories;
 using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
 using WebApi.Infrastructure;
 using WebApi.Infrastructure.Foundations;
 using WebApi.Infrastructure.Repositories;
-using WebApi.Infrastructure.Services;
+using WebApi.Middlewares;
 
 public class Program
 {
@@ -48,6 +49,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.UseMiddleware<ExceptionMiddleware>();
 
         app.Run();
     }

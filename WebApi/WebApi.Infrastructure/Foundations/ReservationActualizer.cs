@@ -1,7 +1,7 @@
 ﻿using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
 using WebApi.Domain.Foundations;
-using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
 
 namespace WebApi.Infrastructure.Foundations;
 

@@ -2,7 +2,7 @@
 using WebApi.Data;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
-using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
 using WebApi.Mapping;
 
 namespace WebApi.Controllers;
@@ -19,29 +19,12 @@ public class SearchController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<SearchResultDto>> Search( [FromQuery] SearchFilter filter )
+    public List<SearchResultDto> Search( [FromQuery] SearchFilter filter )
     {
-        try
-        {
-            List<(Property, RoomType)> searchedData = _searchService.Search( filter ).ToList();
+        List<(Property, RoomType)> searchedData = _searchService.Search( filter ).ToList();
 
-            List<SearchResultDto> result = [];
+        List<SearchResultDto> result = SearchMapper.ToSearchResultDtoList( searchedData );
 
-            foreach ( (Property, RoomType) data in searchedData )
-            {
-                SearchResultDto resultDto = new();
-
-                resultDto.Property = Mapper.ToPropertyDto( data.Item1 );
-                resultDto.RoomType = Mapper.ToRoomTypeDto( data.Item2 );
-
-                result.Add( resultDto );
-            }
-
-            return Ok( result );
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        return result;
     }
 }

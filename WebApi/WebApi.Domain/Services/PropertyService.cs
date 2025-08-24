@@ -1,9 +1,9 @@
 ﻿using WebApi.Domain.Entities;
 using WebApi.Domain.Foundations;
 using WebApi.Domain.Repositories;
-using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
 
-namespace WebApi.Infrastructure.Services;
+namespace WebApi.Domain.Services;
 
 public class PropertyService : IPropertyService
 {

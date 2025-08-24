@@ -2,7 +2,8 @@
 using WebApi.Data;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Foundations;
-using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
+using WebApi.Extensions;
 using WebApi.Mapping;
 
 namespace WebApi.Controllers;
@@ -13,8 +14,6 @@ public class RoomTypeController : ControllerBase
 {
     private IRoomTypeService _roomTypeService;
     private IActualizer _actualizer;
-    private int MinId = 1;
-    private int MaxId = 1000000000;
 
     public RoomTypeController( IRoomTypeService roomTypeService, IActualizer actualizer )
     {
@@ -23,80 +22,44 @@ public class RoomTypeController : ControllerBase
     }
 
     [HttpGet( "property/{propertyId}" )]
-    public List<RoomType> ListRoomType( int propertyId )
+    public List<RoomType> ListRoomType( [FromQuery] int propertyId )
     {
         return _roomTypeService.GetAllById( propertyId );
     }
 
     [HttpGet( "{id}" )]
-    public ActionResult<RoomTypeDto> GetRoomType( int id )
+    public RoomTypeDto GetRoomType( [FromQuery] int id )
     {
-        try
-        {
-            RoomType roomType = _roomTypeService.GetById( id );
+        RoomType roomType = _roomTypeService.GetById( id );
 
-            return Mapper.ToRoomTypeDto( roomType );
-        }
-        catch ( ArgumentException ex )
-        {
-            return NotFound( ex.Message );
-        }
+        return roomType.ToRoomTypeDto();
     }
 
     [HttpPost( "property/{propertyId}" )]
-    public ActionResult CreateRoomType( [FromRoute] int propertyId, RoomTypeDto roomTypeDto )
+    public void CreateRoomType( [FromRoute] int propertyId, [FromBody] RoomTypeDto roomTypeDto )
     {
-        try
-        {
-            Random rnd = new Random();
+        RoomType roomType = RoomTypeMapper.ToRoomType( ControllerHelper.GenerateId(), roomTypeDto );
 
-            RoomType roomType = Mapper.ToRoomType( rnd.Next( MinId, MaxId ), roomTypeDto );
+        roomType.PropertyId = propertyId;
 
-            roomType.PropertyId = propertyId;
-
-            _roomTypeService.Create( roomType );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _roomTypeService.Create( roomType );
     }
 
     [HttpPut( "{id}" )]
-    public ActionResult UpdateRoomType( int id, RoomTypeDto roomTypeDto )
+    public void UpdateRoomType( [FromQuery] int id, [FromBody] RoomTypeDto roomTypeDto )
     {
-        try
-        {
-            RoomType roomType = _roomTypeService.GetById( id );
+        RoomType roomType = _roomTypeService.GetById( id );
 
-            Mapper.ChangeExistingRoomType( roomTypeDto, roomType );
+        RoomTypeMapper.ChangeExistingRoomType( roomTypeDto, roomType );
 
-            _roomTypeService.Update( roomType );
+        _roomTypeService.Update( roomType );
 
-            _actualizer.ActualizeById( id );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _actualizer.ActualizeById( id );
     }
 
     [HttpDelete( "{id}" )]
-    public ActionResult DeleteRoomType( int id )
+    public void DeleteRoomType( [FromQuery] int id )
     {
-        try
-        {
-            _roomTypeService.Delete( id );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _roomTypeService.Delete( id );
     }
 }

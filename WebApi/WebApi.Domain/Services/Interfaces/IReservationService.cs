@@ -1,7 +1,7 @@
 ﻿using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
 
-namespace WebApi.Domain.Services;
+namespace WebApi.Domain.Services.Interfaces;
 
 public interface IReservationService
 {

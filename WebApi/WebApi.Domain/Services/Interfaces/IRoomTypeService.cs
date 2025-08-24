@@ -1,6 +1,6 @@
 ﻿using WebApi.Domain.Entities;
 
-namespace WebApi.Domain.Services;
+namespace WebApi.Domain.Services.Interfaces;
 
 public interface IRoomTypeService
 {

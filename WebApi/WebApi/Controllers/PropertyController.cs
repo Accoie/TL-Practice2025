@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Data;
 using WebApi.Domain.Entities;
-using WebApi.Domain.Services;
+using WebApi.Domain.Services.Interfaces;
+using WebApi.Extensions;
 using WebApi.Mapping;
 
 namespace WebApi.Controllers;
@@ -11,8 +12,6 @@ namespace WebApi.Controllers;
 public class PropertyController : ControllerBase
 {
     private IPropertyService _propertyService;
-    private int MinId = 1;
-    private int MaxId = 1000000000;
 
     public PropertyController( IPropertyService propertyService )
     {
@@ -26,70 +25,34 @@ public class PropertyController : ControllerBase
     }
 
     [HttpGet( "{id}" )]
-    public ActionResult<PropertyDto> GetProperty( int id )
+    public PropertyDto GetProperty( [FromQuery] int id )
     {
-        try
-        {
-            Property property = _propertyService.GetById( id );
+        Property property = _propertyService.GetById( id );
 
-            return Mapper.ToPropertyDto( property );
-        }
-        catch ( ArgumentException ex )
-        {
-            return NotFound( ex.Message );
-        }
+        return property.ToPropertyDto();
     }
 
     [HttpPost]
-    public ActionResult CreateProperty( PropertyDto propertyDto )
+    public void CreateProperty( [FromBody] PropertyDto propertyDto )
     {
-        try
-        {
-            Random rnd = new Random();
+        Property property = PropertyMapper.ToProperty( ControllerHelper.GenerateId(), propertyDto ); ;
 
-            Property property = Mapper.ToProperty( rnd.Next( MinId, MaxId ), propertyDto ); ;
-
-            _propertyService.Create( property );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _propertyService.Create( property );
     }
 
     [HttpPut( "{id}" )]
-    public ActionResult UpdateProperty( int id, PropertyDto propertyDto )
+    public void UpdateProperty( [FromQuery] int id, [FromBody] PropertyDto propertyDto )
     {
-        try
-        {
-            Property property = _propertyService.GetById( id );
+        Property property = _propertyService.GetById( id );
 
-            Mapper.ChangeExistingProperty( propertyDto, property );
+        PropertyMapper.ChangeExistingProperty( propertyDto, property );
 
-            _propertyService.Update( property );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _propertyService.Update( property );
     }
 
     [HttpDelete( "{id}" )]
-    public ActionResult DeleteProperty( int id )
+    public void DeleteProperty( [FromQuery] int id )
     {
-        try
-        {
-            _propertyService.Delete( id );
-
-            return Ok();
-        }
-        catch ( ArgumentException ex )
-        {
-            return BadRequest( ex.Message );
-        }
+        _propertyService.Delete( id );
     }
 }
