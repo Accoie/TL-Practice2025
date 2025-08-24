@@ -14,7 +14,7 @@ namespace Fighters.Tests.ModelsFactories
         private readonly Mock<IRace> _raceMock = new Mock<IRace>();
 
         [Test]
-        public void Build_Fighter()
+        public void CreateFighter_WithDefaultName_WillCreated()
         {
             // Arrange
             string fighterName = "sdf";
@@ -27,7 +27,7 @@ namespace Fighters.Tests.ModelsFactories
         }
 
         [Test]
-        public void CreateFighter_FighterWithEmptyName()
+        public void CreateFighter_FighterWithEmptyName_WillCreated()
         {
             // Arrange
             string emptyName = string.Empty;
