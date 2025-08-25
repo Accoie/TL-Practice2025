@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+.reviewerPage {
+  min-height: 100%;
+  width: 100%;
+  place-items: center;
+  align-items: center;
+  height: fit-content;
+  font-family: "Inter", sans-serif;
+}
+
+.reviewFormWrapper {
+  margin-bottom: 30px;
+}

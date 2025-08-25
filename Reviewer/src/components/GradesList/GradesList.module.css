@@ -1,0 +1,7 @@
+.gradesList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
+  padding-left: 6px;
+}
