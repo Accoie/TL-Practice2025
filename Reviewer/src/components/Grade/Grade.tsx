@@ -15,19 +15,16 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
       case 1:
         return <img src="src/assets/icons/twemoji_angry-face.svg"></img>;
       case 2:
-        return (
-          <img src="src/assets/icons/twemoji_slightly-frowning-face.svg"></img>
-        );
+        return <img src="src/assets/icons/twemoji_slightly-frowning-face.svg"></img>;
+
       case 3:
         return <img src="src/assets/icons/twemoji_neutral-face.svg"></img>;
       case 4:
-        return (
-          <img src="src/assets/icons/twemoji_slightly-smiling-face.svg"></img>
-        );
+        return <img src="src/assets/icons/twemoji_slightly-smiling-face.svg"></img>;
+
       case 5:
-        return (
-          <img src="src/assets/icons/twemoji_grinning-face-with-big-eyes.svg"></img>
-        );
+        return <img src="src/assets/icons/twemoji_grinning-face-with-big-eyes.svg"></img>;
+
       default:
         return null;
     }
@@ -46,7 +43,7 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
       case 5:
         return "#ffe600ff";
       default:
-        return "#ffffffff";
+        return "#ffffff";
     }
   };
 
@@ -71,6 +68,21 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
     }
   };
 
+  const handleGradeClick = (e: React.MouseEvent) => {
+    if (!sliderRef || !sliderRef.current){
+      return;
+    }
+    
+    const rect = sliderRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    
+    const segmentWidth = width / 5;
+    let newValue = Math.floor(clickX / segmentWidth) + 1;
+    newValue = Math.min(5, Math.max(1, newValue));
+    
+    onValueChange(newValue);
+  }
   return (
     <div className={styles.gradeWrapper}>
       <div className={styles.inputContainer}>
@@ -82,6 +94,7 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
           max="5"
           step="1"
           value={value}
+          onClick={ handleGradeClick }
           onChange={(e) => onValueChange(parseInt(e.target.value, 10))}
           style={{
             background: `linear-gradient(to right, ${getColor(
