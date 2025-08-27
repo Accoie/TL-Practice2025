@@ -1,18 +1,17 @@
 import { GradesList } from "../GradesList/GradesList";
 import styles from "./ReviewForm.module.css";
 import { useState, useRef, useEffect } from "react";
-
-type ReviewObject = {
-  name: string;
-  description: string;
-  average: number;
-};
+import type { ReviewObject } from "../../types/ReviewObject";
 
 export const ReviewForm = () => {
   const [average, setAverage] = useState(0);
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [reviewText]);
 
   const loadAllToLocalStorage = () => {
     const reviewObj: ReviewObject = {
@@ -40,17 +39,15 @@ export const ReviewForm = () => {
     setName("");
     setReviewText("");
     setAverage(0);
-
-    alert("Отзыв успешно сохранен!");
   };
+
   const adjustTextareaHeight = () => {
-      const textarea = textAreaRef.current;
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-      }
-    };
-  useEffect(()=>{adjustTextareaHeight()},[reviewText])
+    const textarea = textAreaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+    }
+  };
 
   return (
     <form className={styles.reviewForm}>
@@ -58,6 +55,7 @@ export const ReviewForm = () => {
         <h3 className={styles.formTitle}>
           Помогите нам сделать процесс бронирования лучше
         </h3>
+
         <GradesList onAverageChange={setAverage}></GradesList>
 
         <div className={styles.inputContainer}>
@@ -85,8 +83,8 @@ export const ReviewForm = () => {
         <button
           type="submit"
           className={styles.submitButton}
-          onClick={() => { 
-            if(average === 0) return;
+          onClick={() => {
+            if (average === 0) return;
             loadAllToLocalStorage();
           }}
         >

@@ -16,15 +16,12 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
         return <img src="src/assets/icons/twemoji_angry-face.svg"></img>;
       case 2:
         return <img src="src/assets/icons/twemoji_slightly-frowning-face.svg"></img>;
-
       case 3:
         return <img src="src/assets/icons/twemoji_neutral-face.svg"></img>;
       case 4:
         return <img src="src/assets/icons/twemoji_slightly-smiling-face.svg"></img>;
-
       case 5:
         return <img src="src/assets/icons/twemoji_grinning-face-with-big-eyes.svg"></img>;
-
       default:
         return null;
     }
@@ -57,6 +54,7 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
 
   const getTickColor = (tick: number) => {
     const initialValue = 6;
+    
     if (value === initialValue) {
       return getColor(tick);
     }
@@ -83,6 +81,7 @@ export const Grade = ({ name, value, onValueChange }: GradeProps) => {
     
     onValueChange(newValue);
   }
+
   return (
     <div className={styles.gradeWrapper}>
       <div className={styles.inputContainer}>
