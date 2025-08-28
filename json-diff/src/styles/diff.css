@@ -1,0 +1,79 @@
+.form-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  background-color: rgb(255, 251, 199);
+}
+
+.old-json-area {
+  display: flex;
+  padding-top: 20px;
+}
+
+.old-json-wrapper {
+  margin-bottom: 30px;
+}
+
+.old-json {
+  width: 400px;
+  height: 300px
+}
+
+.new-json-wrapper {
+  padding-bottom: 30px;
+}
+
+.new-json {
+  width: 400px;
+  height: 300px;
+}
+
+.new-json-area {
+  display: flex;
+
+  align-items: flex-start; 
+}
+
+.old-json-text {
+  padding-left: 40px;
+  padding-right: 40px;
+  width: 15%; 
+  flex-shrink: 0; 
+}
+
+.new-json-text {
+  padding-left: 40px;
+  padding-right: 39px;
+  width: 15%; 
+  flex-shrink: 0; 
+  text-wrap: nowrap;
+}
+
+.diff-button {
+  background-color: gray;
+  color: white;
+  padding: 15px 15px 15px 15px;
+  border: 0;
+  cursor: pointer;  
+  width: 71%;
+  margin-left: 28%;
+  margin-top: 25px; 
+}
+
+.diff-error-message {
+  display: none;
+  color: red;
+  padding-top: 5px;
+  padding-left: 29%;
+}

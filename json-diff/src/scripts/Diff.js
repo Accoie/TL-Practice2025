@@ -13,7 +13,7 @@ const calculate = (oldObj, newObj) => {
     if (oldValue === newValue) {
       result = { ...result, [key]: { type: `unchanged`, oldValue, newValue } };
     } else if (oldValue === undefined) {
-      result = { ...result, [key]: { type: `added`, newValue } };
+      result = { ...result, [key]: { type: `new`, newValue } };
     } else if (newValue === undefined) {
       result = { ...result, [key]: { type: `deleted`, oldValue } };
     } else {
