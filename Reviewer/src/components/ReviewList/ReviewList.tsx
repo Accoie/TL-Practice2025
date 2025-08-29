@@ -6,15 +6,17 @@ type ReviewObject = {
   average: number;
 };
 
+const getReviewsFromLocalStorage = (): ReviewObject[] => {
+  try {
+    return JSON.parse(localStorage.getItem("reviews") || "[]");
+  } catch (error) {
+    console.error("Ошибка при чтении отзывов:", error);
+    return [];
+  }
+};
+
 export const ReviewList = () => {
-  const getReviewsFromLocalStorage = (): ReviewObject[] => {
-    try {
-      return JSON.parse(localStorage.getItem("reviews") || "[]");
-    } catch (error) {
-      console.error("Ошибка при чтении отзывов:", error);
-      return [];
-    }
-  };
+
 
   const reviews = getReviewsFromLocalStorage();
 
