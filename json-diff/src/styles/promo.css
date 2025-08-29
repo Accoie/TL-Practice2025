@@ -11,6 +11,7 @@
   flex-direction: column;
   margin: auto;
   align-items: center;
+  text-align: center;
 }
 
 .promo-text-objects {
