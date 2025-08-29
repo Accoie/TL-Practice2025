@@ -7,6 +7,7 @@ export const ReviewForm = () => {
   const [average, setAverage] = useState(0);
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -26,19 +27,21 @@ export const ReviewForm = () => {
       reviewObj.description === ""
     ) {
       console.log("Review fields cannot be empty");
-
       return;
     }
 
     const existingReviews = JSON.parse(localStorage.getItem("reviews") || "[]");
-
     const updatedReviews = [...existingReviews, reviewObj];
-
     localStorage.setItem("reviews", JSON.stringify(updatedReviews));
 
-    setName("");
-    setReviewText("");
-    setAverage(0);
+    setIsSuccess(true);
+    
+    setTimeout(() => {
+      setName("");
+      setReviewText("");
+      setAverage(0);
+      setIsSuccess(false);
+    }, 2000);
   };
 
   const adjustTextareaHeight = () => {
@@ -56,14 +59,15 @@ export const ReviewForm = () => {
           Помогите нам сделать процесс бронирования лучше
         </h3>
 
-        <GradesList onAverageChange={setAverage}></GradesList>
+        <GradesList onAverageChange={setAverage} />
 
         <div className={styles.inputContainer}>
           <input
             type="text"
             id="name"
-            className={styles.nameInput}
+            className={`${styles.nameInput} ${isSuccess ? styles.success : ""}`}
             placeholder="Как вас зовут?"
+            value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -74,21 +78,22 @@ export const ReviewForm = () => {
 
         <textarea
           ref={textAreaRef}
-          className={styles.reviewInput}
+          className={`${styles.reviewInput} ${isSuccess ? styles.success : ""}`}
           placeholder="Напишите, что понравилось, что было непонятно"
+          value={reviewText}
           onChange={(e) => setReviewText(e.target.value)}
           required
         />
 
         <button
-          type="submit"
+          type="button"
           className={styles.submitButton}
           onClick={() => {
             if (average === 0) return;
             loadAllToLocalStorage();
           }}
         >
-          Отправить
+          {isSuccess ? "✓ Отправлено" : "Отправить"}
         </button>
       </div>
     </form>

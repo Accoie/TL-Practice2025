@@ -84,3 +84,9 @@
   transition: ease-in-out 0.1s;
   box-shadow: 0px 0px 3px red;
 }
+
+.nameInput.success,
+.reviewInput.success {
+  border: 1px solid #28a745;
+  background-color: #f0fff4;
+}
