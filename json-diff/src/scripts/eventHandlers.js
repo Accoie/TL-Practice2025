@@ -1,7 +1,7 @@
 "use strict";
 
 import { elements } from "./elements.js";
-import { calculateDiff } from "./diffValidate.js";
+import { calculateDiff } from "./difference.js";
 import {
   displayDiffResult,
   hideErrorMessages,

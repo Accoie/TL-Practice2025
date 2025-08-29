@@ -11,3 +11,11 @@ export function setupEventListeners() {
   elements.submitBtn.addEventListener('click', handleLoginSubmit);
   elements.startButton.addEventListener('click', handleStartButtonClick);
 }
+
+export function cleanupEventListeners() {
+  elements.form.removeEventListener('submit', handleFormSubmit);
+  elements.loginLink.removeEventListener('click', handleLoginClick);
+  elements.logoutLink.removeEventListener('click', handleLogoutClick);
+  elements.submitBtn.removeEventListener('click', handleLoginSubmit);
+  elements.startButton.removeEventListener('click', handleStartButtonClick);
+}
