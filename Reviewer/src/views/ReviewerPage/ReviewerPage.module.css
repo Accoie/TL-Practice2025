@@ -4,6 +4,8 @@
   min-height: 100%;
   width: 100%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
   place-items: center;
   align-items: center;
   height: fit-content;
