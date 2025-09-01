@@ -21,44 +21,6 @@ public class GameEngineTests
         _zeroDamageFighterMock = CreateFighterMock( "zeroDamage", 100, 0 );
     }
 
-    private static void AddWeakFighter( GameEngine engine )
-    {
-        IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
-        engine.AddFighter( fighter );
-    }
-
-    private static Mock<IFighter> CreateFighterMock( string name,
-        int maxHealth,
-        int damage )
-    {
-        int health = maxHealth;
-
-        Mock<IFighter> fighter = new();
-
-        fighter.Setup( f => f.Name ).Returns( name );
-        fighter.Setup( f => f.Race ).Returns( Mock.Of<IRace>() );
-        fighter.Setup( f => f.Armor ).Returns( Mock.Of<IArmor>() );
-        fighter.Setup( f => f.Weapon ).Returns( Mock.Of<IWeapon>() );
-        fighter.Setup( f => f.MaxHealth ).Returns( maxHealth );
-
-        fighter.Setup( f => f.Health ).Returns( () => health );
-
-        fighter.Setup( f => f.CalculateDamage() ).Returns( damage );
-
-        fighter.Setup( f => f.IsCanWin( It.IsAny<IFighter>() ) ).Returns( true );
-
-        fighter.Setup( f => f.Fight( It.IsAny<IFighter>() ) )
-            .Callback<IFighter>( def => def.TakeDamage( damage ) )
-            .Returns( damage );
-
-        fighter.Setup( f => f.ResetHealth() ).Callback( () => health = maxHealth );
-
-        fighter.Setup( f => f.TakeDamage( It.IsAny<int>() ) )
-            .Callback<int>( damage => health -= damage );
-
-        return fighter;
-    }
-
     [Test]
     public void AddFighter_AddWithEmptyName_ThrowException()
     {
@@ -156,5 +118,43 @@ public class GameEngineTests
 
         // Assert
         Assert.That( winner, Is.Null );
+    }
+
+    private static void AddWeakFighter( GameEngine engine )
+    {
+        IFighter fighter = new BaseFighter( "Weak1", new Diamond(), new Fists(), new Human() );
+        engine.AddFighter( fighter );
+    }
+
+    private static Mock<IFighter> CreateFighterMock( string name,
+        int maxHealth,
+        int damage )
+    {
+        int health = maxHealth;
+
+        Mock<IFighter> fighter = new();
+
+        fighter.Setup( f => f.Name ).Returns( name );
+        fighter.Setup( f => f.Race ).Returns( Mock.Of<IRace>() );
+        fighter.Setup( f => f.Armor ).Returns( Mock.Of<IArmor>() );
+        fighter.Setup( f => f.Weapon ).Returns( Mock.Of<IWeapon>() );
+        fighter.Setup( f => f.MaxHealth ).Returns( maxHealth );
+
+        fighter.Setup( f => f.Health ).Returns( () => health );
+
+        fighter.Setup( f => f.CalculateDamage() ).Returns( damage );
+
+        fighter.Setup( f => f.IsCanWin( It.IsAny<IFighter>() ) ).Returns( true );
+
+        fighter.Setup( f => f.Fight( It.IsAny<IFighter>() ) )
+            .Callback<IFighter>( def => def.TakeDamage( damage ) )
+            .Returns( damage );
+
+        fighter.Setup( f => f.ResetHealth() ).Callback( () => health = maxHealth );
+
+        fighter.Setup( f => f.TakeDamage( It.IsAny<int>() ) )
+            .Callback<int>( damage => health -= damage );
+
+        return fighter;
     }
 }
