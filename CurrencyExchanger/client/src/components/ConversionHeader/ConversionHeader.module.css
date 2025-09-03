@@ -1,0 +1,35 @@
+.conversionHeader {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.conversionRate {
+  margin-bottom: 8px;
+}
+
+.rateMain {
+  font-size: 16px;
+  color: #5f6368;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.rateValue {
+  font-size: 28px;
+  font-weight: 500;
+  color: #202124;
+  line-height: 1.2;
+}
+
+.conversionDate {
+  font-size: 14px;
+  color: #9aa0a6;
+}
+
+@media (max-width: 600px) {
+  .rateValue {
+    font-size: 24px;
+  }
+}

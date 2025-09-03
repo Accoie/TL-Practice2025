@@ -1,0 +1,17 @@
+.currencyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .currencyTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  
+  .currencyItem {
+    padding: 14px;
+  }
+}

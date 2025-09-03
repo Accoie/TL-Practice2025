@@ -1,0 +1,64 @@
+.pairInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.aboutButton {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: #f8f9fa;
+  padding: 5px 10px 5px 10px;
+  border-radius: 8px;
+}
+
+.aboutButton:hover {
+  background: #d6facf;
+}
+
+.strip {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background-color: #f8f9fa;
+}
+
+.pairCode {
+  font-weight: 500;
+  color: #202124;
+}
+
+.aboutText {
+  color: #0f9d58;
+  font-weight: 500;
+}
+
+.trendArrow {
+  color: #0f9d58;
+  margin-left: 2px;
+}
+
+.aboutButton:focus {
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  .pairInfo {
+    margin-left: -8px;
+    margin-right: -8px;
+    border-radius: 0;
+    padding: 12px 8px;
+  }
+}

@@ -1,0 +1,27 @@
+.intervalButton {
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1b3f1b;
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.intervalButton:hover:not(:disabled) {
+  background: #d6facf;
+  color: #1b3f1b;
+}
+
+.intervalButton:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.active {
+  background-color: #0a8a0a;
+  color: #fff;
+  font-weight: bold;
+}
