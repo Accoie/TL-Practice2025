@@ -1,0 +1,103 @@
+.resultCard {
+  max-width: 500px;
+  margin: 20px auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.cardContent {
+  padding: 24px;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 16px;
+
+  .icon {
+    font-size: 20px;
+  }
+}
+
+.correct {
+  color: #2e7d32;
+}
+
+.incorrect {
+  color: #d32f2f;
+}
+
+.total {
+  color: #7b1fa2;
+}
+
+.noData {
+  color: #757575;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.buttonGroup {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  .retryButton {
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 600;
+    padding: 10px 24px;
+  }
+
+  .homeButton {
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-width: 2px;
+
+    &:hover {
+      border-width: 2px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .resultCard {
+    margin: 16px;
+    max-width: none;
+  }
+
+  .cardContent {
+    padding: 20px 16px;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    gap: 8px;
+
+    .retryButton,
+    .homeButton {
+      width: 100%;
+    }
+  }
+
+  .resultItem {
+    font-size: 14px;
+
+    .icon {
+      font-size: 18px;
+    }
+  }
+}
