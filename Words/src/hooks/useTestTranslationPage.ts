@@ -13,9 +13,6 @@ export const useTestTranslationPage = (currentIndex: number) => {
 
   useEffect(() => {
     if (words.length < 5) {
-      navigate("/", {
-        state: { message: "Добавьте хотя бы 5 слов в словарь" }
-      });
       return;
     }
 

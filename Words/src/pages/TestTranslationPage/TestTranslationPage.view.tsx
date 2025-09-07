@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { BackButton } from "../../components/buttons/BackButton/BackButton";
 import { useTestTranslationState } from "./TestTranslationPage.state";
-import styles from './TestTranslationPage.module.scss';
-import { useState } from 'react';
+import styles from "./TestTranslationPage.module.scss";
+import { useState } from "react";
 
 export const TestTranslationPage = () => {
   const {
@@ -41,11 +41,29 @@ export const TestTranslationPage = () => {
     setIsSelectFocused(false);
   };
 
-  const selectClassName = `${styles.selectRoot} ${isSelectFocused ? styles.selectFocused : ''}`;
+  const selectClassName = `${styles.selectRoot} ${
+    isSelectFocused ? styles.selectFocused : ""
+  }`;
+
+  if (options.length < 5) {
+    return (
+      <Box className = {styles.container}>
+        <BackButton />
+        <Typography variant="h4" className={styles.errorTitle}>
+          Недостаточно слов для тестирования(минимум 3)
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box className={styles.container}>
-      <Stack direction="row" alignItems="center" spacing={2} className={styles.header}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={2}
+        className={styles.header}
+      >
         <BackButton />
         <Typography variant="h4" className={styles.title}>
           Тест на перевод
@@ -66,24 +84,24 @@ export const TestTranslationPage = () => {
 
         <Card className={styles.card}>
           <CardContent className={styles.cardContent}>
-            <Typography 
-              variant="h6"  
-              align="center" 
+            <Typography
+              variant="h6"
+              align="center"
               className={styles.instruction}
             >
               Выберите правильный перевод для слова:
             </Typography>
-            
-            <Typography 
-              variant="h4" 
-              align="center" 
-              className={styles.word}
-            >
+
+            <Typography variant="h4" align="center" className={styles.word}>
               {currentWord?.russian ?? ""}
             </Typography>
 
-            <FormControl fullWidth variant="outlined" className={styles.formControl}>
-              <InputLabel 
+            <FormControl
+              fullWidth
+              variant="outlined"
+              className={styles.formControl}
+            >
+              <InputLabel
                 id="translation-select-label"
                 className={styles.inputLabel}
               >
@@ -97,14 +115,18 @@ export const TestTranslationPage = () => {
                 onBlur={handleSelectBlur}
                 displayEmpty
                 className={selectClassName}
-                input={<OutlinedInput classes={{ notchedOutline: styles.selectOutline }} />}
+                input={
+                  <OutlinedInput
+                    classes={{ notchedOutline: styles.selectOutline }}
+                  />
+                }
               >
                 <MenuItem value="">
                   <em>— выберите вариант —</em>
                 </MenuItem>
                 {options.map((option, index) => (
-                  <MenuItem 
-                    key={index} 
+                  <MenuItem
+                    key={index}
                     value={option}
                     className={styles.menuItem}
                   >
@@ -124,7 +146,9 @@ export const TestTranslationPage = () => {
             size="large"
             className={styles.button}
           >
-            {currentIndex < selectedWords.length - 1 ? "Следующий вопрос" : "Завершить тест"}
+            {currentIndex < selectedWords.length - 1
+              ? "Следующий вопрос"
+              : "Завершить тест"}
           </Button>
         </Box>
       </Paper>
