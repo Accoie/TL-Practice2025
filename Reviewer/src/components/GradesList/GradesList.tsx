@@ -1,6 +1,6 @@
 import { Grade } from "../Grade/Grade.tsx";
 import styles from "./GradesList.module.css";
-import type { GradeItem } from "../../types/GradeItem.ts";
+import type { GradeItem } from "./GradeItem.ts";
 import { useGradesState } from "../../hooks/useGradesState.tsx";
 
 type GradesListProps = {

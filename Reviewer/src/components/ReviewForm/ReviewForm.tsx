@@ -1,9 +1,13 @@
+import type { ReviewObject } from "../../hooks/ReviewObject";
 import { GradesList } from "../GradesList/GradesList";
 import styles from "./ReviewForm.module.css";
 import { useState, useRef, useEffect } from "react";
-import type { ReviewObject } from "../../types/ReviewObject";
 
-export const ReviewForm = () => {
+type ReviewFormProps = {
+  setReviews: (reviews: ReviewObject[] | ((prev: ReviewObject[]) => ReviewObject[])) => void;
+}
+
+export const ReviewForm = ({ setReviews }: ReviewFormProps) => {
   const [average, setAverage] = useState(0);
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
@@ -14,25 +18,19 @@ export const ReviewForm = () => {
     adjustTextareaHeight();
   }, [reviewText]);
 
-  const loadAllToLocalStorage = () => {
+  const handleSubmit = () => {
+    if (average === 0 || name === "" || reviewText === "") {
+      console.log("Все поля обязательны для заполнения");
+      return;
+    }
+
     const reviewObj: ReviewObject = {
       average: average,
       name: name,
       description: reviewText,
     };
 
-    if (
-      reviewObj.name === "" ||
-      reviewObj.average === 0 ||
-      reviewObj.description === ""
-    ) {
-      console.log("Review fields cannot be empty");
-      return;
-    }
-
-    const existingReviews = JSON.parse(localStorage.getItem("reviews") || "[]");
-    const updatedReviews = [...existingReviews, reviewObj];
-    localStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    setReviews(prevReviews => [...prevReviews, reviewObj]);
 
     setIsSuccess(true);
     
@@ -53,7 +51,7 @@ export const ReviewForm = () => {
   };
 
   return (
-    <form className={styles.reviewForm}>
+    <form className={styles.reviewForm} onSubmit={(e) => e.preventDefault()}>
       <div className={styles.reviewFormWrapper}>
         <h3 className={styles.formTitle}>
           Помогите нам сделать процесс бронирования лучше
@@ -88,10 +86,8 @@ export const ReviewForm = () => {
         <button
           type="button"
           className={styles.submitButton}
-          onClick={() => {
-            if (average === 0) return;
-            loadAllToLocalStorage();
-          }}
+          onClick={handleSubmit}
+          disabled={average === 0}
         >
           {isSuccess ? "✓ Отправлено" : "Отправить"}
         </button>

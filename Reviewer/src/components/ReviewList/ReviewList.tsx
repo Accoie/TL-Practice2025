@@ -1,25 +1,12 @@
 import styles from "./ReviewList.module.css";
 import { Review } from "../Review/Review";
-type ReviewObject = {
-  name: string;
-  description: string;
-  average: number;
-};
+import type { ReviewObject } from "../../hooks/ReviewObject";
 
-const getReviewsFromLocalStorage = (): ReviewObject[] => {
-  try {
-    return JSON.parse(localStorage.getItem("reviews") || "[]");
-  } catch (error) {
-    console.error("Ошибка при чтении отзывов:", error);
-    return [];
-  }
-};
+type ReviewListProps = {
+  reviews: ReviewObject[];
+}
 
-export const ReviewList = () => {
-
-
-  const reviews = getReviewsFromLocalStorage();
-
+export const ReviewList = ({ reviews }: ReviewListProps) => {
   return (
     <div className={styles.reviewList}>
       <div className={styles.reviewsContainer}>
@@ -29,7 +16,7 @@ export const ReviewList = () => {
             name={review.name}
             review={review.description}
             average={review.average}
-          ></Review>
+          />
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GradeItem } from "../types/GradeItem";
+import type { GradeItem } from "../components/GradesList/GradeItem";
 
 export const useGradesState = (initialGrades: GradeItem[]) => {
   const [grades, setGrades] = useState<GradeItem[]>(initialGrades);

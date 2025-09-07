@@ -4,7 +4,6 @@ import NeutralFace from '../assets/icons/twemoji_neutral-face.svg?react';
 import SlightlySmiling from '../assets/icons/twemoji_slightly-smiling-face.svg?react';
 import GrinningFace from '../assets/icons/twemoji_grinning-face-with-big-eyes.svg?react';
 
-
 type SmileIconProps = {
   value: number;
 }
@@ -28,6 +27,6 @@ export const SmileIcon = (smileIconProps: SmileIconProps) => {
     case 5:
       return <GrinningFace {...props} />;
     default:
-      return <></>
+      return null
   }
 };
