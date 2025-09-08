@@ -1,4 +1,5 @@
-﻿using WebApi.Domain.Entities;
+﻿using FluentValidation;
+using WebApi.Domain.Entities;
 using WebApi.Domain.Foundations;
 using WebApi.Domain.Repositories;
 using WebApi.Domain.Services.Interfaces;
@@ -9,35 +10,43 @@ public class RoomTypeService : IRoomTypeService
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<RoomType> _validator;
 
-    public RoomTypeService( IRoomTypeRepository roomTypeRepository, IUnitOfWork unitOfWork )
+    public RoomTypeService( IRoomTypeRepository roomTypeRepository, IUnitOfWork unitOfWork, IValidator<RoomType> validator )
     {
         _roomTypeRepository = roomTypeRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public void Create( RoomType roomType )
+    public async Task Create( RoomType roomType )
     {
-        CheckRoomTypeExists( roomType.Id );
-        ValidateRoomType( roomType );
+        bool isRoomTypeExists = await _roomTypeRepository.GetByIdAsync( roomType.Id ) is not null;
 
-        _roomTypeRepository.Create( roomType );
+        if ( isRoomTypeExists )
+        {
+            throw new ArgumentException( "RoomType already exists" );
+        }
 
-        _unitOfWork.CommitAsync();
+        await _validator.ValidateAndThrowAsync( roomType );
+
+        await _roomTypeRepository.CreateAsync( roomType );
+
+        await _unitOfWork.CommitAsync();
     }
 
-    public void Delete( int id )
+    public async Task Delete( int id )
     {
-        RoomType roomType = GetById( id );
+        RoomType roomType = await GetById( id );
 
         _roomTypeRepository.Delete( roomType );
 
-        _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync();
     }
 
-    public RoomType GetById( int id )
+    public async Task<RoomType> GetById( int id )
     {
-        RoomType? roomType = _roomTypeRepository.GetById( id );
+        RoomType? roomType = await _roomTypeRepository.GetByIdAsync( id );
 
         if ( roomType is null )
         {
@@ -47,121 +56,28 @@ public class RoomTypeService : IRoomTypeService
         return roomType;
     }
 
-    public List<RoomType> GetAllById( int propertyId )
+    public async Task<List<RoomType>> GetAllById( int propertyId )
     {
-        return GetAll().Where( r => r.PropertyId == propertyId ).ToList();
+        List<RoomType> roomTypes = await GetAll();
+
+        return roomTypes.Where( r => r.PropertyId == propertyId ).ToList();
     }
 
-    public List<RoomType> GetAll()
+    public async Task<List<RoomType>> GetAll()
     {
-        return _roomTypeRepository.GetAll();
+        return await _roomTypeRepository.GetAllAsync();
     }
 
-    public void Update( RoomType roomType )
+    public async Task Update( int id, Action<RoomType> updateAction )
     {
-        ValidateRoomType( roomType );
+        RoomType existingRoomType = await GetById( id );
 
-        _roomTypeRepository.Update( roomType );
+        updateAction( existingRoomType );
 
-        _unitOfWork.CommitAsync();
-    }
+        await _validator.ValidateAndThrowAsync( existingRoomType );
 
-    private void ValidateRoomType( RoomType roomType )
-    {
-        if ( roomType.PropertyId <= 0 )
-        {
-            throw new ArgumentException( "PropertyId must be greater than 0" );
-        }
+        _roomTypeRepository.Update( existingRoomType );
 
-        ValidateName( roomType.Name );
-        ValidateDailyPrice( roomType.DailyPrice );
-        ValidateCurrency( roomType.Currency );
-        ValidatePersonCounts( roomType.MinPersonCount, roomType.MaxPersonCount );
-        ValidateServices( roomType.Services );
-        ValidateAmenities( roomType.Amenities );
-    }
-
-    private void CheckRoomTypeExists( int id )
-    {
-        if ( _roomTypeRepository.GetById( id ) is not null )
-        {
-            throw new ArgumentException( "RoomType already exists" );
-        }
-    }
-
-    private void ValidateName( string name )
-    {
-        if ( string.IsNullOrWhiteSpace( name ) )
-        {
-            throw new ArgumentException( "Name cannot be empty or whitespace" );
-        }
-        if ( name.Length > 100 )
-        {
-            throw new ArgumentException( "Name cannot be longer than 100 characters" );
-        }
-    }
-
-    private void ValidateDailyPrice( decimal dailyPrice )
-    {
-        if ( dailyPrice <= 0 )
-        {
-            throw new ArgumentException( "DailyPrice must be greater than 0" );
-        }
-        if ( dailyPrice > 100000000 )
-        {
-            throw new ArgumentException( "DailyPrice is too high" );
-        }
-    }
-
-    private void ValidateCurrency( string currency )
-    {
-        if ( string.IsNullOrWhiteSpace( currency ) )
-        {
-            throw new ArgumentException( "Currency cannot be empty" );
-        }
-        if ( currency.Length != 5 )
-        {
-            throw new ArgumentException( "Currency must be a 5-letter code" );
-        }
-    }
-
-    private void ValidatePersonCounts( int minCount, int maxCount )
-    {
-        if ( minCount <= 0 )
-        {
-            throw new ArgumentException( "Minimal person count could not be less than 1" );
-        }
-        if ( maxCount <= 0 )
-        {
-            throw new ArgumentException( "Maximal person count could not be less than 1" );
-        }
-        if ( maxCount < minCount )
-        {
-            throw new ArgumentException( "Maximal person count cannot be less than minimal" );
-        }
-    }
-
-    private void ValidateServices( List<string> services )
-    {
-        if ( services is null )
-        {
-            throw new ArgumentException( "Services list cannot be null" );
-        }
-        if ( services.Any( string.IsNullOrWhiteSpace ) )
-        {
-            throw new ArgumentException( "Services cannot contain empty or whitespace values" );
-        }
-    }
-
-    private void ValidateAmenities( List<string> amenities )
-    {
-        if ( amenities is null )
-        {
-            throw new ArgumentException( "Amenities list cannot be null" );
-        }
-        if ( amenities.Any( string.IsNullOrWhiteSpace ) )
-        {
-            throw new ArgumentException( "Amenities cannot contain empty or whitespace values" );
-        }
+        await _unitOfWork.CommitAsync();
     }
 }

@@ -22,44 +22,48 @@ public class RoomTypeController : ControllerBase
     }
 
     [HttpGet( "property/{propertyId}" )]
-    public List<RoomType> ListRoomType( [FromQuery] int propertyId )
+    public async Task<ActionResult<List<RoomType>>> ListRoomType( int propertyId )
     {
-        return _roomTypeService.GetAllById( propertyId );
+        List<RoomType> roomTypes = await _roomTypeService.GetAllById( propertyId );
+
+        return Ok( roomTypes );
     }
 
     [HttpGet( "{id}" )]
-    public RoomTypeDto GetRoomType( [FromQuery] int id )
+    public async Task<ActionResult<RoomTypeDto>> GetRoomType( int id )
     {
-        RoomType roomType = _roomTypeService.GetById( id );
+        RoomType roomType = await _roomTypeService.GetById( id );
 
-        return roomType.ToRoomTypeDto();
+        return Ok( roomType.ToRoomTypeDto() );
     }
 
     [HttpPost( "property/{propertyId}" )]
-    public void CreateRoomType( [FromRoute] int propertyId, [FromBody] RoomTypeDto roomTypeDto )
+    public async Task<IActionResult> CreateRoomType( [FromRoute] int propertyId, [FromBody] RoomTypeDto roomTypeDto )
     {
         RoomType roomType = RoomTypeMapper.ToRoomType( ControllerHelper.GenerateId(), roomTypeDto );
-
         roomType.PropertyId = propertyId;
 
-        _roomTypeService.Create( roomType );
+        await _roomTypeService.Create( roomType );
+
+        return Ok();
     }
 
     [HttpPut( "{id}" )]
-    public void UpdateRoomType( [FromQuery] int id, [FromBody] RoomTypeDto roomTypeDto )
+    public async Task<IActionResult> UpdateRoomType( int id, [FromBody] RoomTypeDto roomTypeDto )
     {
-        RoomType roomType = _roomTypeService.GetById( id );
+        Action<RoomType> updateAction = ( roomType ) => { RoomTypeMapper.ChangeExistingRoomType( roomTypeDto, roomType ); };
 
-        RoomTypeMapper.ChangeExistingRoomType( roomTypeDto, roomType );
+        await _roomTypeService.Update( id, updateAction );
+        await _actualizer.ActualizeById( id );
 
-        _roomTypeService.Update( roomType );
-
-        _actualizer.ActualizeById( id );
+        return Ok();
     }
 
     [HttpDelete( "{id}" )]
-    public void DeleteRoomType( [FromQuery] int id )
+    public async Task<IActionResult> DeleteRoomType( int id )
     {
-        _roomTypeService.Delete( id );
+        await _roomTypeService.Delete( id );
+
+        return Ok();
     }
 }

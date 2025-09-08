@@ -35,17 +35,13 @@ public class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
         builder.Property( rt => rt.MaxPersonCount )
                .IsRequired();
 
-        builder.Property( rt => rt.Services )
-               .HasConversion(
-                   v => string.Join( ',', v ),
-                   v => v.Split( ',', StringSplitOptions.RemoveEmptyEntries ).ToList() )
-               .HasColumnType( "nvarchar(max)" );
+        builder.Property( rt => rt.ServicesString )
+            .HasColumnType( "nvarchar(max)" )
+            .HasColumnName( "Services" );
 
-        builder.Property( rt => rt.Amenities )
-               .HasConversion(
-                   v => string.Join( ',', v ),
-                   v => v.Split( ',', StringSplitOptions.RemoveEmptyEntries ).ToList() )
-               .HasColumnType( "nvarchar(max)" );
+        builder.Property( rt => rt.AmenitiesString )
+               .HasColumnType( "nvarchar(max)" )
+               .HasColumnName( "Amenities" );
 
         builder.HasIndex( rt => rt.PropertyId );
         builder.HasIndex( rt => rt.DailyPrice );

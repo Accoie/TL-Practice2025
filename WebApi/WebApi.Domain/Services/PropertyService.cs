@@ -1,4 +1,5 @@
-﻿using WebApi.Domain.Entities;
+﻿using FluentValidation;
+using WebApi.Domain.Entities;
 using WebApi.Domain.Foundations;
 using WebApi.Domain.Repositories;
 using WebApi.Domain.Services.Interfaces;
@@ -9,135 +10,64 @@ public class PropertyService : IPropertyService
 {
     private readonly IPropertyRepository _propertyRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<Property> _validator;
 
-    public PropertyService( IPropertyRepository propertyRepository, IUnitOfWork unitOfWork )
+    public PropertyService( IPropertyRepository propertyRepository, 
+                            IUnitOfWork unitOfWork, 
+                            IValidator<Property> validator )
     {
         _propertyRepository = propertyRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public void Create( Property property )
+    public async Task Create( Property property )
     {
-        ValidateProperty( property );
-        CheckPropertyExists( property.Id );
+        if ( await _propertyRepository.GetByIdAsync( property.Id ) is not null )
+        {
+            throw new ArgumentException( "Property already exists" );
+        }
 
-        _propertyRepository.Create( property );
-        _unitOfWork.CommitAsync();
+        await _validator.ValidateAndThrowAsync( property );
+
+        await _propertyRepository.CreateAsync( property );
+        await _unitOfWork.CommitAsync();
     }
 
-    public Property GetById( int id )
+    public async Task<List<Property>> GetAll()
     {
-        Property? property = _propertyRepository.GetById( id );
+        return await _propertyRepository.GetAllAsync();
+    }
+
+    public async Task<Property> GetById( int id )
+    {
+        Property? property = await _propertyRepository.GetByIdAsync( id );
 
         if ( property is null )
         {
-            throw new ArgumentException( "Property doesn't exists" );
+            throw new ArgumentException( "Property doesn't exist" );
         }
 
         return property;
     }
 
-    public List<Property> GetAll()
+    public async Task Update( int id , Action<Property> updateAction )
     {
-        return _propertyRepository.GetAll();
+        Property existingProperty = await GetById( id );
+
+        updateAction( existingProperty );
+
+        await _validator.ValidateAndThrowAsync( existingProperty );
+
+        _propertyRepository.Update( existingProperty );
+        await _unitOfWork.CommitAsync();
     }
 
-    public void Update( Property property )
+    public async Task Delete( int id )
     {
-        _propertyRepository.Update( property );
-
-        _unitOfWork.CommitAsync();
-    }
-
-    private void ValidateProperty( Property property )
-    {
-        ValidateName( property.Name );
-        ValidateCountry( property.Country );
-        ValidateCity( property.City );
-        ValidateAddress( property.Address );
-        ValidateCoordinates( property.Latitude, property.Longitude );
-    }
-
-    private void CheckPropertyExists( int id )
-    {
-        bool isExists = _propertyRepository.GetById( id ) is not null;
-        if ( isExists )
-        {
-            throw new ArgumentException( "Property already exists" );
-        }
-    }
-
-    private void ValidateName( string name )
-    {
-        if ( string.IsNullOrWhiteSpace( name ) )
-        {
-            throw new ArgumentException( "Property name cannot be empty" );
-        }
-
-        if ( name.Length > 100 )
-        {
-            throw new ArgumentException( "Property name cannot exceed 100 characters" );
-        }
-    }
-
-    private void ValidateCountry( string country )
-    {
-        if ( string.IsNullOrWhiteSpace( country ) )
-        {
-            throw new ArgumentException( "Country cannot be empty" );
-        }
-
-        if ( country.Length > 50 )
-        {
-            throw new ArgumentException( "Country name cannot exceed 50 characters" );
-        }
-    }
-
-    private void ValidateCity( string city )
-    {
-        if ( string.IsNullOrWhiteSpace( city ) )
-        {
-            throw new ArgumentException( "City cannot be empty" );
-        }
-
-        if ( city.Length > 50 )
-        {
-            throw new ArgumentException( "City name cannot exceed 50 characters" );
-        }
-    }
-
-    private void ValidateAddress( string address )
-    {
-        if ( string.IsNullOrWhiteSpace( address ) )
-        {
-            throw new ArgumentException( "Address cannot be empty" );
-        }
-
-        if ( address.Length > 200 )
-        {
-            throw new ArgumentException( "Address cannot exceed 200 characters" );
-        }
-    }
-
-    private void ValidateCoordinates( decimal latitude, decimal longitude )
-    {
-        if ( latitude < -90 || latitude > 90 )
-        {
-            throw new ArgumentException( "Latitude must be between -90 and 90 degrees" );
-        }
-
-        if ( longitude < -180 || longitude > 180 )
-        {
-            throw new ArgumentException( "Longitude must be between -180 and 180 degrees" );
-        }
-    }
-
-    public void Delete( int id )
-    {
-        Property property = GetById( id );
+        Property property = await GetById( id );
 
         _propertyRepository.Delete( property );
-
-        _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync();
     }
 }

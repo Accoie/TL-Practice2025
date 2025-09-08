@@ -2,8 +2,9 @@
 
 namespace WebApi.Middlewares;
 
-public record ExceptionResponse(
+public record ValidationExceptionResponse(
     string Message,
+    List<string> Errors,
     HttpStatusCode StatusCode,
     DateTime Time
 );

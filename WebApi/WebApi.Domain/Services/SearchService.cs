@@ -1,6 +1,7 @@
 ﻿using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
 using WebApi.Domain.Services.Interfaces;
+using WebApi.Domain.Validators;
 
 namespace WebApi.Domain.Services;
 
@@ -19,7 +20,7 @@ public class SearchService : ISearchService
         _reservationService = reservationService;
     }
 
-    public List<(Property, RoomType)> Search( SearchFilter filter )
+    public async Task<List<(Property, RoomType)>> Search( SearchFilter filter )
     {
         if ( string.IsNullOrWhiteSpace( filter.City ) )
         {
@@ -41,19 +42,20 @@ public class SearchService : ISearchService
             throw new ArgumentException( "Person count must be at least 1" );
         }
 
-
-        return ExecuteSearch( filter );
+        return await ExecuteSearch( filter );
     }
 
-    private List<(Property, RoomType)> ExecuteSearch( SearchFilter filter )
+    private async Task<List<(Property, RoomType)>> ExecuteSearch( SearchFilter filter )
     {
-        List<RoomType> roomTypes = _roomTypeService.GetAll()
+        List<RoomType> allRoomTypes = await _roomTypeService.GetAll();
+        List<RoomType> roomTypes = allRoomTypes
             .Where( r => r.DailyPrice <= filter.MaxPrice )
             .Where( r => r.MaxPersonCount >= filter.PersonCount )
             .Where( r => r.MinPersonCount <= filter.PersonCount )
             .ToList();
 
-        List<Property> properties = _propertyService.GetAll()
+        List<Property> allProperties = await _propertyService.GetAll();
+        List<Property> properties = allProperties
             .Where( p => p.City.Equals( filter.City, StringComparison.OrdinalIgnoreCase ) )
             .Where( p => roomTypes.Any( r => r.PropertyId == p.Id ) )
             .ToList();
@@ -62,9 +64,10 @@ public class SearchService : ISearchService
             .Where( r => properties.Any( p => p.Id == r.PropertyId ) )
             .ToList();
 
-        List<Reservation> reservations = _reservationService.GetAll()
+        List<Reservation> allReservations = await _reservationService.GetAll();
+        List<Reservation> reservations = allReservations
             .Where( res => roomTypes.Any( r => r.Id == res.RoomTypeId ) )
-            .Where( res => ReservationService.IsDateIntersection(
+            .Where( res => ReservationValidator.IsDateIntersection(
                 (filter.ArrivalDate, filter.DepartureDate),
                 (res.ArrivalDate, res.DepartureDate) ) )
             .ToList();
@@ -73,11 +76,11 @@ public class SearchService : ISearchService
             .Where( r => !reservations.Any( res => res.RoomTypeId == r.Id ) )
             .ToList();
 
-        List<(Property, RoomType)> resultList = new();
+        List<(Property, RoomType)> resultList = new List<(Property, RoomType)>();
 
-        foreach ( var roomType in roomTypes )
+        foreach ( RoomType roomType in roomTypes )
         {
-            var property = properties.FirstOrDefault( p => p.Id == roomType.PropertyId );
+            Property? property = properties.FirstOrDefault( p => p.Id == roomType.PropertyId );
 
             if ( property != null )
             {

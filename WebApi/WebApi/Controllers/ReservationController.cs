@@ -19,32 +19,39 @@ public class ReservationController : ControllerBase
     }
 
     [HttpPost]
-    public void CreateReservation( [FromBody] ReservationDto dto )
+    public async Task<IActionResult> CreateReservation( [FromBody] ReservationDto dto )
     {
         Reservation reservation = ReservationMapper.ToReservation( ControllerHelper.GenerateId(), dto );
 
-        _reservationService.Create( reservation );
+        await _reservationService.Create( reservation );
+
+        return Ok();
     }
 
     [HttpPut( "{id}" )]
-    public void UpdateReservation( [FromQuery] int id, [FromBody] ReservationUpdationDto dto )
+    public async Task<IActionResult> UpdateReservation( [FromQuery] int id, [FromBody] ReservationUpdationDto dto )
     {
-        Reservation reservation = _reservationService.GetById( id );
+        await _reservationService.UpdateWithAction( id, reservation =>
+        {
+            ReservationMapper.ChangeExistingReservation( dto, reservation );
+        } );
 
-        ReservationMapper.ChangeExistingReservation( dto, reservation );
-
-        _reservationService.Update( reservation );
+        return Ok();
     }
 
     [HttpGet]
-    public List<Reservation> GetReservations( [FromQuery] ReservationFilter filter )
+    public async Task<IActionResult> GetReservations( [FromQuery] ReservationFilter filter )
     {
-        return _reservationService.GetAll( filter );
+        await _reservationService.GetAll( filter );
+
+        return Ok();
     }
 
     [HttpDelete( "{id}" )]
-    public void DeleteReservation( [FromQuery] int id )
+    public async Task<IActionResult> DeleteReservation( [FromQuery] int id )
     {
-        _reservationService.Delete( id );
+        await _reservationService.Delete( id );
+
+        return Ok();
     }
 }

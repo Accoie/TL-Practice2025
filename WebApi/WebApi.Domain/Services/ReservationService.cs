@@ -1,133 +1,117 @@
-﻿using WebApi.Domain.Entities;
+﻿using FluentValidation;
+using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
 using WebApi.Domain.Foundations;
 using WebApi.Domain.Repositories;
 using WebApi.Domain.Services.Interfaces;
+using WebApi.Domain.Validators;
 
 namespace WebApi.Domain.Services;
 
 public class ReservationService : IReservationService
 {
-    private readonly IPropertyService _propertyService;
     private readonly IRoomTypeService _roomTypeService;
     private readonly IReservationRepository _reservationRepository;
+    private readonly IValidator<Reservation> _validator;
     private readonly IUnitOfWork _unitOfWork;
 
     public ReservationService(
         IPropertyService propertyService,
         IRoomTypeService roomTypeService,
         IReservationRepository reservationRepository,
-        IUnitOfWork unitOfWork )
+        IUnitOfWork unitOfWork,
+        IValidator<Reservation> validator )
     {
-        _propertyService = propertyService;
         _roomTypeService = roomTypeService;
         _reservationRepository = reservationRepository;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
-    public void Create( Reservation reservation )
+    public async Task Create( Reservation reservation )
     {
-        if ( _reservationRepository.GetById( reservation.Id ) is not null )
+        if ( await _reservationRepository.GetByIdAsync( reservation.Id ) is not null )
         {
             throw new ArgumentException( "Reservation already exists" );
         }
 
-        ValidateReservation( reservation );
+        await ProcessReservationValidation( reservation );
 
-        ValidateAvailability( reservation );
+        RoomType roomType = await _roomTypeService.GetById( reservation.RoomTypeId );
 
-        reservation.Total = CalculateTotalPrice( reservation );
+        reservation.CalculateTotalPrice( roomType );
 
-        _reservationRepository.Create( reservation );
+        await _reservationRepository.CreateAsync( reservation );
 
-        _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync();
     }
 
-    public void Update( Reservation reservation )
+    public async Task UpdateWithAction( int id, Action<Reservation> updateAction )
     {
-        ValidateReservation( reservation );
+        Reservation existingReservation = await GetById( id );
 
-        reservation.Total = CalculateTotalPrice( reservation );
+        updateAction( existingReservation );
+
+        await ProcessReservationValidation( existingReservation );
+        await Actualize( existingReservation );
+    }
+
+    public async Task Actualize( Reservation reservation )
+    {
+        RoomType roomType = await _roomTypeService.GetById(reservation.RoomTypeId );
+
+        reservation.CalculateTotalPrice( roomType );
 
         _reservationRepository.Update( reservation );
 
-        _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync();
     }
 
-    public void Delete( int id )
+    public async Task Delete( int id )
     {
-        Reservation reservation = GetById( id );
+        Reservation reservation = await GetById( id );
 
         _reservationRepository.Delete( reservation );
 
-        _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync();
     }
 
-    public List<Reservation> GetAll( ReservationFilter? filter = null )
+    public async Task<List<Reservation>> GetAll( ReservationFilter? filter = null )
     {
-        IEnumerable<Reservation> reservations = _reservationRepository.GetAll();
+        IEnumerable<Reservation> reservations = await _reservationRepository.GetAllAsync();
 
         if ( filter is null )
-        {
             return reservations.ToList();
-        }
 
-        if ( filter.PropertyId.HasValue )
-        {
-            reservations = reservations.Where( r => r.PropertyId == filter.PropertyId.Value );
-        }
-
-        if ( filter.RoomTypeId.HasValue )
-        {
-            reservations = reservations.Where( r => r.RoomTypeId == filter.RoomTypeId.Value );
-        }
-
-        if ( filter.ArrivalDate.HasValue )
-        {
-            reservations = reservations.Where( r => r.ArrivalDate >= filter.ArrivalDate.Value );
-        }
-
-        if ( filter.DepartureDate.HasValue )
-        {
-            reservations = reservations.Where( r => r.DepartureDate <= filter.DepartureDate.Value );
-        }
-
-        if ( filter.ArrivalTime.HasValue )
-        {
-            reservations = reservations.Where( r => r.ArrivalTime >= filter.ArrivalTime.Value );
-        }
-
-        if ( filter.DepartureTime.HasValue )
-        {
-            reservations = reservations.Where( r => r.DepartureTime <= filter.DepartureTime.Value );
-        }
-
-        if ( filter.PersonCount.HasValue )
-        {
-            reservations = reservations.Where( r => r.PersonCount == filter.PersonCount.Value );
-        }
-
-        if ( !string.IsNullOrEmpty( filter.GuestName ) )
-        {
-            reservations = reservations.Where( r => r.GuestName == filter.GuestName );
-        }
-
-        if ( !string.IsNullOrEmpty( filter.GuestPhoneNumber ) )
-        {
-            reservations = reservations.Where( r => r.GuestPhoneNumber == r.GuestPhoneNumber );
-        }
-
-        if ( !string.IsNullOrEmpty( filter.Currency ) )
-        {
-            reservations = reservations.Where( r => r.Currency == filter.Currency );
-        }
-
-        return reservations.ToList();
+        return reservations
+            .Where( r => !filter.PropertyId.HasValue || r.PropertyId == filter.PropertyId.Value )
+            .Where( r => !filter.RoomTypeId.HasValue || r.RoomTypeId == filter.RoomTypeId.Value )
+            .Where( r => !filter.ArrivalDate.HasValue || r.ArrivalDate >= filter.ArrivalDate.Value )
+            .Where( r => !filter.DepartureDate.HasValue || r.DepartureDate <= filter.DepartureDate.Value )
+            .Where( r => !filter.ArrivalTime.HasValue || r.ArrivalTime >= filter.ArrivalTime.Value )
+            .Where( r => !filter.DepartureTime.HasValue || r.DepartureTime <= filter.DepartureTime.Value )
+            .Where( r => !filter.PersonCount.HasValue || r.PersonCount == filter.PersonCount.Value )
+            .Where( r => string.IsNullOrEmpty( filter.GuestName ) || r.GuestName == filter.GuestName )
+            .Where( r => string.IsNullOrEmpty( filter.GuestPhoneNumber ) || r.GuestPhoneNumber == filter.GuestPhoneNumber )
+            .Where( r => string.IsNullOrEmpty( filter.Currency ) || r.Currency == filter.Currency )
+            .ToList();
     }
 
-    public Reservation GetById( int id )
+    public async Task<List<Reservation>> GetAllById( int? propertyId, int? roomTypeId )
     {
-        Reservation? reservation = _reservationRepository.GetById( id );
+        ReservationFilter filter = new()
+        {
+            PropertyId = propertyId,
+            RoomTypeId = roomTypeId
+        };
+
+        return await GetAll( filter );
+    }
+
+    public async Task<Reservation> GetById( int id )
+    {
+
+        Reservation? reservation = await _reservationRepository.GetByIdAsync( id );
 
         if ( reservation is null )
         {
@@ -137,102 +121,15 @@ public class ReservationService : IReservationService
         return reservation;
     }
 
-    public static bool IsDateIntersection( ValueTuple<DateTime, DateTime> firstDateInterval, ValueTuple<DateTime, DateTime> secondDateInterval )
+    private async Task ProcessReservationValidation( Reservation reservation )
     {
-        return firstDateInterval.Item2 > secondDateInterval.Item1 && firstDateInterval.Item1 < secondDateInterval.Item2;
-    }
+        await _validator.ValidateAndThrowAsync( reservation );
 
-    private void ValidateReservation( Reservation reservation )
-    {
-        ValidateGuestInfo( reservation );
-        ValidateDates( reservation );
-        ValidatePropertyAndRoom( reservation );
-        ValidatePersonCount( reservation );
-    }
+        RoomType roomType = await _roomTypeService.GetById( reservation.RoomTypeId );
 
-    private void ValidateGuestInfo( Reservation reservation )
-    {
-        if ( string.IsNullOrEmpty( reservation.GuestName ) )
-        {
-            throw new ArgumentException( "Guest name cannot be empty" );
-        }
+        List<Reservation> reservations = await GetAllById( reservation.PropertyId, reservation.RoomTypeId );
 
-        if ( string.IsNullOrEmpty( reservation.GuestPhoneNumber ) )
-        {
-            throw new ArgumentException( "Guest phone number cannot be empty" );
-        }
-
-        if ( string.IsNullOrEmpty( reservation.Currency ) )
-        {
-            throw new ArgumentException( "Currency cannot be empty" );
-        }
-    }
-
-    private void ValidateDates( Reservation reservation )
-    {
-        if ( reservation.ArrivalDate >= reservation.DepartureDate )
-        {
-            throw new ArgumentException( "Arrival date must be before departure date" );
-        }
-    }
-
-    private void ValidatePropertyAndRoom( Reservation reservation )
-    {
-        Property property = _propertyService.GetById( reservation.PropertyId );
-        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
-    }
-
-    private void ValidatePersonCount( Reservation reservation )
-    {
-        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
-
-        if ( reservation.PersonCount > roomType.MaxPersonCount )
-        {
-            throw new ArgumentException( $"Too many people for reservation! Max count is {roomType.MaxPersonCount}" );
-        }
-
-        if ( reservation.PersonCount < roomType.MinPersonCount )
-        {
-            throw new ArgumentException( $"Too few people for reservation! Min count is {roomType.MinPersonCount}" );
-        }
-    }
-
-    private void ValidateAvailability( Reservation reservation )
-    {
-        ReservationFilter filter = new();
-
-        filter.PropertyId = reservation.PropertyId;
-        filter.RoomTypeId = reservation.RoomTypeId;
-
-        List<Reservation> reservations = GetAll( filter );
-
-        foreach ( Reservation res in reservations )
-        {
-            bool isDateEqual = reservation.ArrivalDate == res.DepartureDate || reservation.DepartureDate == res.ArrivalDate;
-            bool isDateIntersection = IsDateIntersection( (reservation.ArrivalDate, reservation.DepartureDate), (res.ArrivalDate, res.DepartureDate) );
-
-            if ( isDateEqual )
-            {
-                bool isAvailableTime = reservation.ArrivalTime > res.DepartureTime || reservation.DepartureTime > res.ArrivalTime;
-
-                throw new ArgumentException(
-                    $"RoomType \"{reservation.RoomTypeId}\" is already reserved on {res.ArrivalDate.Date} {res.ArrivalTime} - {res.DepartureDate.Date} {res.DepartureTime}" );
-            }
-            if ( isDateIntersection )
-            {
-                throw new ArgumentException(
-                    $"RoomType \"{reservation.RoomTypeId}\" is already reserved on {res.ArrivalDate.Date} {res.ArrivalTime} - {res.DepartureDate.Date} {res.DepartureTime}" );
-            }
-        }
-    }
-
-    private decimal CalculateTotalPrice( Reservation reservation )
-    {
-        RoomType roomType = _roomTypeService.GetById( reservation.RoomTypeId );
-
-        int numberOfDays = ( reservation.DepartureDate - reservation.ArrivalDate ).Days;
-        decimal totalPrice = roomType.DailyPrice * numberOfDays;
-
-        return totalPrice;
+        ReservationValidator.ValidatePersonCount( reservation, roomType );
+        ReservationValidator.ValidateAvailability( reservation, reservations );
     }
 }

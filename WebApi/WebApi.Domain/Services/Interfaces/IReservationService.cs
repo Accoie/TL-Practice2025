@@ -5,12 +5,12 @@ namespace WebApi.Domain.Services.Interfaces;
 
 public interface IReservationService
 {
-    public void Create( Reservation reservation );
+    public Task Create( Reservation reservation );
 
-    public List<Reservation> GetAll( ReservationFilter? filter = null );
-    public Reservation GetById( int id );
+    public Task<List<Reservation>> GetAll( ReservationFilter? filter = null );
+    public Task<Reservation> GetById( int id );
 
-    public void Update( Reservation reservation );
-
-    public void Delete( int id );
+    public Task UpdateWithAction( int id, Action<Reservation> reservation );
+    public Task Actualize( Reservation reservation );
+    public Task Delete( int id );
 }

@@ -4,13 +4,13 @@ namespace WebApi.Domain.Services.Interfaces;
 
 public interface IRoomTypeService
 {
-    public void Create( RoomType roomType );
+    public Task Create( RoomType roomType );
 
-    public List<RoomType> GetAll();
-    public List<RoomType> GetAllById( int propertyId );
-    public RoomType GetById( int id );
+    public Task<List<RoomType>> GetAll();
+    public Task<List<RoomType>> GetAllById( int propertyId );
+    public Task<RoomType> GetById( int id );
+    
+    public Task Update( int id, Action<RoomType> updateAction );
 
-    public void Update( RoomType roomType );
-
-    public void Delete( int id );
+    public Task Delete( int id );
 }

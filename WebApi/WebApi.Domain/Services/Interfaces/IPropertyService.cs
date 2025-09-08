@@ -4,12 +4,12 @@ namespace WebApi.Domain.Services.Interfaces;
 
 public interface IPropertyService
 {
-    public void Create( Property property );
+    public Task Create( Property property );
 
-    public List<Property> GetAll();
-    public Property GetById( int id );
+    public Task<List<Property>> GetAll();
+    public Task<Property> GetById( int id );
 
-    public void Update( Property property );
+    public Task Update( int id, Action<Property> updateAction );
 
-    public void Delete( int id );
+    public Task Delete( int id );
 }

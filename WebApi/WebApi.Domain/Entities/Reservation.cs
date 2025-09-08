@@ -12,6 +12,14 @@ public class Reservation
     public int PersonCount { get; set; }
     public string GuestName { get; set; }
     public string GuestPhoneNumber { get; set; }
-    public decimal Total { get; set; }
+    public decimal Total { get; private set; }
     public string Currency { get; set; }
+
+    public decimal CalculateTotalPrice( RoomType roomType )
+    {
+        int numberOfDays = ( DepartureDate - ArrivalDate ).Days;
+        Total = roomType.DailyPrice * numberOfDays;
+
+        return Total;
+    }
 }

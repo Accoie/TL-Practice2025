@@ -5,5 +5,5 @@ namespace WebApi.Domain.Services.Interfaces;
 
 public interface ISearchService
 {
-    public List<(Property, RoomType)> Search( SearchFilter filter );
+    public Task<List<(Property, RoomType)>> Search( SearchFilter filter );
 }

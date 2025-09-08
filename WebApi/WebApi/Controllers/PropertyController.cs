@@ -19,40 +19,49 @@ public class PropertyController : ControllerBase
     }
 
     [HttpGet]
-    public List<Property> ListProperty()
+    public async Task<ActionResult<List<Property>>> ListProperty()
     {
-        return _propertyService.GetAll();
+        List<Property> properties = await _propertyService.GetAll();
+
+        return Ok( properties );
     }
 
     [HttpGet( "{id}" )]
-    public PropertyDto GetProperty( [FromQuery] int id )
+    public async Task<ActionResult<PropertyDto>> GetProperty( int id )
     {
-        Property property = _propertyService.GetById( id );
+        Property property = await _propertyService.GetById( id );
 
-        return property.ToPropertyDto();
+        return Ok( property.ToPropertyDto() );
     }
 
     [HttpPost]
-    public void CreateProperty( [FromBody] PropertyDto propertyDto )
+    public async Task<IActionResult> CreateProperty( [FromBody] PropertyDto propertyDto )
     {
-        Property property = PropertyMapper.ToProperty( ControllerHelper.GenerateId(), propertyDto ); ;
+        Property property = PropertyMapper.ToProperty( ControllerHelper.GenerateId(), propertyDto );
 
-        _propertyService.Create( property );
+        await _propertyService.Create( property );
+
+        return Ok();
     }
 
     [HttpPut( "{id}" )]
-    public void UpdateProperty( [FromQuery] int id, [FromBody] PropertyDto propertyDto )
+    public async Task<IActionResult> UpdateProperty( int id, [FromBody] PropertyDto propertyDto )
     {
-        Property property = _propertyService.GetById( id );
+        Action<Property> updateAction = ( property ) =>
+        {
+            PropertyMapper.ChangeExistingProperty( propertyDto, property );
+        };
 
-        PropertyMapper.ChangeExistingProperty( propertyDto, property );
+        await _propertyService.Update( id, updateAction );
 
-        _propertyService.Update( property );
+        return Ok();
     }
 
     [HttpDelete( "{id}" )]
-    public void DeleteProperty( [FromQuery] int id )
+    public async Task<IActionResult> DeleteProperty( int id )
     {
-        _propertyService.Delete( id );
+        await _propertyService.Delete( id );
+
+        return Ok();
     }
 }

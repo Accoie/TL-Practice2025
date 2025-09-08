@@ -2,5 +2,5 @@
 
 public interface IActualizer
 {
-    public void ActualizeById( int id );
+    public Task ActualizeById( int id );
 }

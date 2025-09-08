@@ -14,17 +14,17 @@ public class ReservationActualizer : IActualizer
         _reservationService = reservationService;
     }
 
-    public void ActualizeById( int id )
+    public async Task ActualizeById( int id )
     {
         ReservationFilter filter = new();
 
         filter.RoomTypeId = id;
 
-        List<Reservation> reservations = _reservationService.GetAll( filter );
+        List<Reservation> reservations = await _reservationService.GetAll( filter );
 
         foreach ( Reservation reservation in reservations )
         {
-            _reservationService.Update( reservation );
+            await _reservationService.Actualize(reservation);
         }
     }
 }

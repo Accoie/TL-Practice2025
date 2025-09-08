@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Data;
 using WebApi.Domain.Entities;
 using WebApi.Domain.Filters;
@@ -19,9 +20,9 @@ public class SearchController : ControllerBase
     }
 
     [HttpGet]
-    public List<SearchResultDto> Search( [FromQuery] SearchFilter filter )
+    public async Task<List<SearchResultDto>> Search( [FromQuery] SearchFilter filter )
     {
-        List<(Property, RoomType)> searchedData = _searchService.Search( filter ).ToList();
+        List<(Property, RoomType)> searchedData = await _searchService.Search( filter );
 
         List<SearchResultDto> result = SearchMapper.ToSearchResultDtoList( searchedData );
 

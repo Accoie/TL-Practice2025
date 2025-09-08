@@ -11,4 +11,18 @@ public class RoomType
     public int MaxPersonCount { get; set; }
     public List<string> Services { get; set; } = [];
     public List<string> Amenities { get; set; } = [];
+
+    public string ServicesString
+    {
+        get => string.Join( ',', Services );
+        set => Services = value?.Split( ',', StringSplitOptions.RemoveEmptyEntries ).ToList()
+                          ?? new List<string>();
+    }
+
+    public string AmenitiesString
+    {
+        get => string.Join( ',', Amenities );
+        set => Amenities = value?.Split( ',', StringSplitOptions.RemoveEmptyEntries ).ToList()
+                           ?? new List<string>();
+    }
 }
