@@ -12,6 +12,18 @@ public class RoomType
     public List<string> Services { get; set; } = [];
     public List<string> Amenities { get; set; } = [];
 
+    public void Update(RoomType roomType)
+    {
+        PropertyId = roomType.PropertyId;
+        Name = roomType.Name;
+        DailyPrice = roomType.DailyPrice;
+        Currency = roomType.Currency;
+        MinPersonCount = roomType.MinPersonCount;
+        MaxPersonCount = roomType.MaxPersonCount;
+        Services = roomType.Services;
+        Amenities = roomType.Amenities;
+    }
+
     public string ServicesString
     {
         get => string.Join( ',', Services );

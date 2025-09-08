@@ -19,16 +19,5 @@ namespace WebApi.Mapping
 
             return property;
         }
-
-        public static void ChangeExistingProperty( PropertyDto dto, Property property )
-        {
-            property.Longitude = dto.Longitude;
-            property.Latitude = dto.Latitude;
-            property.Address = dto.Address;
-            property.City = dto.City;
-            property.Country = dto.Country;
-            property.Name = dto.Name;
-        }
-
     }
 }

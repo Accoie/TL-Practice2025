@@ -43,7 +43,7 @@ public class RoomTypeController : ControllerBase
         RoomType roomType = RoomTypeMapper.ToRoomType( ControllerHelper.GenerateId(), roomTypeDto );
         roomType.PropertyId = propertyId;
 
-        await _roomTypeService.Create( roomType );
+        await _roomTypeService.CreateOrUpdate( roomType );
 
         return Ok();
     }
@@ -51,9 +51,9 @@ public class RoomTypeController : ControllerBase
     [HttpPut( "{id}" )]
     public async Task<IActionResult> UpdateRoomType( int id, [FromBody] RoomTypeDto roomTypeDto )
     {
-        Action<RoomType> updateAction = ( roomType ) => { RoomTypeMapper.ChangeExistingRoomType( roomTypeDto, roomType ); };
+        RoomType roomType = RoomTypeMapper.ToRoomType( id, roomTypeDto );
 
-        await _roomTypeService.Update( id, updateAction );
+        await _roomTypeService.CreateOrUpdate( roomType );
         await _actualizer.ActualizeById( id );
 
         return Ok();

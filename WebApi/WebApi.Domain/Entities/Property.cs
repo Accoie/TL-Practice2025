@@ -9,4 +9,14 @@ public class Property
     public string Address { get; set; }
     public decimal Latitude { get; set; }
     public decimal Longitude { get; set; }
+
+    public void Update( Property property )
+    {
+        Name = property.Name;
+        Country = property.Country;
+        City = property.City;
+        Address = property.Address;
+        Latitude = property.Latitude;
+        Longitude = property.Longitude;
+    }
 }

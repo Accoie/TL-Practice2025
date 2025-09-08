@@ -24,7 +24,7 @@ public class ReservationActualizer : IActualizer
 
         foreach ( Reservation reservation in reservations )
         {
-            await _reservationService.Actualize(reservation);
+            await _reservationService.CreateOrUpdate(reservation);
         }
     }
 }

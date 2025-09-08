@@ -23,18 +23,4 @@ public static class ReservationMapper
 
         return newReservation;
     }
-
-    public static Reservation ChangeExistingReservation( ReservationUpdationDto dto, Reservation reservation )
-    {
-        reservation.ArrivalDate = dto.ArrivalDate.Date;
-        reservation.ArrivalTime = dto.ArrivalTime;
-        reservation.Currency = dto.Currency;
-        reservation.DepartureDate = dto.DepartureDate.Date;
-        reservation.DepartureTime = dto.DepartureTime;
-        reservation.PersonCount = dto.PersonCount;
-        reservation.GuestName = dto.GuestName;
-        reservation.GuestPhoneNumber = dto.GuestPhoneNumber;
-
-        return reservation;
-    }
 }

@@ -11,6 +11,7 @@ namespace WebApi.Domain.Services;
 public class ReservationService : IReservationService
 {
     private readonly IRoomTypeService _roomTypeService;
+    private readonly IPropertyService _propertyService;
     private readonly IReservationRepository _reservationRepository;
     private readonly IValidator<Reservation> _validator;
     private readonly IUnitOfWork _unitOfWork;
@@ -23,46 +24,31 @@ public class ReservationService : IReservationService
         IValidator<Reservation> validator )
     {
         _roomTypeService = roomTypeService;
+        _propertyService = propertyService;
         _reservationRepository = reservationRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
 
-    public async Task Create( Reservation reservation )
+    public async Task CreateOrUpdate( Reservation reservation )
     {
-        if ( await _reservationRepository.GetByIdAsync( reservation.Id ) is not null )
-        {
-            throw new ArgumentException( "Reservation already exists" );
-        }
-
-        await ProcessReservationValidation( reservation );
-
         RoomType roomType = await _roomTypeService.GetById( reservation.RoomTypeId );
 
         reservation.CalculateTotalPrice( roomType );
 
-        await _reservationRepository.CreateAsync( reservation );
+        Reservation? existingReservation = await _reservationRepository.GetByIdAsync( reservation.Id );
 
-        await _unitOfWork.CommitAsync();
-    }
-
-    public async Task UpdateWithAction( int id, Action<Reservation> updateAction )
-    {
-        Reservation existingReservation = await GetById( id );
-
-        updateAction( existingReservation );
-
-        await ProcessReservationValidation( existingReservation );
-        await Actualize( existingReservation );
-    }
-
-    public async Task Actualize( Reservation reservation )
-    {
-        RoomType roomType = await _roomTypeService.GetById(reservation.RoomTypeId );
-
-        reservation.CalculateTotalPrice( roomType );
-
-        _reservationRepository.Update( reservation );
+        if ( existingReservation is null )
+        {
+            await ProcessReservationValidation( reservation );
+            await _reservationRepository.CreateAsync( reservation );
+        }
+        else
+        {
+            existingReservation.Update( reservation );
+            await ProcessReservationValidation( existingReservation );
+            _reservationRepository.Update( existingReservation );
+        }
 
         await _unitOfWork.CommitAsync();
     }
@@ -110,7 +96,6 @@ public class ReservationService : IReservationService
 
     public async Task<Reservation> GetById( int id )
     {
-
         Reservation? reservation = await _reservationRepository.GetByIdAsync( id );
 
         if ( reservation is null )
@@ -126,6 +111,7 @@ public class ReservationService : IReservationService
         await _validator.ValidateAndThrowAsync( reservation );
 
         RoomType roomType = await _roomTypeService.GetById( reservation.RoomTypeId );
+        Property property = await _propertyService.GetById( reservation.PropertyId );
 
         List<Reservation> reservations = await GetAllById( reservation.PropertyId, reservation.RoomTypeId );
 

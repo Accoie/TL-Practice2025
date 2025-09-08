@@ -39,7 +39,7 @@ public class PropertyController : ControllerBase
     {
         Property property = PropertyMapper.ToProperty( ControllerHelper.GenerateId(), propertyDto );
 
-        await _propertyService.Create( property );
+        await _propertyService.CreateOrUpdate( property );
 
         return Ok();
     }
@@ -47,12 +47,9 @@ public class PropertyController : ControllerBase
     [HttpPut( "{id}" )]
     public async Task<IActionResult> UpdateProperty( int id, [FromBody] PropertyDto propertyDto )
     {
-        Action<Property> updateAction = ( property ) =>
-        {
-            PropertyMapper.ChangeExistingProperty( propertyDto, property );
-        };
+        Property property = PropertyMapper.ToProperty( id, propertyDto );
 
-        await _propertyService.Update( id, updateAction );
+        await _propertyService.CreateOrUpdate( property );
 
         return Ok();
     }

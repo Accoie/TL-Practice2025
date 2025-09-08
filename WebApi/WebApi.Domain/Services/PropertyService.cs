@@ -21,16 +21,22 @@ public class PropertyService : IPropertyService
         _validator = validator;
     }
 
-    public async Task Create( Property property )
+    public async Task CreateOrUpdate( Property property )
     {
-        if ( await _propertyRepository.GetByIdAsync( property.Id ) is not null )
+        Property? existingProperty = await _propertyRepository.GetByIdAsync( property.Id );
+
+        if ( existingProperty is null )
         {
-            throw new ArgumentException( "Property already exists" );
+            await _validator.ValidateAndThrowAsync( property );
+            await _propertyRepository.CreateAsync( property );
+        }
+        else
+        {
+            existingProperty.Update( property );
+            await _validator.ValidateAndThrowAsync( existingProperty );
+            _propertyRepository.Update( existingProperty );
         }
 
-        await _validator.ValidateAndThrowAsync( property );
-
-        await _propertyRepository.CreateAsync( property );
         await _unitOfWork.CommitAsync();
     }
 
@@ -49,18 +55,6 @@ public class PropertyService : IPropertyService
         }
 
         return property;
-    }
-
-    public async Task Update( int id , Action<Property> updateAction )
-    {
-        Property existingProperty = await GetById( id );
-
-        updateAction( existingProperty );
-
-        await _validator.ValidateAndThrowAsync( existingProperty );
-
-        _propertyRepository.Update( existingProperty );
-        await _unitOfWork.CommitAsync();
     }
 
     public async Task Delete( int id )

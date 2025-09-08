@@ -9,28 +9,38 @@ namespace WebApi.Domain.Services;
 public class RoomTypeService : IRoomTypeService
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
+    private readonly IPropertyService _propertyService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<RoomType> _validator;
 
-    public RoomTypeService( IRoomTypeRepository roomTypeRepository, IUnitOfWork unitOfWork, IValidator<RoomType> validator )
+    public RoomTypeService( IRoomTypeRepository roomTypeRepository,
+                            IPropertyService propertyService,   
+                            IUnitOfWork unitOfWork,
+                            IValidator<RoomType> validator )
     {
         _roomTypeRepository = roomTypeRepository;
+        _propertyService = propertyService;
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
 
-    public async Task Create( RoomType roomType )
+    public async Task CreateOrUpdate( RoomType roomType )
     {
-        bool isRoomTypeExists = await _roomTypeRepository.GetByIdAsync( roomType.Id ) is not null;
+        await _propertyService.GetById( roomType.PropertyId );
 
-        if ( isRoomTypeExists )
+        RoomType? existingRoomType = await _roomTypeRepository.GetByIdAsync( roomType.Id );
+
+        if ( existingRoomType is null )
         {
-            throw new ArgumentException( "RoomType already exists" );
+            await _validator.ValidateAndThrowAsync( roomType );
+            await _roomTypeRepository.CreateAsync( roomType );
         }
-
-        await _validator.ValidateAndThrowAsync( roomType );
-
-        await _roomTypeRepository.CreateAsync( roomType );
+        else
+        {
+            existingRoomType.Update( roomType );
+            await _validator.ValidateAndThrowAsync( existingRoomType );
+            _roomTypeRepository.Update( existingRoomType );
+        }
 
         await _unitOfWork.CommitAsync();
     }
@@ -66,18 +76,5 @@ public class RoomTypeService : IRoomTypeService
     public async Task<List<RoomType>> GetAll()
     {
         return await _roomTypeRepository.GetAllAsync();
-    }
-
-    public async Task Update( int id, Action<RoomType> updateAction )
-    {
-        RoomType existingRoomType = await GetById( id );
-
-        updateAction( existingRoomType );
-
-        await _validator.ValidateAndThrowAsync( existingRoomType );
-
-        _roomTypeRepository.Update( existingRoomType );
-
-        await _unitOfWork.CommitAsync();
     }
 }

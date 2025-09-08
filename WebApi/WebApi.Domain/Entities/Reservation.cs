@@ -15,6 +15,19 @@ public class Reservation
     public decimal Total { get; private set; }
     public string Currency { get; set; }
 
+    public void Update( Reservation reservation )
+    {
+        PropertyId = reservation.PropertyId;
+        RoomTypeId = reservation.RoomTypeId;
+        ArrivalDate = reservation.ArrivalDate;
+        DepartureDate = reservation.DepartureDate;
+        ArrivalTime = reservation.ArrivalTime;
+        DepartureTime = reservation.DepartureTime;
+        PersonCount = reservation.PersonCount;
+        Total = reservation.Total;
+        Currency = reservation.Currency;
+    }
+
     public decimal CalculateTotalPrice( RoomType roomType )
     {
         int numberOfDays = ( DepartureDate - ArrivalDate ).Days;

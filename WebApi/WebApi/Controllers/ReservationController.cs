@@ -23,18 +23,17 @@ public class ReservationController : ControllerBase
     {
         Reservation reservation = ReservationMapper.ToReservation( ControllerHelper.GenerateId(), dto );
 
-        await _reservationService.Create( reservation );
+        await _reservationService.CreateOrUpdate( reservation );
 
         return Ok();
     }
 
     [HttpPut( "{id}" )]
-    public async Task<IActionResult> UpdateReservation( [FromQuery] int id, [FromBody] ReservationUpdationDto dto )
+    public async Task<IActionResult> UpdateReservation( [FromQuery] int id, [FromBody] ReservationDto dto )
     {
-        await _reservationService.UpdateWithAction( id, reservation =>
-        {
-            ReservationMapper.ChangeExistingReservation( dto, reservation );
-        } );
+        Reservation reservation = ReservationMapper.ToReservation( id, dto );
+
+        await _reservationService.CreateOrUpdate( reservation );
 
         return Ok();
     }
