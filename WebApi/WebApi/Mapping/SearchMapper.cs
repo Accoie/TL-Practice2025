@@ -6,7 +6,7 @@ namespace WebApi.Mapping;
 
 public static class SearchMapper
 {
-    public static List<SearchResultDto> ToSearchResultDtoList( List<(Property, RoomType)> searchedData )
+    public static List<SearchResultDto> ToSearchResultDtos( List<(Property, RoomType)> searchedData )
     {
         List<SearchResultDto> result = new();
 

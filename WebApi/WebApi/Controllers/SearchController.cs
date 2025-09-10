@@ -24,7 +24,7 @@ public class SearchController : ControllerBase
     {
         List<(Property, RoomType)> searchedData = await _searchService.Search( filter );
 
-        List<SearchResultDto> result = SearchMapper.ToSearchResultDtoList( searchedData );
+        List<SearchResultDto> result = SearchMapper.ToSearchResultDtos( searchedData );
 
         return result;
     }

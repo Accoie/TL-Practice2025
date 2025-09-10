@@ -41,9 +41,9 @@ public class ReservationController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetReservations( [FromQuery] ReservationFilter filter )
     {
-        await _reservationService.GetAll( filter );
+        IReadOnlyList<Reservation> reservations = await _reservationService.GetAll( filter );
 
-        return Ok();
+        return Ok( reservations );
     }
 
     [HttpDelete( "{id}" )]

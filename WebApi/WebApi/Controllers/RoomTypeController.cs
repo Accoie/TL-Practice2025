@@ -22,9 +22,9 @@ public class RoomTypeController : ControllerBase
     }
 
     [HttpGet( "property/{propertyId}" )]
-    public async Task<ActionResult<List<RoomType>>> ListRoomType( int propertyId )
+    public async Task<ActionResult<List<RoomType>>> GetRoomTypes( int propertyId )
     {
-        List<RoomType> roomTypes = await _roomTypeService.GetAllById( propertyId );
+        IReadOnlyList<RoomType> roomTypes = await _roomTypeService.GetAllById( propertyId );
 
         return Ok( roomTypes );
     }

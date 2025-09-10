@@ -19,9 +19,9 @@ public class PropertyController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Property>>> ListProperty()
+    public async Task<ActionResult<List<Property>>> GetProperties()
     {
-        List<Property> properties = await _propertyService.GetAll();
+        IReadOnlyList<Property> properties = await _propertyService.GetAll();
 
         return Ok( properties );
     }

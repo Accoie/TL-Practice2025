@@ -20,7 +20,7 @@ public class ReservationActualizer : IActualizer
 
         filter.RoomTypeId = id;
 
-        List<Reservation> reservations = await _reservationService.GetAll( filter );
+        IReadOnlyList<Reservation> reservations = await _reservationService.GetAll( filter );
 
         foreach ( Reservation reservation in reservations )
         {
