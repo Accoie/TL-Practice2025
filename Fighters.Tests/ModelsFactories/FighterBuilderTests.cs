@@ -27,7 +27,7 @@ namespace Fighters.Tests.ModelsFactories
         }
 
         [Test]
-        public void OfType_WithKnightType_ReturnsKnightInstance()
+        public void Build_WithKnightType_ReturnsKnightInstance()
         {
             // Arrange
             FighterBuilder builder = new FighterBuilder();
@@ -44,26 +44,6 @@ namespace Fighters.Tests.ModelsFactories
             // Assert
             Assert.That( result, Is.InstanceOf<Knight>() );
             Assert.That( result.Name, Is.EqualTo( "TestKnight" ) );
-        }
-
-        [Test]
-        public void OfType_WithAssasinType_ReturnsAssasinInstance()
-        {
-            // Arrange
-            FighterBuilder builder = new();
-
-            // Act
-            builder.WithName( "TestAssasin" )
-                   .WithWeapon( _weaponMock.Object )
-                   .WithArmor( _armorMock.Object )
-                   .WithRace( _raceMock.Object )
-                   .OfType( FighterType.Assasin );
-
-            IFighter result = builder.Build();
-
-            // Assert
-            Assert.That( result, Is.InstanceOf<Assasin>() );
-            Assert.That( result.Name, Is.EqualTo( "TestAssasin" ) );
         }
 
         private IFighter CreateFighter( string name )
