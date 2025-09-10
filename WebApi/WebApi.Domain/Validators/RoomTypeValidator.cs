@@ -20,7 +20,7 @@ public class RoomTypeValidator : AbstractValidator<RoomType>
 
         RuleFor( roomType => roomType.Currency )
             .NotEmpty().WithMessage( "Currency cannot be empty" )
-            .Length( 5 ).WithMessage( "Currency must be a 5-letter code" );
+            .Length( 3 ).WithMessage( "Currency must be a 3-letter code" );
 
         RuleFor( roomType => roomType.MinPersonCount )
             .GreaterThan( 0 ).WithMessage( "Minimal person count could not be less than 1" );
