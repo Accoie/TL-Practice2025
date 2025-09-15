@@ -1,0 +1,93 @@
+.reviewForm {
+  width: 550px;
+  border: 1px solid #DCDCDC;
+  border-radius: 8px;
+}
+
+.formTitle {
+  margin: 0;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.reviewFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap:30px;
+  padding: 43px 70px 70px 70px;
+}
+
+.inputContainer {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.nameInput {
+  width: 100%;
+  height: 30px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.inputLabel {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-size: 12px;
+  color: #666;
+  background-color: white;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+.nameInput:focus {
+  outline: none;
+}
+
+.reviewInput {
+  width: 100%;
+  min-height: 113px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: 'Inter';
+  resize: none;
+  height: max-content;
+  overflow: hidden;
+}
+
+.reviewInput:focus {
+  background-color: transparent;
+  outline: none;
+}
+
+.submitButton {
+  height: 32px;
+  width: 136px;
+  align-self: end;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #C0C0C0 ;
+  color: white;
+}
+
+.submitButton:active {
+  transition: ease-in-out 0.1s;
+  background-color: #e09850 ;
+}
+.submitButton:hover {
+  transition: ease-in-out 0.1s;
+  box-shadow: 0px 0px 3px red;
+}
+
+.nameInput.success,
+.reviewInput.success {
+  border: 1px solid #28a745;
+  background-color: #f0fff4;
+}
