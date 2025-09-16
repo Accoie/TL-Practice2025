@@ -1,0 +1,41 @@
+.promo {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.promo-text {
+  display: flex;
+  font-size: 40px;
+  margin: 0;
+  flex-direction: column;
+  margin: auto;
+  align-items: center;
+  text-align: center;
+}
+
+.promo-text-objects {
+  font-weight: 900;
+  color: brown;
+}
+
+.promo-text-wrapper {
+  margin: auto;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.promo-text-differences {
+  font-weight: 900;
+  color: darkorange;
+  margin-top: 0;
+}
+
+.start-button {
+  cursor: pointer;
+  color: rgb(34, 98, 215);
+  background: none;
+  border: none;
+  font-weight: 900;
+}
