@@ -1,0 +1,117 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  .title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 2.125rem;
+  }
+}
+
+.subtitle {
+  color: #7f8c8d;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+.paper {
+  padding: 32px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+  margin-bottom: 32px;
+  height: 6px;
+  border-radius: 12px;
+  background-color: #ecf0f1;
+
+  .progressBar {
+    background-color: #308ecd;
+  }
+}
+
+.card {
+  margin-bottom: 32px;
+  background-color: #cbe5ff13;
+  border: 2px solid #cee6ff95;
+  border-radius: 8px;
+
+  .cardContent {
+    padding: 24px 0;
+  }
+}
+
+.instruction {
+  margin-bottom: 24px;
+  color: #2c3e50;
+  font-weight: 500;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.word {
+  padding-top: 22px;
+  padding-bottom: 22px;
+  color: #3c83e7ff;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.formControl {
+  width: 100%;
+
+  .inputLabel {
+    background-color: #ffffff;
+    padding: 0 8px;
+    transform: translate(14px, -9px) scale(0.85);
+  }
+}
+
+.menuItem {
+  &:hover {
+    background-color: #d6eeff66;
+  }
+}
+
+.buttonContainer {
+  text-align: center;
+}
+
+.button {
+  min-width: 140px;
+  font-size: 1rem;
+  padding: 12px 32px;
+  border-radius: 8px;
+  background-color: #308cc9ff;
+  font-weight: 600;
+  text-transform: none;
+
+  &:hover {
+    background-color: #75c0f1ff;
+    box-shadow: 0 4px 12px rgba(39, 138, 174, 0.3);
+  }
+
+  &:disabled {
+    background-color: #bdc3c7;
+    color: #7f8c8d;
+  }
+}
+
+.errorTitle {
+  padding: 20px;
+  font-weight: 600;
+  color: rgb(233, 84, 84);
+} 

@@ -1,0 +1,28 @@
+.homePage {
+  padding: 20px;
+}
+
+.title {
+  color: #364963;
+  margin-bottom: 24px;
+  font-weight: 600;
+  padding-bottom: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.secondaryButton {
+  border-radius: 8px;
+  padding: 12px 24px;
+  text-transform: none;
+  border: 2px solid blue ;
+
+  &:hover {
+    border: 2px solid linear-gradient(45deg, #1976d2 30%, #1e88e5 90%);;
+  }
+}
