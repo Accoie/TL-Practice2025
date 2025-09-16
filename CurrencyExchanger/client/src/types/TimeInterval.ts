@@ -1,0 +1,1 @@
+export type TimeInterval = '1 MIN' | '2 MIN' | '3 MIN' | '4 MIN' | '5 MIN';

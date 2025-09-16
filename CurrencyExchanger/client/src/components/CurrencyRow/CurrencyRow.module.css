@@ -1,0 +1,76 @@
+.currencyRow {
+  display: flex;
+  width: 319px;
+  height: 45px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.currencyAmount {
+  padding-left: 20px;
+  align-self: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+  width: 155px;
+  border: 0;
+}
+
+.currencyInput {
+  font-family: Helvetica;
+  padding-left: 20px;
+  align-self: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+  width: 95px;
+  border: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.currencyInput::-webkit-outer-spin-button,
+.currencyInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.currencyInput:focus {
+  outline: none;
+}
+
+.currencySelectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.currencySelect {
+  width: 100%;
+  padding: 14px 32px 0px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  background: #fff;
+  color: #202124;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.strip {
+  background: #f0f0f0;
+  height: 80%;
+  align-self: center;
+  width: 2px;
+}
+
+.selectArrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5f6368;
+  pointer-events: none;
+  font-size: 12px;
+}

@@ -1,0 +1,43 @@
+.currencyExchanger {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Helvetica;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.currencyWrapper {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding-bottom: 30px;
+}
+
+.currencyPairBlock {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.conversionCard {
+  align-self: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+@media (max-width: 840px) {
+  .currencyExchanger {
+    padding: 16px;
+  }
+
+  .conversionCard {
+    padding: 20px 16px;
+  }
+}
